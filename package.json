@@ -1,5 +1,5 @@
 {
-  "name": "dusken-client",
+  "name": "Dusken",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,8 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "~15.4.0-rc.4",
-    "react-native": "0.40.0",
+    "react": "16.0.0-alpha.6",
+    "react-native": "0.43.3",
     "react-native-material-kit": "^0.4.1",
     "react-redux": "^5.0.2",
     "redux": "^3.6.0"
