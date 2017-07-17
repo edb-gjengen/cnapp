@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { MKButton, MKColor, MKTextField } from 'react-native-material-kit';
+import {Button, Image, StyleSheet, Text, TextInput, View} from 'react-native';
 
 import { loginStart } from "../../actions";
 
@@ -12,9 +11,7 @@ export default class Login extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    console.log("IN Login.componentWillReceiveProps");
-    console.log(nextProps);
-    if(this.state.loggedIn != nextProps.loggedIn) {
+    if(this.state.loggedIn !== nextProps.loggedIn) {
       this.setState({
         loggedIn: nextProps.loggedIn
       })
@@ -26,32 +23,29 @@ export default class Login extends Component {
     };
     return (
       <View style={styles.container}>
-        <Text>Chateau Neuf</Text>
-        <Text>The Norwegian Student Society</Text>
+        <Text style={styles.text}>The Norwegian Student Society</Text>
+        <Text style={styles.text}>Chateau Neuf</Text>
         <Image source={pic} style={{width: 200, height: 150, marginBottom: 40}} resizeMode='contain' />
-        <MKTextField
+        <TextInput
           placeholder="Email"
           style={styles.input}
         />
-        <MKTextField
+        <TextInput
           placeholder="Password"
           style={styles.input}
         />
-        <MKButton
-          backgroundColor={MKColor.Blue}
-          shadowRadius={2}
-          shadowOpacity={.7}
-          shadowColor="black"
-          onPress={this.onLoginPress}
-          style={{marginTop: 20}}
-        >
-          <Text pointerEvents="none" style={styles.button}>Log in</Text>
-        </MKButton>
+        <View style={styles.button}>
+          <Button
+            title="Log in"
+            onPress={this.onLoginPress}
+          />
+        </View>
         <Text style={{paddingTop: 10}}>{this.loginState()}</Text>
       </View>
     );
   }
   onLoginPress = () => {
+    console.log("YO from onLoginPress");
     this.props.dispatch(loginStart())
   };
 
@@ -72,13 +66,16 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 240,
-    height: 50,
+    fontSize: 20,
+    height: 52,
   },
   button: {
-    fontWeight: 'bold',
+    marginTop: 20,
     padding: 10,
     width: 240,
-    textAlign: 'center',
-    color: 'white',
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 });
