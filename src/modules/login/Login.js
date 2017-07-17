@@ -10,6 +10,7 @@ export default class Login extends Component {
       loggedIn: false
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if(this.state.loggedIn !== nextProps.loggedIn) {
       this.setState({
@@ -17,6 +18,7 @@ export default class Login extends Component {
       })
     }
   }
+
   render() {
     const pic = {
       uri: 'https://dusken.neuf.no/static/dist/images/logo.png'
@@ -29,12 +31,21 @@ export default class Login extends Component {
         <TextInput
           placeholder="Email"
           style={styles.input}
-          keyboardType={"email-address"}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoFocus={true}
+          returnKeyType="next"
+          onSubmitEditing={(event) => {
+              this.refs.passwordInput.focus();
+          }}
         />
         <TextInput
           placeholder="Password"
           style={styles.input}
           secureTextEntry={true}
+          autoCapitalize="none"
+          ref='passwordInput'
+          onSubmitEditing={this.onLoginPress}
         />
         <View style={styles.button}>
           <Button
@@ -46,6 +57,7 @@ export default class Login extends Component {
       </View>
     );
   }
+
   onLoginPress = () => {
     console.log("YO from onLoginPress");
     this.props.dispatch(loginStart())
