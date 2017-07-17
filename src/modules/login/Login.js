@@ -33,7 +33,6 @@ export default class Login extends Component {
           style={styles.input}
           keyboardType="email-address"
           autoCapitalize="none"
-          autoFocus={true}
           returnKeyType="next"
           onSubmitEditing={(event) => {
               this.refs.passwordInput.focus();
