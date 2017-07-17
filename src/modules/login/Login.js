@@ -29,10 +29,12 @@ export default class Login extends Component {
         <TextInput
           placeholder="Email"
           style={styles.input}
+          keyboardType={"email-address"}
         />
         <TextInput
           placeholder="Password"
           style={styles.input}
+          secureTextEntry={true}
         />
         <View style={styles.button}>
           <Button
