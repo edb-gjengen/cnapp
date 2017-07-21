@@ -1,4 +1,3 @@
-
 import {Platform, StyleSheet, FlatList, Text, View, Linking, TouchableOpacity, ActivityIndicator} from "react-native";
 import React, { Component } from 'react';
 import moment from "moment";
