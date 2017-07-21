@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "moment": "^2.18.1",
+    "native-base": "^2.3.0",
     "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.3",
+    "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.5",
     "redux": "^3.7.2"
   },
@@ -23,7 +25,7 @@
   "jest": {
     "preset": "react-native",
     "transformIgnorePatterns": [
-      "node_modules/(?!react-native|tcomb-form-native|apsl-react-native-button,react-native-device-info|react-clone-referenced-element)"
+      "node_modules/(?!react-native|react-navigation)"
     ]
   }
 }

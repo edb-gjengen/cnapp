@@ -43,15 +43,15 @@ export default class EventList extends Component {
 
 const styles = StyleSheet.create({
     listItem: {
-        height: 100,
+        height: 86,
     },
     listItemTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'black'
     },
     listItemTime: {
-        fontSize: 18,
+        fontSize: 16,
         color: 'black'
     },
     container: {
