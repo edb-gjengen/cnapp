@@ -7,18 +7,18 @@ import AboutScreen from "./screens/AboutScreen";
 import MembershipScreen from "./screens/MembershipScreen";
 
 
-const routeConfig = {
+const tabBarRoutes = {
     Events: { screen: EventsScreen },
     Membership: { screen: MembershipScreen },
     About: { screen: AboutScreen },
 };
 
-const tabConfig = {
-    tabBarPosition: 'bottom'
+const tabBarOptions = {
+    tabBarPosition: 'bottom',
 };
 
 /* Navigation */
-const tabNav = TabNavigator(routeConfig, tabConfig);
+const tabNav = TabNavigator(tabBarRoutes, tabBarOptions);
 
 const DuskenContainer = StackNavigator({
     Root: { screen: tabNav},
