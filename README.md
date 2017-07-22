@@ -8,6 +8,11 @@
     # Improve compile times
     touch ~/.gradle/gradle.properties && echo -e "org.gradle.daemon=true\norg.gradle.jvmargs=-Xmx2048M" >> ~/.gradle/gradle.properties
 
+    # Run android emulator (first avd)
+    npm run emulator
+
+    # Make sure you have hw.keyboard=yes in your avd config.ini (in $HOME/.android/avd/.../) for reloading when pressing R twice to work.
+
 ## Create release build (Android)
     # Aquire the keystore and put it in android/app/dusken-client.keystore
 
@@ -21,3 +26,4 @@
     cd android && ./gradlew assembleRelease
 
     # Output is in android/app/build/outputs/apk
+
