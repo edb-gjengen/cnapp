@@ -27,3 +27,7 @@
 
     # Output is in android/app/build/outputs/apk
 
+
+## Libraries
+
+We use https://nativebase.io/ for generic UI components

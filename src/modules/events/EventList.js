@@ -1,25 +1,44 @@
-import {Platform, StyleSheet, FlatList, Text, View, Linking, TouchableOpacity, ActivityIndicator} from "react-native";
+import {StyleSheet, Linking, ActivityIndicator, View, SectionList} from "react-native";
+import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content} from 'native-base';
 import React, { Component } from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
 
 export default class EventList extends Component {
-    _keyExtractor = (item, index) => item.id;
-
     _renderItem = ({item}) => (
-        <View>
-            <TouchableOpacity onPress={() => { this._onPressItem(item); }} style={[styles.listItem, styles.card]}>
-                <View>
-                    <Text style={styles.listItemTitle}>{item.title.rendered}</Text>
-                    <Text style={styles.listItemTime}>{this._formatTime(item.start_time)}</Text>
-                </View>
-            </TouchableOpacity>
-        </View>
+        <ListItem button onPress={() => { this._onPressItem(item); }} style={styles.listItem}>
+            <Body style={{flex: 5}}>
+            <Text style={styles.listItemTitle} numberOfLines={1}>{item.title.decoded}</Text>
+            <Text style={styles.listItemTime}>{this._formatTime(item.start_time)}</Text>
+            </Body>
+            <Right style={{flex: 1}}>
+                <Icon name="arrow-forward" />
+            </Right>
+        </ListItem>
     );
+
+    _renderSectionHeader = ({section}) => {
+        return (<ListItem style={[styles.listItem, {paddingBottom: 8}]}>
+            <Body>
+                <Text style={styles.listItemSectionTitle}>{section.title}</Text>
+            </Body>
+        </ListItem>);
+    };
+
+    _renderFooter = () => {
+        if(!this.props.loading) {
+            return null;
+        }
+
+        return (<View style={{paddingVertical: 20}}>
+            <ActivityIndicator animating size="large" />
+        </View>);
+    };
 
     _onPressItem = (item) => {
         Linking.openURL(item.link);
     };
+
 
     _formatTime(time) {
         moment.locale('nb');
@@ -27,15 +46,31 @@ export default class EventList extends Component {
     }
 
     render() {
-        if(this.props.loading) {
-            return (<View style={styles.card}><Text style={styles.loadingText}>Loading...</Text><ActivityIndicator/></View>)
+        if (this.props.error) {
+            return (<Content>
+                <Card style={{margin: 4}}>
+                    <CardItem onPress={() => { this._onPressItem(item); }}>
+                        <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
+                    </CardItem>
+                    <CardItem>
+                        <Button onPress={this.props.handleRefresh}><Text>Prøv igjen</Text></Button>
+                    </CardItem>
+                </Card>
+            </Content>)
         }
-        return (<FlatList
-            data={this.props.events}
+
+        return (<SectionList
+            sections={this.props.eventsSectioned}
             renderItem={this._renderItem}
-            keyExtractor={this._keyExtractor}
-            style={styles.container}
+            renderSectionHeader={this._renderSectionHeader}
+            keyExtractor={(item) => item.id}
             refreshing={this.props.refreshing}
+            onRefresh={this.props.handleRefresh}
+            onEndReached={this.props.handleLoadMore}
+            onEndReachedThreshould={10}
+            initialNumToRender={10}
+            ListFooterComponent={this._renderFooter}
+            style={styles.list}
         />);
     }
 }
@@ -43,40 +78,24 @@ export default class EventList extends Component {
 
 const styles = StyleSheet.create({
     listItem: {
-        height: 86,
+        marginLeft: 0
     },
     listItemTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'black'
+        fontSize: 14,
     },
     listItemTime: {
-        fontSize: 16,
-        color: 'black'
+        fontSize: 14,
+        color: '#666'
     },
-    container: {
-        flex: 1,
-    },
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: { height: 0, width: 0 },
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
+    listItemSectionTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
     },
     loadingText: {
         textAlign: 'center',
         paddingBottom: 8
+    },
+    list: {
+        backgroundColor: 'white'
     }
 });
