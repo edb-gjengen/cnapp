@@ -36,7 +36,7 @@ export default class EventList extends Component {
     };
 
     _onPressItem = (item) => {
-        Linking.openURL(item.link);
+        this.props.showEvent(item);
     };
 
 
