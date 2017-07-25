@@ -1,4 +1,4 @@
-import {StyleSheet, Linking, ActivityIndicator, View, SectionList} from "react-native";
+import {StyleSheet, ActivityIndicator, View, SectionList} from "react-native";
 import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content} from 'native-base';
 import React, { Component } from 'react';
 import moment from "moment";
@@ -8,8 +8,8 @@ export default class EventList extends Component {
     _renderItem = ({item}) => (
         <ListItem button onPress={() => { this._onPressItem(item); }} style={styles.listItem}>
             <Body style={{flex: 5}}>
-            <Text style={styles.listItemTitle} numberOfLines={1}>{item.title.decoded}</Text>
-            <Text style={styles.listItemTime}>{this._formatTime(item.start_time)}</Text>
+                <Text style={styles.listItemTitle} numberOfLines={1}>{item.title.decoded}</Text>
+                <Text style={styles.listItemTime}>{this._formatTime(item.start_time)}</Text>
             </Body>
             <Right style={{flex: 1}}>
                 <Icon name="arrow-forward" />

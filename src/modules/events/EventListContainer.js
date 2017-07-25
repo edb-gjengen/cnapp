@@ -104,7 +104,12 @@ class EventListContainer extends React.Component {
     };
 
     render() {
-        return (<EventList showEvent={this.showEvent} {...{...this.state, handleRefresh: this.handleRefresh, handleLoadMore: this.handleLoadMore}} />)
+        return (<EventList
+            showEvent={this.showEvent}
+            handleRefresh={this.handleRefresh}
+            handleLoadMore={this.handleLoadMore}
+            {...this.state}
+        />)
     }
 }
 

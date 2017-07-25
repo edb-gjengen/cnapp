@@ -26,8 +26,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "setupFiles": ["<rootDir>/jest/setup.js"],
     "transformIgnorePatterns": [
-      "node_modules/(?!react-native|react-navigation)"
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-navigation|native-base|@shoutem)"
     ]
   }
 }
