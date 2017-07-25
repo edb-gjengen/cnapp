@@ -16,6 +16,6 @@ export default class EventsScreen extends Component {
     };
 
     render() {
-        return (<EventListContainer showEvent={this.showEvent} />);
+        return (<EventListContainer showEvent={this.showEvent}/>);
     }
 }
