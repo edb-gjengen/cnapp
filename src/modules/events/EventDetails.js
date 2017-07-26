@@ -37,7 +37,7 @@ export default class EventDetails extends Component {
         }
         let price = null;
         if (item.price_regular && item.price_regular) {
-            price = <Text style={styles.info}>Pris: {item.price_regular} - Medlemer: {item.price_member}</Text>;
+            price = <Text style={styles.info}>Pris: {item.price_regular} - Medlemmer: {item.price_member}</Text>;
         }
         let faceButton = null;
         if (item.facebook_url) {
@@ -51,7 +51,7 @@ export default class EventDetails extends Component {
         if (item.ticket_url) {
             ticket = <View style={styles.ticketButton}>
                         <Button onPress={() => this._onUrlPress(item.ticket_url)}
-                                title="Kjøp bilett"/>
+                                title="Kjøp billett"/>
                     </View>;
         }
         return (
