@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
 
+moment.locale('nb');
+
 export default class EventList extends Component {
     _renderItem = ({item}) => (
         <ListItem button onPress={() => { this._onPressItem(item); }} style={styles.listItem}>
@@ -41,7 +43,6 @@ export default class EventList extends Component {
 
 
     _formatTime(time) {
-        moment.locale('nb');
         return moment(time).format('llll');
     }
 

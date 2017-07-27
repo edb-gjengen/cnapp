@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import {Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableHighlight, Button} from "react-native";
+import {Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableHighlight} from "react-native";
 import HTMLView from 'react-native-htmlview';
 import moment from "moment";
+import {Button, Icon, Text as NBText} from "native-base";
+
+moment.locale('nb');
 
 export default class EventDetails extends Component {
 
     _formatTime(time) {
-        moment.locale('nb');
         return moment(time).format('HH:mm');
     }
 
     _formatMonth(time) {
-        moment.locale('nb');
         return moment(time).format('MMM');
     }
 
     _formatDay(time) {
-        moment.locale('nb');
-        return moment(time).format('DD');
+        return moment(time).format('DD.');
     }
 
     _formatYear(time) {
-        moment.locale('nb');
         return moment(time).format('YYYY');
     }
 
@@ -41,36 +40,44 @@ export default class EventDetails extends Component {
         }
         let faceButton = null;
         if (item.facebook_url) {
-            faceButton = <TouchableHighlight style={styles.faceButton} underlayColor="#fff"
-                                            onPress={() => this._onUrlPress(item.facebook_url)}>
-                            <Image style={styles.faceIcon} resizeMode="contain"
-                                   source={require('./img/facebook_circle_color-256.png')} />
+            faceButton = <TouchableHighlight underlayColor="#fff" onPress={() => this._onUrlPress(item.facebook_url)}>
+                            <View>
+                                <Icon style={styles.faceIcon} name="logo-facebook" />
+                                <Text style={styles.faceText}>På Facebook</Text>
+                            </View>
                          </TouchableHighlight>;
         }
         let ticket = null;
         if (item.ticket_url) {
             ticket = <View style={styles.ticketButton}>
-                        <Button onPress={() => this._onUrlPress(item.ticket_url)}
-                                title="Kjøp billett"/>
+                        <Button onPress={() => this._onUrlPress(item.ticket_url)} full><NBText>Kjøp billett</NBText></Button>
                     </View>;
         }
+
+        let year = null;
+        if(moment().year() !== moment(item.start_time).year()) {
+            year = <Text style={styles.year}>{this._formatYear(item.start_time)}</Text>
+        }
+
         return (
             <ScrollView>
                 {image}
                 <View style={styles.card}>
                     <Text style={styles.header} numberOfLines={2}>{item.title.decoded}</Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={styles.date}>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                        <View style={styles.dateContainer}>
                             <Text style={styles.day}>{this._formatDay(item.start_time)}</Text>
                             <Text style={styles.month}>{this._formatMonth(item.start_time)}</Text>
-                            <Text style={styles.year}>{this._formatYear(item.start_time)}</Text>
+                            {year}
                         </View>
                         <View style={styles.infoContainer}>
-                            <Text style={styles.info}>{item.venue}</Text>
-                            <Text style={styles.info}>kl. {this._formatTime(item.start_time)}</Text>
+                            <Text style={styles.info}><Icon name="pin" style={styles.icons} /> {item.venue}</Text>
+                            <Text style={styles.info}><Icon name="time" style={styles.icons} /> kl. {this._formatTime(item.start_time)}</Text>
                             {price}
                         </View>
-                        {faceButton}
+                        <View style={styles.buttonContainer}>
+                            {faceButton}
+                        </View>
                     </View>
                     {ticket}
                     <HTMLView style={styles.content} stylesheet={HTMLStyles} value={item.content.rendered}/>
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
     content: {
         paddingTop: 20,
     },
-    date: {
+    dateContainer: {
         borderColor: '#e1e8ee',
         borderWidth: 1,
         ...Platform.select({
@@ -131,8 +138,7 @@ const styles = StyleSheet.create({
                 elevation: 2,
             },
         }),
-        marginTop: 10,
-        backgroundColor: '#eee',
+        backgroundColor: '#fff',
     },
     day: {
         paddingTop: 5,
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
     },
     month: {
         textAlign: 'center',
-        paddingBottom: 5,
+        paddingHorizontal: 16,
     },
     year: {
         fontSize: 10,
@@ -156,20 +162,26 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flex: 3,
-        marginLeft: 20,
-        marginTop: 20,
+        paddingLeft: 16,
     },
-    faceButton: {
-        marginTop: 10,
+    buttonContainer: {
         flex: 1,
+        justifyContent: 'center',
+    },
+    faceText: {
+        textAlign: 'center',
+        fontSize: 10,
     },
     faceIcon: {
-        height: 70,
-        width: 70,
-        alignSelf: 'flex-end',
+        fontSize: 20,
+        color: '#999',
+        alignSelf: 'center',
     },
     ticketButton: {
         paddingTop: 20,
+    },
+    icons: {
+        fontSize: 14,
     }
 
 });

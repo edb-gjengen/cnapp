@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {ScrollView, Text, View, Linking, StyleSheet, Platform, Button} from "react-native";
+import {ScrollView, Text, View, Linking, StyleSheet, Platform} from "react-native";
+import {Button, Text as NBText} from "native-base";
 
 export default class Membership extends Component {
     render() {
@@ -10,7 +11,7 @@ export default class Membership extends Component {
                     <Text style={styles.paragraph}>Vi setter pris på felleskapet som er med på å bygge Chateau Neuf. DNS er en organisasjon av og for medlemmene. Derfor sørger vi for at det blir litt lettere å være student ved å ta en del av kaka for medlemmene våre. Med medlemskap får billigere inngang og servering på alt som skjer på Chateau Neuf.</Text>
 
                     <View style={styles.button}>
-                        <Button onPress={this.onPurchasePress} title="Kjøp medlemskap" />
+                        <Button onPress={this.onPurchasePress} full><NBText>Kjøp medlemskap</NBText></Button>
                     </View>
 
                     <Text style={styles.paragraph}>Vi gir medlemmer:{"\n"}
@@ -25,7 +26,7 @@ export default class Membership extends Component {
     }
 
     onPurchasePress() {
-        Linking.openURL('https://dusken.neuf.no');
+        Linking.openURL('https://medlem.neuf.no');
     }
 }
 

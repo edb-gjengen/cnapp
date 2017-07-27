@@ -5,8 +5,9 @@ import React from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
 
-/* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
+moment.locale('nb');
 
+/* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
 class EventListContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -23,7 +24,6 @@ class EventListContainer extends React.Component {
     }
 
     _formatDate(time) {
-        moment.locale('nb');
         return moment(time).format('ll');
     }
 
