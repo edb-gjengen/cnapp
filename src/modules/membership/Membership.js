@@ -26,6 +26,7 @@ export default class Membership extends Component {
     }
 
     onPurchasePress() {
+        // FIXME: Move this to process.env.DUSKEN_URL and use babel thing to do search replace
         Linking.openURL('https://medlem.neuf.no');
     }
 }
