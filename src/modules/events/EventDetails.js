@@ -19,9 +19,16 @@ export default class EventDetails extends Component {
     _formatDay(time) {
         return moment(time).format('DD.');
     }
+    _formatLocalDay(time) {
+        return moment(time).format('ddd')
+    }
 
     _formatYear(time) {
         return moment(time).format('YYYY');
+    }
+
+    _formatRelative(time) {
+        return moment(time).fromNow();
     }
 
     _onUrlPress(link) {
@@ -32,11 +39,11 @@ export default class EventDetails extends Component {
         const item = this.props.item;
         let image = null;
         if (item.thumbnail.medium_large) {
-            image = <Image source={{uri: item.thumbnail.medium_large}} style={styles.image} resizeMode="cover" />;
+            image = <Image source={{uri: item.thumbnail.medium_large}} style={styles.image} />;
         }
         let price = null;
         if (item.price_regular && item.price_regular) {
-            price = <Text style={styles.info}>Pris: {item.price_regular} - Medlemmer: {item.price_member}</Text>;
+            price = <Text style={styles.metaText}>Pris: {item.price_regular} - Medlemmer: {item.price_member}</Text>;
         }
         let faceButton = null;
         if (item.facebook_url) {
@@ -66,13 +73,22 @@ export default class EventDetails extends Component {
                     <Text style={styles.header} numberOfLines={2}>{item.title.decoded}</Text>
                     <View style={{flexDirection: 'row', marginTop: 10}}>
                         <View style={styles.dateContainer}>
-                            <Text style={styles.day}>{this._formatDay(item.start_time)}</Text>
-                            <Text style={styles.month}>{this._formatMonth(item.start_time)}</Text>
-                            {year}
+                            <View style={styles.dateCard}>
+                                <Text style={styles.day}>{this._formatDay(item.start_time)}</Text>
+                                <Text style={styles.month}>{this._formatMonth(item.start_time)}</Text>
+                                {year}
+                            </View>
                         </View>
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.info}><Icon name="pin" style={styles.icons} /> {item.venue}</Text>
-                            <Text style={styles.info}><Icon name="time" style={styles.icons} /> kl. {this._formatTime(item.start_time)}</Text>
+                        <View style={styles.metaContainer}>
+                            <View style={styles.metaInner}>
+                                <View style={[styles.metaIcon, {paddingLeft: 1}]}><Icon name="pin" style={styles.icons} /></View>
+                                <Text style={styles.metaText}>{item.venue}</Text>
+                            </View>
+                            <View style={styles.metaInner}>
+                                <View style={styles.metaIcon}><Icon name="time" style={styles.icons} /></View>
+                                <Text style={styles.metaText}>{this._formatLocalDay(item.start_time)} kl. {this._formatTime(item.start_time)} - {this._formatTime(item.end_time)},</Text>
+                                <Text style={styles.timeRelative}> {this._formatRelative(item.start_time)}</Text>
+                            </View>
                             {price}
                         </View>
                         <View style={styles.buttonContainer}>
@@ -113,18 +129,40 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 260,
+        width: null
     },
     time: {
         fontSize: 14,
         color: '#666'
     },
-    info: {
+    metaIcon: {
+        width: 16,
+        paddingTop: 3,
+    },
+    metaContainer: {
+        flex: 3,
+        paddingLeft: 10,
+    },
+    metaInner: {
+        flexDirection: 'row'
+    },
+    metaText: {
         color: '#000',
     },
+    timeRelative: {
+        color: '#666',
+    },
     content: {
-        paddingTop: 20,
+        borderTopWidth: 0.5,
+        borderColor: '#999',
+        marginTop: 16,
+        paddingTop: 10,
     },
     dateContainer: {
+        width: 62,
+        justifyContent: 'center',
+    },
+    dateCard: {
         borderColor: '#e1e8ee',
         borderWidth: 1,
         ...Platform.select({
@@ -135,10 +173,11 @@ const styles = StyleSheet.create({
                 shadowRadius: 2,
             },
             android: {
-                elevation: 2,
+                elevation: 1,
             },
         }),
         backgroundColor: '#fff',
+        paddingBottom: 6,
     },
     day: {
         paddingTop: 5,
@@ -159,10 +198,6 @@ const styles = StyleSheet.create({
         paddingBottom: 3,
         paddingLeft: 20,
         paddingTop: 3,
-    },
-    infoContainer: {
-        flex: 3,
-        paddingLeft: 16,
     },
     buttonContainer: {
         flex: 1,
