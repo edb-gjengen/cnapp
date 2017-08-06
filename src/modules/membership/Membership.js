@@ -7,6 +7,10 @@ export default class Membership extends Component {
         return (
             <ScrollView>
                 <View style={styles.card}>
+                    <View style={styles.button}>
+                        <Button onPress={this.onLoginPress} full><NBText>Logg inn</NBText></Button>
+                    </View>
+
                     <Text style={styles.paragraph}>Siden 1813 har Det Norske Studentersamfund samlet studenter til kulturell, politisk, faglig og ikke minst sosial aktivitet. Som medlem i DNS er du med på å understreke viktigheten til en felles møteplass for alle Oslos studenter, uavhengig av utdanningsinstitusjon, studie og hvem de er.</Text>
                     <Text style={styles.paragraph}>Vi setter pris på felleskapet som er med på å bygge Chateau Neuf. DNS er en organisasjon av og for medlemmene. Derfor sørger vi for at det blir litt lettere å være student ved å ta en del av kaka for medlemmene våre. Med medlemskap får billigere inngang og servering på alt som skjer på Chateau Neuf.</Text>
 
@@ -23,12 +27,16 @@ export default class Membership extends Component {
                 </View>
             </ScrollView>
         )
-    }
+    };
 
     onPurchasePress() {
         // FIXME: Move this to process.env.DUSKEN_URL and use babel thing to do search replace
         Linking.openURL('https://medlem.neuf.no');
-    }
+    };
+
+    onLoginPress = () => {
+        this.props.onLoginPress();
+    };
 }
 
 

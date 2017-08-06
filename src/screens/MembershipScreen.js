@@ -10,9 +10,13 @@ export default class MembershipScreen extends Component {
         ),
     };
 
+    onLoginPress = () => {
+        this.props.navigation.navigate('Login');
+    };
+
     render() {
         return (
-            <MembershipContainer />
+            <MembershipContainer onLoginPress={this.onLoginPress} />
         )
     }
 }

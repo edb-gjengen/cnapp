@@ -16,7 +16,8 @@
     "react-native-htmlview": "^0.12.0",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.5",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",
@@ -26,7 +27,9 @@
   },
   "jest": {
     "preset": "react-native",
-    "setupFiles": ["<rootDir>/jest/setup.js"],
+    "setupFiles": [
+      "<rootDir>/jest/setup.js"
+    ],
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-navigation|native-base|@shoutem)"
     ]

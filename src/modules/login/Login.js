@@ -1,20 +1,38 @@
 import React, { Component } from 'react';
 import {Button, Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import { Spinner } from 'native-base';
 
-import { loginStart } from "../../actions";
+// import { login } from "../../actions";
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false
+      isAuthenticated: false,
+      isLoggingIn: false,
+      errorMessage: null,
+      email: '',
+      password: ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.state.loggedIn !== nextProps.loggedIn) {
+    if(this.state.isAuthenticated !== nextProps.isAuthenticated) {
       this.setState({
-        loggedIn: nextProps.loggedIn
+        isAuthenticated: nextProps.isAuthenticated
+      })
+      if (nextProps.isAuthenticated) {
+        this.onLogin();
+      }
+    }
+    if(this.state.isLoggingIn !== nextProps.isLoggingIn) {
+      this.setState({
+        isLoggingIn: nextProps.isLoggingIn
+      })
+    }
+    if(this.state.errorMessage !== nextProps.errorMessage) {
+      this.setState({
+        errorMessage: nextProps.errorMessage
       })
     }
   }
@@ -25,48 +43,60 @@ export default class Login extends Component {
     };
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>The Norwegian Student Society</Text>
+        <Text style={styles.text}>Det Norske Studentersamfund</Text>
         <Text style={styles.text}>Chateau Neuf</Text>
         <Image source={pic} style={{width: 200, height: 150, marginBottom: 40}} resizeMode='contain' />
         <TextInput
-          placeholder="Email"
+          placeholder="E-post"
           style={styles.input}
           keyboardType="email-address"
           autoCapitalize="none"
           returnKeyType="next"
+          onChangeText={this.handleEmail}
           onSubmitEditing={(event) => {
               this.refs.passwordInput.focus();
           }}
         />
         <TextInput
-          placeholder="Password"
+          placeholder="Passord"
           style={styles.input}
           secureTextEntry={true}
           autoCapitalize="none"
           ref='passwordInput'
+          onChangeText={this.handlePassword}
           onSubmitEditing={this.onLoginPress}
         />
         <View style={styles.button}>
           <Button
-            title="Log in"
+            title="Logg inn"
             onPress={this.onLoginPress}
           />
         </View>
-        <Text style={{paddingTop: 10}}>{this.loginState()}</Text>
+        {this.spinIfLoggingIn}
       </View>
     );
   }
 
-  onLoginPress = () => {
-    console.log("YO from onLoginPress");
-    this.props.dispatch(loginStart())
+  spinIfLoggingIn = () => {
+    if (this.state.isLoggingIn) {
+      return <Spinner color="#f58220"></Spinner>
+    }
+  }
+
+  handleEmail = (text) => {
+    this.setState({ email: text })
   };
 
-  loginState() {
-    if(this.state.loggedIn) {
-      return 'LOGGED IN'
-    }
-    return 'NOT YET'
+  handlePassword = (text) => {
+    this.setState({ password: text })
+  };
+
+  onLoginPress = () => {
+    this.props.requestLogin(this.state.email, this.state.password)
+  };
+
+  onLogin = () => {
+    this.props.onLogin();
   }
 }
 
@@ -78,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   input: {
-    width: 240,
+    width: 320,
     fontSize: 20,
     height: 52,
   },
