@@ -1,6 +1,7 @@
 ## Install
     # See https://facebook.github.io/react-native/docs/getting-started.html#content
     yarn
+    cp env-example .env
     react-native start
     react-native run-android
 

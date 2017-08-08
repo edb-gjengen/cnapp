@@ -4,6 +4,7 @@ import EventList from "./EventList";
 import React from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
+import Config from 'react-native-config'
 
 moment.locale('nb');
 
@@ -73,7 +74,7 @@ class EventListContainer extends React.Component {
 
     fetchEvents() {
         const { page } = this.state;
-        const url = `https://studentersamfundet.no/wp-json/wp/v2/events?page=${page}&future=1`;
+        const url = `${Config.EVENT_API_BASE_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
         this.setState({ loading: true });
 
         fetch(url)
