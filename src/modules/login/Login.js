@@ -78,7 +78,7 @@ export default class Login extends Component {
                         {this.emailInput()}
                         {this.passwordInput()}
                         {this.showError()}
-                        <Button block onPress={this.onLoginPress} style={styles.loginButton}><NBText>Logg
+                        <Button full onPress={this.onLoginPress} style={styles.loginButton}><NBText>Logg
                             inn</NBText></Button>
                         {this.showSpinner()}
                     </Form>
@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         marginVertical: 16,
-        marginHorizontal: 16
     },
     errorBox: {
         marginVertical: 16,

@@ -14,9 +14,13 @@ export default class MembershipScreen extends Component {
         this.props.navigation.navigate('Login');
     };
 
+    logoutNavigate = () => {
+        this.props.navigation.navigate('Membership');
+    };
+
     render() {
         return (
-            <MembershipContainer onLoginPress={this.onLoginPress} />
+            <MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />
         )
     }
 }

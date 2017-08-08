@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Platform, RefreshControl} from "react-native";
-import {Card, CardItem, Text, Content} from 'native-base';
+import {StyleSheet, Platform, RefreshControl, View} from "react-native";
+import {Button, Card, CardItem, Text, Content} from 'native-base';
 
 export default class MembershipProof extends Component {
     constructor(props) {
@@ -18,23 +18,27 @@ export default class MembershipProof extends Component {
     }
 
     validTo() {
-        if (this.state.user.last_membership.membership_type == 'lifelong') {
+        if (this.state.user.last_membership.membership_type === 'lifelong') {
             return 'Livsvarig'
         }
         return this.state.user.last_membership.end_date;
     }
 
-    statusText() {
+    membershipStatus() {
         if (!this.state.user.is_member) {
             if (!this.state.user.last_membership) {
-                return 'Ikke medlem'
+                // TODO: purchase membership button
+                return <View style={styles.notMember}><Text style={styles.notMemberText}>Ikke medlem</Text></View>
             }
-            return 'Utløpt'
+
+            return <View style={styles.expired}><Text style={styles.expiredText}>Utløpt</Text></View>
         }
+
         if (this.state.user.is_volunteer) {
-            return 'Aktiv'
+            return <View style={styles.valid}><Text style={styles.validText}>Aktiv frivillig</Text></View>
         }
-        return 'Medlem'
+
+        return <View style={styles.valid}><Text style={styles.validText}>Medlem</Text></View>
     }
 
     fetchUser = () => {
@@ -69,10 +73,16 @@ export default class MembershipProof extends Component {
                         <Text style={styles.nameText}>{this.state.user.first_name} {this.state.user.last_name}</Text>
                     </CardItem>
                     <CardItem>
-                        <Text>{this.statusText()}</Text>
+                        {this.membershipStatus()}
                     </CardItem>
                     <CardItem>
-                        <Text>Gyldig til: {this.validTo()}</Text>
+                        <View style={{alignItems: 'center', flex: 1}}>
+                        <Text>Gyldig til: </Text>
+                        <Text style={styles.validToValue}>{this.validTo()}</Text>
+                        </View>
+                    </CardItem>
+                    <CardItem>
+                        <Button onPress={this.props.onLogoutPress} style={styles.logoutButton}><Text>Logg ut</Text></Button>
                     </CardItem>
                 </Card>
             </Content>
@@ -86,5 +96,44 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    logoutButton: {
+        marginTop: 16,
+    },
+    valid: {
+        backgroundColor: '#5cb85c',
+        flex: 1,
+        marginHorizontal: -16,
+        padding: 16
+    },
+    validText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 24
+    },
+    expired: {
+        backgroundColor: '#62B1F6',
+        flex: 1,
+        marginHorizontal: -16,
+        padding: 16
+    },
+    expiredText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 24
+    },
+    notMember: {
+        flex: 1,
+        marginHorizontal: -16,
+        padding: 16
+    },
+    notMemberText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 24
+    },
+    validToValue: {
+        fontWeight: 'bold',
+        fontSize: 18,
     },
 });
