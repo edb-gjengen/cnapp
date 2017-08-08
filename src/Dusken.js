@@ -7,9 +7,11 @@ import EventsScreen from "./screens/EventScreen";
 import EventDetailsScreen from "./screens/EventDetailsScreen";
 import AboutScreen from "./screens/AboutScreen";
 import MembershipScreen from "./screens/MembershipScreen";
+import Login from "./modules/login/Login";
 
 
 const tabBarRoutes = {
+    // Login: { screen: LoginScreen },
     Events: { screen: EventsScreen },
     Membership: { screen: MembershipScreen },
     About: { screen: AboutScreen },

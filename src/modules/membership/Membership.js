@@ -30,8 +30,8 @@ export default class Membership extends Component {
     };
 
     onPurchasePress() {
-        // FIXME: Move this to process.env.DUSKEN_URL and use babel thing to do search replace
-        Linking.openURL('https://medlem.neuf.no');
+        // FIXME: Move this to .env as DUSKEN_URL
+        Linking.openURL('https://galtinn.neuf.no');
     };
 
     onLoginPress = () => {

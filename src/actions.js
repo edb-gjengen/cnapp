@@ -1,3 +1,5 @@
+import Config from 'react-native-config';
+
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -20,10 +22,10 @@ function loginSuccess(username, token) {
   }
 }
 
-function loginFailure(errorMessage) {
+function loginFailure(loginError) {
   return {
     type: LOGIN_FAILURE,
-    errorMessage
+    loginError
   }
 }
 
@@ -66,9 +68,9 @@ export {
 export function requestLogin(username, password) {
   return (dispatch) => {
     // We are now logging in
-    dispatch(loginRequest())
-
-    return fetch('http://10.0.0.10:3000/auth/obtain-token/', {
+    dispatch(loginRequest());
+    const apiURL = Config.DUSKEN_API_URL;
+    return fetch(`${apiURL}/auth/obtain-token/`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -91,7 +93,8 @@ export function requestLogin(username, password) {
         dispatch(loginSuccess(username, data.token))
       },
       data => {
-      	dispatch(loginFailure(data.error || 'Log in failed'))
+        console.log(data);
+        dispatch(loginFailure(data || {'non_field_errors': ['Kunne ikke logge inn, prøv igjen']}))
       }
     )
   }
@@ -100,9 +103,10 @@ export function requestLogin(username, password) {
 export function requestUserData(token) {
   return (dispatch) => {
     // We are now fetching user data
-    dispatch(userDataRequest())
+    dispatch(userDataRequest());
 
-    return fetch('http://10.0.0.10:3000/api/me/', {
+    const apiURL = Config.DUSKEN_API_URL;
+    return fetch(`${apiURL}/api/me/`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

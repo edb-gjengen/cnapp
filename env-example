@@ -1,1 +1,2 @@
-EVENT_API_BASE_URL=https://studentersamfundet.no
+EVENT_API_URL=https://studentersamfundet.no
+DUSKEN_API_URL=https://galtinn.neuf.no

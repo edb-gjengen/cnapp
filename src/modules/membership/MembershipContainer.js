@@ -26,7 +26,7 @@ class MembershipContainer extends React.Component {
             this.setState({isAuthenticated: nextProps.isAuthenticated})
         }
         if(this.state.userToken !== nextProps.userToken) {
-            this.setState({userToken: nextProps.userToken})
+            this.setState({userToken: nextProps.userToken});
             this.fetchUser();
         }
         if(this.state.user !== nextProps.user) {
@@ -37,11 +37,11 @@ class MembershipContainer extends React.Component {
     fetchUser = () => {
         if (!this.state.userToken) { return; }
         this.props.requestUserData(this.state.userToken)
-    }
+    };
 
     onLoginPress = () => {
         this.props.onLoginPress();
-    }
+    };
 
     render() {
         if (this.state.user) {

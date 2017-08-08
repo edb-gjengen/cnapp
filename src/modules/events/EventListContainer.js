@@ -2,9 +2,9 @@ import {connect} from "react-redux";
 import EventList from "./EventList";
 
 import React from 'react';
+import Config from 'react-native-config';
 import moment from "moment";
 import 'moment/locale/nb';
-import Config from 'react-native-config'
 
 moment.locale('nb');
 
@@ -74,7 +74,7 @@ class EventListContainer extends React.Component {
 
     fetchEvents() {
         const { page } = this.state;
-        const url = `${Config.EVENT_API_BASE_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
+        const url = `${Config.EVENT_API_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
         this.setState({ loading: true });
 
         fetch(url)

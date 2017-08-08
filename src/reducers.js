@@ -14,19 +14,21 @@ const initialState = {
   isFetchingUserData: false,
   userToken: null,
   user: null,
+  loginError: null,
 };
 
 export default function duskenApp(state = initialState, action) {
   switch (action.type) {
     case LOGIN_REQUEST:
       return Object.assign({}, state, {
-        isLoggingIn: true
+        isLoggingIn: true,
+        loginError: null,
       });
 
     case LOGIN_FAILURE:
       return Object.assign({}, state, {
       	isLoggingIn: false,
-      	errorMessage: action.errorMessage
+        loginError: action.loginError
       });
 
     case LOGIN_SUCCESS:
@@ -37,7 +39,7 @@ export default function duskenApp(state = initialState, action) {
       });
 
     case LOGOUT:
-      return initialState
+      return initialState;
 
     case USER_DATA_REQUEST:
       return Object.assign({}, state, {
