@@ -17,14 +17,18 @@ class EventListContainer extends React.Component {
             events: [],
             eventsSectioned: [],
             page: 1,
-            noMorePages: false,
+            totalPages: 0,
             error: null,
             refreshing: false,
         };
     }
 
     _formatDate(time) {
-        return moment(time).format('ll');
+        const m = moment(time);
+        if(moment().year() === m.year() ) {
+            return m.format('D. MMM')
+        }
+        return m.format('ll');
     }
 
     _toSectionFormat(events) {
@@ -50,14 +54,14 @@ class EventListContainer extends React.Component {
         this.setState({
             page: 1,
             refreshing: true,
-            noMorePages: false,
+            totalPages: 1,
         }, () => {
             this.fetchEvents()
         });
     };
 
     handleLoadMore = () => {
-        if(this.state.noMorePages || this.state.loading) {
+        if(this.state.page >= this.state.totalPages || this.state.loading) {
             return;
         }
         this.setState({
@@ -73,14 +77,11 @@ class EventListContainer extends React.Component {
         this.setState({ loading: true });
 
         fetch(url)
-            .then(res => res.json())
             .then(res => {
-                if(res.code === 'rest_post_invalid_page_number') {
-                    this.setState({
-                        noMorePages: true
-                    });
-                }
-
+                this.setState({totalPages: parseInt(res.headers.get('x-wp-totalpages'))});
+                return res.json();
+            })
+            .then(res => {
                 this.setState({
                     events: page === 1 ? res : [...this.state.events, ...res],
                     eventsSectioned: page === 1 ? this._toSectionFormat(res) : this._toSectionFormat([...this.state.events, ...res]),
