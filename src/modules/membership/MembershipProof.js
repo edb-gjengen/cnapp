@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Linking, StyleSheet, Platform, RefreshControl, View} from "react-native";
 import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
 import Config from 'react-native-config';
+import Confetti from 'react-native-confetti';
 
 export default class MembershipProof extends Component {
     constructor(props) {
@@ -15,6 +16,17 @@ export default class MembershipProof extends Component {
     componentWillReceiveProps(nextProps) {
         if(this.state.user !== nextProps.user) {
             this.setState({user: nextProps.user})
+        }
+    }
+    componentDidMount() {
+        if(this._confettiView) {
+            this._confettiView.startConfetti();
+        }
+    }
+
+    componentWillUnmount () {
+        if (this._confettiView) {
+            this._confettiView.stopConfetti();
         }
     }
 
@@ -75,7 +87,7 @@ export default class MembershipProof extends Component {
 
         let statusText = 'Medlem';
         if (this.state.user.is_volunteer) {
-            statusText = 'Aktiv frivillig';
+            statusText = 'Aktiv';
         }
 
         return <CardItem><View style={styles.valid}><Text style={styles.validText}>{statusText}</Text></View></CardItem>
@@ -100,29 +112,39 @@ export default class MembershipProof extends Component {
         </CardItem>
     }
 
+    confetti() {
+        if (this.state.user.is_member) {
+            // FIXME: allmost infinite confetti. Are the animations paused when not visible, if not power hog?
+            return <Confetti ref={(node) => this._confettiView = node} confettiCount={Number.MAX_SAFE_INTEGER} />
+        }
+    }
+
     fetchUser = () => {
         this.props.fetchUser()
     };
 
     render() {
         return (
-            <Content style={{margin: 8}}>
-                <Card>
-                    {this.membershipName()}
-                    {this.membershipStatus()}
-                    {this.purchaseButton()}
-                    {this.membershipValidTo()}
-                </Card>
-                <Card>
-                    <CardItem>
-                        <Body>
-                            <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
-                                <Text>Logg ut</Text>
-                            </Button>
-                        </Body>
-                    </CardItem>
-                </Card>
-            </Content>
+            <View style={{flex: 1}}>
+                {this.confetti()}
+                <Content style={{margin: 8}}>
+                    <Card>
+                        {this.membershipName()}
+                        {this.membershipStatus()}
+                        {this.purchaseButton()}
+                        {this.membershipValidTo()}
+                    </Card>
+                    <Card>
+                        <CardItem>
+                            <Body>
+                                <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
+                                    <Text>Logg ut</Text>
+                                </Button>
+                            </Body>
+                        </CardItem>
+                    </Card>
+                </Content>
+            </View>
         )
     };
 
@@ -156,7 +178,7 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     expired: {
-        backgroundColor: '#62B1F6',
+        backgroundColor: '#d9534f',
         flex: 1,
         marginHorizontal: -16,
         padding: 16

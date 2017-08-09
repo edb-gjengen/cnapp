@@ -3442,6 +3442,10 @@ react-devtools-core@2.3.1:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-confetti@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-confetti/-/react-native-confetti-0.0.6.tgz#a505e4e5a23bcb2cf554ba51362dfaf3ac17a100"
+
 react-native-config@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-0.6.0.tgz#0f71631ab5ac4b568637dcb8e9f6ab85ffb380ed"
