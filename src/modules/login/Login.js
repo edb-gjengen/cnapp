@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text as NBText, Icon} from 'native-base';
+import {Body, Card, CardItem, Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text as NBText,
+    Icon} from 'native-base';
 
 export default class Login extends Component {
     constructor(props) {
@@ -73,15 +74,22 @@ export default class Login extends Component {
     render() {
         return (
             <Container style={styles.container}>
-                <Content>
-                    <Form>
-                        {this.emailInput()}
-                        {this.passwordInput()}
-                        {this.showError()}
-                        <Button full onPress={this.onLoginPress} style={styles.loginButton}><NBText>Logg
-                            inn</NBText></Button>
-                        {this.showSpinner()}
-                    </Form>
+                <Content style={{margin: 8}}>
+                    <Card>
+                        <Form>
+                            {this.emailInput()}
+                            {this.passwordInput()}
+                            {this.showError()}
+                            <CardItem>
+                                <Body>
+                                    <Button full onPress={this.onLoginPress} style={styles.loginButton}>
+                                        <NBText>Logg inn</NBText>
+                                    </Button>
+                                </Body>
+                            </CardItem>
+                            {this.showSpinner()}
+                        </Form>
+                    </Card>
                 </Content>
             </Container>
         );
@@ -123,7 +131,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white'
     },
     input: {
         width: 320,

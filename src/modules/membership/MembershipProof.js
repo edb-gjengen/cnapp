@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Platform, RefreshControl, View} from "react-native";
-import {Button, Card, CardItem, Text, Content} from 'native-base';
+import {Linking, StyleSheet, Platform, RefreshControl, View} from "react-native";
+import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
+import Config from 'react-native-config';
 
 export default class MembershipProof extends Component {
     constructor(props) {
@@ -16,34 +17,6 @@ export default class MembershipProof extends Component {
             this.setState({user: nextProps.user})
         }
     }
-
-    validTo() {
-        if (this.state.user.last_membership.membership_type === 'lifelong') {
-            return 'Livsvarig'
-        }
-        return this.state.user.last_membership.end_date;
-    }
-
-    membershipStatus() {
-        if (!this.state.user.is_member) {
-            if (!this.state.user.last_membership) {
-                // TODO: purchase membership button
-                return <View style={styles.notMember}><Text style={styles.notMemberText}>Ikke medlem</Text></View>
-            }
-
-            return <View style={styles.expired}><Text style={styles.expiredText}>Utløpt</Text></View>
-        }
-
-        if (this.state.user.is_volunteer) {
-            return <View style={styles.valid}><Text style={styles.validText}>Aktiv frivillig</Text></View>
-        }
-
-        return <View style={styles.valid}><Text style={styles.validText}>Medlem</Text></View>
-    }
-
-    fetchUser = () => {
-        this.props.fetchUser()
-    };
 
     // fetchUser = () => {
     //     this.props.fetchUser().then(() => {
@@ -65,29 +38,103 @@ export default class MembershipProof extends Component {
     //         />)
     // }
 
+    membershipValidTo() {
+        if( !this.state.user.last_membership) {
+            return;
+        }
+
+        let validTo = this.state.user.last_membership.end_date;
+        if (this.state.user.last_membership.membership_type === 'lifelong') {
+            validTo = 'Livsvarig'
+        }
+
+        return (
+            <CardItem>
+                <View style={{alignItems: 'center', flex: 1}}>
+                    <Text>Gyldig til: </Text>
+                    <Text style={styles.validToValue}>{validTo}</Text>
+                </View>
+            </CardItem>
+        )
+    }
+
+    membershipStatus() {
+        if (!this.state.user.is_member) {
+            // TODO: purchase membership button
+            if ( !this.state.user.last_membership ) {
+                return (
+                    <CardItem>
+                        <View style={styles.notMember}>
+                            <Text style={styles.notMemberText}>Ikke medlem</Text>
+                        </View>
+                    </CardItem>)
+            }
+
+            return <View style={styles.expired}><Text style={styles.expiredText}>Utløpt</Text></View>
+        }
+
+        let statusText = 'Medlem';
+        if (this.state.user.is_volunteer) {
+            statusText = 'Aktiv frivillig';
+        }
+
+        return <CardItem><View style={styles.valid}><Text style={styles.validText}>{statusText}</Text></View></CardItem>
+    }
+
+    purchaseButton() {
+        if (this.state.user.is_member) {
+            return;
+        }
+        return <CardItem>
+            <Body>
+                <Button
+                    onPress={() => {
+                        Linking.openURL(Config.DUSKEN_PURCHASE_URL);
+                    }}
+                    full
+                    style={styles.purchaseButton}
+                >
+                    <Text>Kjøp medlemskap</Text>
+                </Button>
+            </Body>
+        </CardItem>
+    }
+
+    fetchUser = () => {
+        this.props.fetchUser()
+    };
+
     render() {
         return (
-            <Content>
+            <Content style={{margin: 8}}>
+                <Card>
+                    {this.membershipName()}
+                    {this.membershipStatus()}
+                    {this.purchaseButton()}
+                    {this.membershipValidTo()}
+                </Card>
                 <Card>
                     <CardItem>
-                        <Text style={styles.nameText}>{this.state.user.first_name} {this.state.user.last_name}</Text>
-                    </CardItem>
-                    <CardItem>
-                        {this.membershipStatus()}
-                    </CardItem>
-                    <CardItem>
-                        <View style={{alignItems: 'center', flex: 1}}>
-                        <Text>Gyldig til: </Text>
-                        <Text style={styles.validToValue}>{this.validTo()}</Text>
-                        </View>
-                    </CardItem>
-                    <CardItem>
-                        <Button onPress={this.props.onLogoutPress} style={styles.logoutButton}><Text>Logg ut</Text></Button>
+                        <Body>
+                            <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
+                                <Text>Logg ut</Text>
+                            </Button>
+                        </Body>
                     </CardItem>
                 </Card>
             </Content>
         )
     };
+
+    membershipName() {
+        let name = `${this.state.user.first_name} ${this.state.user.last_name}`;
+        if(name === ' ') {
+            name = this.state.user.email;
+        }
+        return <CardItem>
+            <Text style={styles.nameText}>{name}</Text>
+        </CardItem>
+    }
 }
 
 const styles = StyleSheet.create({
@@ -96,9 +143,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold',
-    },
-    logoutButton: {
-        marginTop: 16,
     },
     valid: {
         backgroundColor: '#5cb85c',
@@ -123,6 +167,7 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     notMember: {
+        backgroundColor: '#62B1F6',
         flex: 1,
         marginHorizontal: -16,
         padding: 16
@@ -135,5 +180,11 @@ const styles = StyleSheet.create({
     validToValue: {
         fontWeight: 'bold',
         fontSize: 18,
+    },
+    purchaseButton: {
+        marginTop: 16,
+    },
+    logoutButton: {
+        marginVertical: 8,
     },
 });

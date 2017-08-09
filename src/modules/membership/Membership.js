@@ -16,7 +16,7 @@ export default class Membership extends Component {
                     <Text style={styles.paragraph}>Vi setter pris på felleskapet som er med på å bygge Chateau Neuf. DNS er en organisasjon av og for medlemmene. Derfor sørger vi for at det blir litt lettere å være student ved å ta en del av kaka for medlemmene våre. Med medlemskap får billigere inngang og servering på alt som skjer på Chateau Neuf.</Text>
 
                     <View style={styles.button}>
-                        <Button onPress={this.onPurchasePress} full><NBText>Kjøp medlemskap</NBText></Button>
+                        <Button onPress={() => { Linking.openURL(Config.DUSKEN_PURCHASE_URL); } } full><NBText>Kjøp medlemskap</NBText></Button>
                     </View>
 
                     <Text style={styles.paragraph}>Vi gir medlemmer:{"\n"}
@@ -28,10 +28,6 @@ export default class Membership extends Component {
                 </View>
             </ScrollView>
         )
-    };
-
-    onPurchasePress() {
-        Linking.openURL(Config.DUSKEN_PURCHASE_URL);
     };
 
     onLoginPress = () => {
