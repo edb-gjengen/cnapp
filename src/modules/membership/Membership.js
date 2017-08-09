@@ -14,7 +14,7 @@ export default class Membership extends Component {
                         <Button onPress={() => { Linking.openURL(Config.DUSKEN_PURCHASE_URL); } } full><NBText>Bli medlem</NBText></Button>
                     </View>
                     <Text style={styles.header}>Hva får jeg?</Text>
-                    <Text style={[styles.paragraph, {textAlign: 'left'}]}>
+                    <Text style={[styles.paragraph, {textAlign: 'left', paddingLeft: 4}]}>
                         - Minst 25% rabatt på de fleste arrangement{"\n"}
                         - Gratis inngang på enkelte arrangement{"\n"}
                         - Store rabatter i barene{"\n"}
@@ -83,5 +83,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#000',
         lineHeight: 25,
+        paddingLeft: 2
     },
 });
