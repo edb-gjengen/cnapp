@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, Text, View, Linking, StyleSheet, Platform} from "react-native";
 import {Button, Text as NBText} from "native-base";
+import Config from 'react-native-config';
 
 export default class Membership extends Component {
     render() {
@@ -30,8 +31,7 @@ export default class Membership extends Component {
     };
 
     onPurchasePress() {
-        // FIXME: Move this to .env as DUSKEN_URL
-        Linking.openURL('https://galtinn.neuf.no');
+        Linking.openURL(Config.DUSKEN_PURCHASE_URL);
     };
 
     onLoginPress = () => {
