@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "emulator": "emulator -avd $(emulator -list-avds | head)&"
+    "emulator": "emulator -avd $(emulator -list-avds | head)&",
+    "build-android": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
     "moment": "^2.18.1",

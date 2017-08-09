@@ -24,7 +24,7 @@
     DUSKEN_RELEASE_KEY_PASSWORD=
 
     # Build
-    cd android && ./gradlew assembleRelease
+    npm run build-android
 
     # Output is in android/app/build/outputs/apk
 
