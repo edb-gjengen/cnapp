@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Linking, StyleSheet, View} from 'react-native';
-import {Body, Card, CardItem, Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text,
+import {Linking, StyleSheet, View, Platform} from 'react-native';
+import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text,
     Icon} from 'native-base';
 import Config from 'react-native-config';
 
@@ -15,7 +15,7 @@ export default class Login extends Component {
 
     emailInput() {
         if (this.props.loginError && this.props.loginError.username) {
-            return <Item floatingLabel error>
+            return <Item stackedLabel error>
                 <Label>E-post / Brukernavn</Label>
                 <Input
                     keyboardType="email-address"
@@ -29,7 +29,7 @@ export default class Login extends Component {
             </Item>;
         }
 
-        return <Item floatingLabel>
+        return <Item stackedLabel>
             <Label>E-post / Brukernavn</Label>
             <Input
                 keyboardType="email-address"
@@ -45,7 +45,7 @@ export default class Login extends Component {
 
     passwordInput() {
         if (this.props.loginError && this.props.loginError.password) {
-            return <Item floatingLabel last error>
+            return <Item stackedLabel last error>
                 <Label>Passord</Label>
                 <Input
                     secureTextEntry={true}
@@ -58,7 +58,7 @@ export default class Login extends Component {
                 />
             </Item>
         }
-        return <Item floatingLabel last>
+        return <Item stackedLabel last>
             <Label>Passord</Label>
             <Input
                 secureTextEntry={true}
@@ -75,27 +75,24 @@ export default class Login extends Component {
     render() {
         return (
             <Container style={styles.container}>
-                <Content style={{margin: 8}}>
-                    <Card>
-                        <Form>
-                            {this.emailInput()}
-                            {this.passwordInput()}
-                            {this.showError()}
-                            <CardItem>
-                                <Body>
-                                    <Button full onPress={this.onLoginPress} style={styles.loginButton}>
-                                        <Text>Logg inn</Text>
-                                    </Button>
-                                    <Button
-                                        small
-                                        light
-                                        onPress={() => { Linking.openURL(Config.DUSKEN_FORGOT_PASSWORD_URL); } }
-                                        style={styles.forgotPasswordButton}><Text>Glemt passord?</Text></Button>
-                                </Body>
-                            </CardItem>
-                            {this.showSpinner()}
-                        </Form>
-                    </Card>
+                <Content>
+                    <Form style={styles.card}>
+                        {this.emailInput()}
+                        {this.passwordInput()}
+                        {this.showError()}
+                        <Button full onPress={this.onLoginPress} style={styles.loginButton}>
+                            <Text>Logg inn</Text>
+                        </Button>
+                        <Button
+                            small
+                            light
+                            onPress={() => { Linking.openURL(Config.DUSKEN_FORGOT_PASSWORD_URL); } }
+                            style={styles.forgotPasswordButton}
+                        >
+                            <Text>Glemt passord?</Text>
+                        </Button>
+                        {this.showSpinner()}
+                    </Form>
                 </Content>
             </Container>
         );
@@ -157,5 +154,23 @@ const styles = StyleSheet.create({
     errorMessage: {
         textAlign: 'center',
         color: 'red',
-    }
+    },
+    card: {
+        borderColor: '#e1e8ee',
+        borderWidth: 1,
+        ...Platform.select({
+            ios: {
+                shadowColor: 'rgba(0,0,0, .2)',
+                shadowOffset: {height: 0, width: 0},
+                shadowOpacity: 1,
+                shadowRadius: 1,
+            },
+            android: {
+                elevation: 1,
+            },
+        }),
+        padding: 8,
+        margin: 8,
+        backgroundColor: '#fff',
+    },
 });
