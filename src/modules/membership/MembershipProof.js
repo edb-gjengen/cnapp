@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Linking, StyleSheet, Platform, RefreshControl, View} from "react-native";
+import {Image, Linking, StyleSheet, Platform, RefreshControl, View} from "react-native";
 import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
 import Config from 'react-native-config';
 import Confetti from 'react-native-confetti';
@@ -119,6 +119,18 @@ export default class MembershipProof extends Component {
         }
     }
 
+    logo() {
+        if (!this.state.user.is_member) {
+            return;
+        }
+        // FIXME: URL to config
+        return <Image
+            style={{width: null, height: 100}}
+            source={{uri: 'https://galtinn.neuf.no/static/dist/images/logo.png'}}
+            resizeMode="contain"
+        />
+    }
+
     fetchUser = () => {
         this.props.fetchUser()
     };
@@ -130,6 +142,7 @@ export default class MembershipProof extends Component {
                 <Content style={{margin: 8}}>
                     <Card>
                         {this.membershipName()}
+                        {this.logo()}
                         {this.membershipStatus()}
                         {this.purchaseButton()}
                         {this.membershipValidTo()}
