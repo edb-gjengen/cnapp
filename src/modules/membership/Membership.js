@@ -8,23 +8,22 @@ export default class Membership extends Component {
         return (
             <ScrollView>
                 <View style={styles.card}>
+                    <Text style={styles.headerTitle}>Hei 👋</Text>
+                    <Text style={styles.paragraph}>Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen</Text>
                     <View style={styles.button}>
-                        <Button onPress={this.onLoginPress} full><NBText>Logg inn</NBText></Button>
+                        <Button onPress={() => { Linking.openURL(Config.DUSKEN_PURCHASE_URL); } } full><NBText>Bli medlem</NBText></Button>
                     </View>
-
-                    <Text style={styles.paragraph}>Siden 1813 har Det Norske Studentersamfund samlet studenter til kulturell, politisk, faglig og ikke minst sosial aktivitet. Som medlem i DNS er du med på å understreke viktigheten til en felles møteplass for alle Oslos studenter, uavhengig av utdanningsinstitusjon, studie og hvem de er.</Text>
-                    <Text style={styles.paragraph}>Vi setter pris på felleskapet som er med på å bygge Chateau Neuf. DNS er en organisasjon av og for medlemmene. Derfor sørger vi for at det blir litt lettere å være student ved å ta en del av kaka for medlemmene våre. Med medlemskap får billigere inngang og servering på alt som skjer på Chateau Neuf.</Text>
-
-                    <View style={styles.button}>
-                        <Button onPress={() => { Linking.openURL(Config.DUSKEN_PURCHASE_URL); } } full><NBText>Kjøp medlemskap</NBText></Button>
-                    </View>
-
-                    <Text style={styles.paragraph}>Vi gir medlemmer:{"\n"}
+                    <Text style={styles.header}>Hva får jeg?</Text>
+                    <Text style={[styles.paragraph, {textAlign: 'left'}]}>
                         - Minst 25% rabatt på de fleste arrangement{"\n"}
                         - Gratis inngang på enkelte arrangement{"\n"}
                         - Store rabatter i barene{"\n"}
                         - Egne medlemsarrangement og -tilbud{"\n"}
                         - Mulighet til å delta i landets eldste studentdemokrati</Text>
+                    <Text style={styles.em}>Allerede medlem?</Text>
+                    <View style={styles.button}>
+                        <Button onPress={this.onLoginPress} full><NBText>Logg inn</NBText></Button>
+                    </View>
                 </View>
             </ScrollView>
         )
@@ -56,6 +55,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     paragraph: {
+        textAlign: 'center',
         fontSize: 16,
         color: '#000',
         paddingBottom: 10,
@@ -64,5 +64,24 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 6,
         marginBottom: 16,
-    }
+    },
+    em: {
+        fontSize: 16,
+        color: '#000',
+        fontStyle: 'italic',
+        textAlign: 'center',
+        marginVertical: 10,
+    },
+    headerTitle: {
+        textAlign: 'center',
+        fontSize: 20,
+        color: '#000',
+        paddingVertical: 10,
+        lineHeight: 25,
+    },
+    header: {
+        fontSize: 20,
+        color: '#000',
+        lineHeight: 25,
+    },
 });

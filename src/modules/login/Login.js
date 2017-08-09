@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Body, Card, CardItem, Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text as NBText,
+import {Linking, StyleSheet, View} from 'react-native';
+import {Body, Card, CardItem, Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text,
     Icon} from 'native-base';
+import Config from 'react-native-config';
 
 export default class Login extends Component {
     constructor(props) {
@@ -83,8 +84,13 @@ export default class Login extends Component {
                             <CardItem>
                                 <Body>
                                     <Button full onPress={this.onLoginPress} style={styles.loginButton}>
-                                        <NBText>Logg inn</NBText>
+                                        <Text>Logg inn</Text>
                                     </Button>
+                                    <Button
+                                        small
+                                        light
+                                        onPress={() => { Linking.openURL(Config.DUSKEN_FORGOT_PASSWORD_URL); } }
+                                        style={styles.forgotPasswordButton}><Text>Glemt passord?</Text></Button>
                                 </Body>
                             </CardItem>
                             {this.showSpinner()}
@@ -100,7 +106,7 @@ export default class Login extends Component {
             const err = this.props.loginError.non_field_errors;
             let errorFormatted = err ? err[0] : 'Feil brukernavn eller passord, prøv igjen...';
             // TODO: Format these and highlight error fields
-            return <View style={styles.errorBox}><NBText style={styles.errorMessage}>{errorFormatted}</NBText></View>
+            return <View style={styles.errorBox}><Text style={styles.errorMessage}>{errorFormatted}</Text></View>
         }
         else {
             return <View style={styles.errorBox}/>
@@ -138,10 +144,15 @@ const styles = StyleSheet.create({
         height: 52,
     },
     loginButton: {
-        marginVertical: 16,
+        marginBottom: 16,
+    },
+    forgotPasswordButton: {
+        alignSelf: 'center',
+        marginTop: 32,
+        marginBottom: 16,
     },
     errorBox: {
-        marginVertical: 16,
+        marginVertical: 10,
     },
     errorMessage: {
         textAlign: 'center',
