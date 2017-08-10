@@ -7,7 +7,8 @@ export default class LoginScreen extends Component {
     };
 
     onLogin = () => {
-        this.props.navigation.navigate('Membership');
+        // This works since LoginScreen is allways navigated to from MembershipScreen
+        this.props.navigation.goBack();
     };
 
     render() {
