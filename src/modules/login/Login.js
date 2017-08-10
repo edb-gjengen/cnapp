@@ -22,8 +22,8 @@ export default class Login extends Component {
                     autoCapitalize="none"
                     returnKeyType="next"
                     onChangeText={this.handleEmail}
-                    onSubmitEditing={(event) => {
-                        this.passwordInputEl._root.focus();
+                    onSubmitEditing={() => {
+                        this.refs.passwordInput._root.focus()
                     }}
                 />
             </Item>;
@@ -36,8 +36,8 @@ export default class Login extends Component {
                 autoCapitalize="none"
                 returnKeyType="next"
                 onChangeText={this.handleEmail}
-                onSubmitEditing={(event) => {
-                    this.passwordInputEl._root.focus();
+                onSubmitEditing={() => {
+                    this.refs.passwordInput._root.focus()
                 }}
             />
         </Item>;
@@ -48,11 +48,9 @@ export default class Login extends Component {
             return <Item stackedLabel last error>
                 <Label>Passord</Label>
                 <Input
+                    ref="passwordInput"
                     secureTextEntry={true}
                     autoCapitalize="none"
-                    getRef={(input) => {
-                        this.passwordInputEl = input;
-                    }}
                     onChangeText={this.handlePassword}
                     onSubmitEditing={this.onLoginPress}
                 />
@@ -61,11 +59,9 @@ export default class Login extends Component {
         return <Item stackedLabel last>
             <Label>Passord</Label>
             <Input
+                ref="passwordInput"
                 secureTextEntry={true}
                 autoCapitalize="none"
-                getRef={(input) => {
-                    this.passwordInputEl = input;
-                }}
                 onChangeText={this.handlePassword}
                 onSubmitEditing={this.onLoginPress}
             />
