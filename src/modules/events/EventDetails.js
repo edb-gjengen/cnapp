@@ -35,16 +35,40 @@ export default class EventDetails extends Component {
         Linking.openURL(link);
     }
 
+    price() {
+        let item = this.props.item;
+        let reg_kr = null;
+        let mem_kr = null;
+        if (item.price_regular === '0') {
+            item.price_regular = 'Gratis'
+        }
+        if (item.price_member === '0') {
+            item.price_member = 'Gratis'
+        }
+        if (item.price_regular != 'Gratis') {
+            reg_kr = " kr"
+        }
+        if (item.price_member != 'Gratis') {
+            mem_kr = " kr"
+        }
+        if (item.price_regular && item.price_member) {
+            return <Text style={styles.metaText}>Pris: {item.price_regular}{reg_kr} - Medlemmer: {item.price_member}{mem_kr}</Text>;
+        }
+        if (item.price_regular) {
+            return <Text style={styles.metaText}>Pris: {item.price_regular}{reg_kr}</Text>
+        }
+        if (item.price_member) {
+            return <Text style={styles.metaText}>Pris (Medlemmer): {item.price_member}{mem_kr}</Text>
+        }
+    }
+
     render() {
         const item = this.props.item;
         let image = null;
         if (item.thumbnail.medium_large) {
             image = <Image source={{uri: item.thumbnail.medium_large}} style={styles.image} />;
         }
-        let price = null;
-        if (item.price_regular && item.price_regular) {
-            price = <Text style={styles.metaText}>Pris: {item.price_regular} - Medlemmer: {item.price_member}</Text>;
-        }
+
         let faceButton = null;
         if (item.facebook_url) {
             faceButton = <TouchableHighlight underlayColor="#fff" onPress={() => this._onUrlPress(item.facebook_url)}>
@@ -89,7 +113,7 @@ export default class EventDetails extends Component {
                                 <Text style={styles.metaText}>{this._formatLocalDay(item.start_time)} kl. {this._formatTime(item.start_time)} - {this._formatTime(item.end_time)},</Text>
                                 <Text style={styles.timeRelative}> {this._formatRelative(item.start_time)}</Text>
                             </View>
-                            {price}
+                            {this.price()}
                         </View>
                         <View style={styles.buttonContainer}>
                             {faceButton}
