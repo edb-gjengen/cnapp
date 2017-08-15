@@ -15,7 +15,7 @@ export default class Login extends Component {
 
     emailInput() {
         if (this.props.loginError && this.props.loginError.username) {
-            return <Item stackedLabel error>
+            return <Item stackedLabel last error>
                 <Label>E-post / Brukernavn</Label>
                 <Input
                     keyboardType="email-address"
@@ -29,7 +29,7 @@ export default class Login extends Component {
             </Item>;
         }
 
-        return <Item stackedLabel>
+        return <Item stackedLabel last>
             <Label>E-post / Brukernavn</Label>
             <Input
                 keyboardType="email-address"
