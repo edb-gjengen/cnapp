@@ -73,8 +73,7 @@ export default class EventDetails extends Component {
         if (item.facebook_url) {
             faceButton = <TouchableHighlight underlayColor="#fff" onPress={() => this._onUrlPress(item.facebook_url)}>
                             <View>
-                                <Icon style={styles.faceIcon} name="logo-facebook" />
-                                <Text style={styles.faceText}>På Facebook</Text>
+                                <Text style={styles.faceText}><Icon style={styles.faceIcon} name="logo-facebook" /> På Facebook</Text>
                             </View>
                          </TouchableHighlight>;
         }
@@ -115,9 +114,9 @@ export default class EventDetails extends Component {
                             </View>
                             {this.price()}
                         </View>
-                        <View style={styles.buttonContainer}>
+                    </View>
+                    <View style={styles.buttonContainer}>
                             {faceButton}
-                        </View>
                     </View>
                     {ticket}
                     <HTMLView style={styles.content} stylesheet={HTMLStyles} value={item.content.rendered}/>
@@ -229,11 +228,12 @@ const styles = StyleSheet.create({
     },
     faceText: {
         textAlign: 'center',
-        fontSize: 10,
+        fontSize: 14,
+        marginTop: 10,
     },
     faceIcon: {
-        fontSize: 20,
-        color: '#999',
+        fontSize: 25,
+        color: '#3B5998',
         alignSelf: 'center',
     },
     ticketButton: {
