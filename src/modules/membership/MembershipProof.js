@@ -1,15 +1,18 @@
 import React, {Component} from 'react';
-import {Image, Linking, StyleSheet, Platform, RefreshControl, View} from "react-native";
+import {Image, Linking, StyleSheet, Platform, RefreshControl, TouchableOpacity, View} from "react-native";
 import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
 import Config from 'react-native-config';
 import Confetti from 'react-native-confetti';
 
 export default class MembershipProof extends Component {
+    CONFETTI_TIMEOUT = 15000;
+
     constructor(props) {
         super(props);
         this.state = {
             user: props.user,
             refreshing: false,
+            stopConfetti: false,
         }
     };
 
@@ -18,15 +21,11 @@ export default class MembershipProof extends Component {
             this.setState({user: nextProps.user})
         }
     }
-    componentDidMount() {
-        if(this._confettiView) {
-            this._confettiView.startConfetti();
-        }
-    }
 
-    componentWillUnmount () {
-        if (this._confettiView) {
+    componentDidUpdate () {
+        if (this._confettiView && this.state.stopConfetti) {
             this._confettiView.stopConfetti();
+            this.setState({stopConfetti: false});
         }
     }
 
@@ -50,6 +49,17 @@ export default class MembershipProof extends Component {
     //         />)
     // }
 
+    onMembershipPress = () => {
+        this.setState({showConfetti: true}, () => {
+            if(this._confettiView) {
+                this._confettiView.startConfetti();
+                setTimeout(function() {
+                    this.setState({stopConfetti: true});
+                }.bind(this), this.CONFETTI_TIMEOUT);
+            }
+        })
+    };
+
     membershipValidTo() {
         if( !this.state.user.last_membership) {
             return;
@@ -72,7 +82,6 @@ export default class MembershipProof extends Component {
 
     membershipStatus() {
         if (!this.state.user.is_member) {
-            // TODO: purchase membership button
             if ( !this.state.user.last_membership ) {
                 return (
                     <CardItem>
@@ -90,7 +99,12 @@ export default class MembershipProof extends Component {
             statusText = 'Aktiv';
         }
 
-        return <CardItem><View style={styles.valid}><Text style={styles.validText}>{statusText}</Text></View></CardItem>
+        return (
+            <CardItem>
+                <TouchableOpacity onPress={this.onMembershipPress} style={styles.valid}>
+                    <Text style={styles.validText}>{statusText}</Text>
+                </TouchableOpacity>
+            </CardItem>);
     }
 
     purchaseButton() {
