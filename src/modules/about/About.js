@@ -20,7 +20,7 @@ export default class About extends Component {
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
     },

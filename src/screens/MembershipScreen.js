@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import MembershipContainer from "../modules/membership/MembershipContainer";
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {StyleProvider} from "native-base";
+import getTheme from '../../native-base-theme/components';
 
 export default class MembershipScreen extends Component {
     static navigationOptions = {
         title: 'Medlemskap',
+        headerStyle: {
+            backgroundColor: '#f58220',
+        },
         tabBarIcon: ({ tintColor }) => (
             <Icon name="user" size={18} color={tintColor} style={{marginTop: 5}} />
         ),
@@ -20,7 +25,9 @@ export default class MembershipScreen extends Component {
 
     render() {
         return (
-            <MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />
+            <StyleProvider style={getTheme()}>
+                <MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />
+            </StyleProvider>
         )
     }
 }

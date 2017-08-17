@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         textAlign: 'center',
+        fontWeight: 'bold',
         fontSize: 20,
         color: '#000',
         paddingVertical: 10,

@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import EventListContainer from "../modules/events/EventListContainer";
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {StyleProvider} from "native-base";
+import getTheme from '../../native-base-theme/components';
 
 export default class EventsScreen extends Component {
     static navigationOptions = {
         title: 'Program',
+        headerStyle: {
+            backgroundColor: '#f58220',
+        },
         tabBarIcon: ({ tintColor }) => (
             <Icon name="event" size={18} color={tintColor} style={{marginTop: 5}}/>
         ),
@@ -16,6 +21,10 @@ export default class EventsScreen extends Component {
     };
 
     render() {
-        return (<EventListContainer showEvent={this.showEvent}/>);
+        return (
+            <StyleProvider style={getTheme()}>
+                <EventListContainer showEvent={this.showEvent}/>
+            </StyleProvider>
+        );
     }
 }

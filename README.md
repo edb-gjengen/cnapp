@@ -10,7 +10,7 @@
     touch ~/.gradle/gradle.properties && echo -e "org.gradle.daemon=true\norg.gradle.jvmargs=-Xmx2048M" >> ~/.gradle/gradle.properties
 
     # Run android emulator (first avd)
-    npm run emulator
+    yarn emulator
 
     # Make sure you have hw.keyboard=yes in your avd config.ini (in $HOME/.android/avd/.../) for reloading when pressing R twice to work.
 
@@ -24,7 +24,7 @@
     DUSKEN_RELEASE_KEY_PASSWORD=
 
     # Build
-    npm run build-android
+    yarn build-android
 
     # Output is in android/app/build/outputs/apk
 
