@@ -9,6 +9,10 @@ export default class LoginScreen extends Component {
         headerStyle: {
             backgroundColor: '#f58220',
         },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
     };
 
     onLogin = () => {

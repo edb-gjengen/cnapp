@@ -8,7 +8,11 @@ export default class EventDetailsScreen extends Component {
         title: navigation.state.params.item.title.decoded,
         headerStyle: {
             backgroundColor: '#f58220',
-        }
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
     });
 
     render() {

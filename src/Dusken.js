@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
+import {Platform} from 'react-native';
 import {TabNavigator, StackNavigator} from "react-navigation";
 
 import AboutScreen from "./screens/AboutScreen";
@@ -25,19 +26,22 @@ const tabBarOptions = {
         indicatorStyle: {
             backgroundColor: "#f58220"
         },
-        // labelStyle: {
-        //     color: '#f58220'
-        // },
         activeTintColor: '#f58220',
-        inactiveTintColor: '#f58220',
+        inactiveTintColor: '#333333',
         showIcon: true,
         iconStyle: {
-            color: '#f58220'
+            width: 20,
+            height: 20,
         },
         labelStyle: {
             fontSize: 10,
             marginBottom: 0,
-        }
+            ...Platform.select({
+               android: {
+                   fontWeight: 'bold',
+               }
+            }),
+        },
     }
 };
 
