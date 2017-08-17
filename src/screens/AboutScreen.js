@@ -15,7 +15,7 @@ export default class AboutScreen extends Component {
         },
         headerTintColor: 'white',
         tabBarIcon: ({ tintColor }) => (
-            <Icon name="info" size={16} color={tintColor} style={{marginTop: 3}} />
+            <Icon name="info" size={16} color={tintColor} style={{marginTop: 5}} />
         ),
     };
 

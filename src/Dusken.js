@@ -29,10 +29,6 @@ const tabBarOptions = {
         activeTintColor: '#f58220',
         inactiveTintColor: '#333333',
         showIcon: true,
-        iconStyle: {
-            width: 20,
-            height: 20,
-        },
         labelStyle: {
             fontSize: 10,
             marginBottom: 0,

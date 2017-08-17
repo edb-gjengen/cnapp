@@ -15,7 +15,7 @@ export default class EventsScreen extends Component {
         },
         headerTintColor: 'white',
         tabBarIcon: ({ tintColor }) => (
-            <Icon name="event" size={16} color={tintColor} style={{marginTop: 3}}/>
+            <Icon name="event" size={16} color={tintColor} style={{marginTop: 5}}/>
         ),
     };
 

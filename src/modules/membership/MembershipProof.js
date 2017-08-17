@@ -161,15 +161,9 @@ export default class MembershipProof extends Component {
                         {this.purchaseButton()}
                         {this.membershipValidTo()}
                     </Card>
-                    <Card>
-                        <CardItem>
-                            <Body>
-                                <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
-                                    <Text>Logg ut</Text>
-                                </Button>
-                            </Body>
-                        </CardItem>
-                    </Card>
+                    <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
+                        <Text>Logg ut</Text>
+                    </Button>
                 </Content>
             </View>
         )
@@ -234,6 +228,7 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     logoutButton: {
-        marginVertical: 8,
+        alignSelf: 'center',
+        marginVertical: 20,
     },
 });
