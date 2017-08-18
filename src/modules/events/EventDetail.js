@@ -119,7 +119,7 @@ export default class EventDetail extends Component {
             <TouchableOpacity onPress={() => this.onUrlPress(item.facebook_url)} style={styles.metaInner}>
                 <View style={[styles.metaIcon, {marginTop: 0}]}><Icon name="logo-facebook" style={styles.icons} /></View>
                 <View>
-                    <Text style={styles.metaText}>På Facebook</Text>
+                    <Text style={[styles.metaText, {paddingTop: 2}]}>På Facebook</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         paddingLeft: 10,
         justifyContent: 'center',
-        flex: 5,
+        flex: 4,
     },
     title: {
         fontSize: 20,
@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
         }),
         backgroundColor: '#fff',
         paddingBottom: 6,
+        width: 62,
     },
     day: {
         paddingTop: 5,

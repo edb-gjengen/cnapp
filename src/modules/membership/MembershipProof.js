@@ -29,6 +29,12 @@ export default class MembershipProof extends Component {
         }
     }
 
+    componentWillUnmount () {
+        if (this._confettiView) {
+            this._confettiView.stopConfetti();
+        }
+    }
+
     // fetchUser = () => {
     //     this.props.fetchUser().then(() => {
     //         this.setState({refreshing: false});
