@@ -8,18 +8,48 @@ const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 036
 
 export default class About extends Component {
     /* FIXME: Values here are pretty hardcoded. Should fetch config from a JSON-file or API */
+
+    openFacebook() {
+        /* Ref: https://stackoverflow.com/questions/4810803/open-facebook-page-from-android-app */
+        const url = 'fb://page/23664032291/';
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                return Linking.openURL('https://www.facebook.com/studentersamfundet/');
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+    }
+    openInstagram() {
+        /* Ref: */
+        const url = Platform.select({
+            ios: 'instagram://user?username=studentersamfundet',
+            android: 'http://instagram.com/_u/studentersamfundet'
+        });
+
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                return Linking.openURL('https://www.instagram.com/studentersamfundet/');
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+    }
+
     render() {
         return (
             <ScrollView>
                 <View style={styles.card}>
-                    <Text style={styles.header}>Det Norske Studentersamfund</Text>
-                    <Image source={{uri: 'https://galtinn.neuf.no/static/dist/images/logo.png'}} style={styles.logo} resizeMode="contain" />
+                    <Text style={[styles.header, {marginTop: 8}]}>Det Norske Studentersamfund</Text>
+                    <TouchableOpacity onPress={() => Linking.openURL('https://www.studentersamfundet.no/')}>
+                        <Image source={{uri: 'https://galtinn.neuf.no/static/dist/images/logo.png'}} style={styles.logo} resizeMode="contain" />
+                    </TouchableOpacity>
                     <Text style={styles.header}>Følg oss på</Text>
                     <View style={[styles.section, {flex: 1, flexDirection: 'row'}]}>
-                        <TouchableOpacity style={styles.someBtn} onPress={() => Linking.openURL('https://www.facebook.com/studentersamfundet/')}>
+                        <TouchableOpacity style={styles.someBtn} onPress={this.openFacebook}>
                             <Icon name="logo-facebook" style={styles.largeIcon} /><NBText>Facebook</NBText>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.someBtn} onPress={() => Linking.openURL('https://www.instagram.com/studentersamfundet/')}>
+                        <TouchableOpacity style={styles.someBtn} onPress={this.openInstagram}>
                             <Icon name="logo-instagram" style={styles.largeIcon} /><NBText>Instagram</NBText>
                         </TouchableOpacity>
                     </View>
