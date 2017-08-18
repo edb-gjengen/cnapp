@@ -21,7 +21,7 @@ export default class EventsScreen extends Component {
 
     showEvent = (item) => {
         const { navigate } = this.props.navigation;
-        navigate('EventDetails', {item: item})
+        navigate('EventDetail', {item: item})
     };
 
     render() {

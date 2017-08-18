@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import EventDetails from "../modules/events/EventDetails";
 import {StyleProvider} from "native-base";
+import EventDetail from "../modules/events/EventDetail";
 import getTheme from '../../native-base-theme/components';
 
-export default class EventDetailsScreen extends Component {
+export default class EventDetailScreen extends Component {
     static navigationOptions = ({navigation}) => ({
         title: navigation.state.params.item.title.decoded,
         headerStyle: {
@@ -19,7 +19,7 @@ export default class EventDetailsScreen extends Component {
         const { params } = this.props.navigation.state;
         return (
             <StyleProvider style={getTheme()}>
-                <EventDetails item={params.item}/>
+                <EventDetail item={params.item}/>
             </StyleProvider>
         );
     }

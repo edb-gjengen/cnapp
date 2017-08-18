@@ -6,7 +6,7 @@ import {Button, Icon, Text as NBText} from "native-base";
 
 moment.locale('nb');
 
-export default class EventDetails extends Component {
+export default class EventDetail extends Component {
 
     _formatTime(time) {
         return moment(time).format('HH:mm');
