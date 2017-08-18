@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import {Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableHighlight} from "react-native";
+import {Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableHighlight,
+        TouchableOpacity} from "react-native";
 import HTMLView from 'react-native-htmlview';
 import moment from "moment";
 import {Button, Icon, Text as NBText} from "native-base";
 
 moment.locale('nb');
+
+const CHATEAU_NEUF_ADDRESS = 'Chateau Neuf, Slemdalsveien 15, 0369 Oslo';
 
 export default class EventDetail extends Component {
 
@@ -31,94 +34,143 @@ export default class EventDetail extends Component {
         return moment(time).fromNow();
     }
 
-    _onUrlPress(link) {
-        Linking.openURL(link);
-    }
-
-    price() {
-        let item = this.props.item;
-        let reg_kr = null;
-        let mem_kr = null;
+    _formatTicketText() {
+        /* FIXME: This should be handled by API */
+        const {item} = this.props;
+        let reg_kr = '';
+        let mem_kr = '';
         if (item.price_regular === '0') {
             item.price_regular = 'Gratis'
         }
         if (item.price_member === '0') {
             item.price_member = 'Gratis'
         }
-        if (item.price_regular != 'Gratis') {
+        if (item.price_regular !== 'Gratis') {
             reg_kr = " kr"
         }
-        if (item.price_member != 'Gratis') {
+        if (item.price_member !== 'Gratis') {
             mem_kr = " kr"
         }
+
+        let text = '';
         if (item.price_regular && item.price_member) {
-            return <Text style={styles.metaText}>Pris: {item.price_regular}{reg_kr} - Medlemmer: {item.price_member}{mem_kr}</Text>;
+            text = `Pris: ${item.price_regular}${reg_kr} / Medlemmer: ${item.price_member}${mem_kr}`;
         }
-        if (item.price_regular) {
-            return <Text style={styles.metaText}>Pris: {item.price_regular}{reg_kr}</Text>
+        else if (item.price_regular) {
+            text = `Pris: ${item.price_regular}${reg_kr}`;
         }
-        if (item.price_member) {
-            return <Text style={styles.metaText}>Pris (Medlemmer): {item.price_member}{mem_kr}</Text>
+        else if (item.price_member) {
+            text = `Pris (Medlemmer): ${item.price_member}${mem_kr}`;
+        } else {
+            return '';
+        }
+        return text;
+    }
+
+    onUrlPress(link) {
+        Linking.openURL(link);
+    }
+    onLocationPress() {
+        Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
+    }
+
+    showPriceAndTicket() {
+        const {item} = this.props;
+        const text = this._formatTicketText();
+
+        if(text === '') {
+            return;
+        }
+
+        if(item.ticket_url) {
+            return (
+                <TouchableOpacity style={styles.metaInner} onPress={() => this.onUrlPress(item.ticket_url)}>
+                    <View style={styles.metaIcon}><Icon name="card" style={styles.icons} /></View>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={styles.metaText}>{text}</Text>
+                        <Text style={styles.metaSubtitle}>Kjøp billett</Text>
+                    </View>
+                </TouchableOpacity>);
+        }
+
+        return (
+            <View style={styles.metaInner}>
+                <View style={styles.metaIcon}><Icon name="card" style={styles.icons} /></View>
+                <View style={{flexDirection: 'column'}}>
+                    <Text style={styles.metaText}>{text}</Text>
+                    <Text style={styles.metaSubtitle}>Billett i døra</Text>
+                </View>
+            </View>)
+    }
+
+    showFacebutton() {
+        const {item} = this.props;
+        if (!item.facebook_url) { return;}
+
+        return (
+            <TouchableOpacity onPress={() => this.onUrlPress(item.facebook_url)} style={styles.metaInner}>
+                <View style={[styles.metaIcon, {marginTop: 0}]}><Icon name="logo-facebook" style={styles.icons} /></View>
+                <View>
+                    <Text style={styles.metaText}>På Facebook</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    showImage() {
+        const {item} = this.props;
+
+        if (item.thumbnail.medium_large) {
+            return <Image source={{uri: item.thumbnail.medium_large}} style={styles.image} />;
+        }
+    }
+
+    showYear() {
+        const {item} = this.props;
+
+        if(moment().year() !== moment(item.start_time).year()) {
+            return <Text style={styles.year}>{this._formatYear(item.start_time)}</Text>
         }
     }
 
     render() {
-        const item = this.props.item;
-        let image = null;
-        if (item.thumbnail.medium_large) {
-            image = <Image source={{uri: item.thumbnail.medium_large}} style={styles.image} />;
-        }
-
-        let faceButton = null;
-        if (item.facebook_url) {
-            faceButton = <TouchableHighlight underlayColor="#fff" onPress={() => this._onUrlPress(item.facebook_url)}>
-                            <View>
-                                <Text style={styles.faceText}><Icon style={styles.faceIcon} name="logo-facebook" /> På Facebook</Text>
-                            </View>
-                         </TouchableHighlight>;
-        }
-        let ticket = null;
-        if (item.ticket_url) {
-            ticket = <View style={styles.ticketButton}>
-                        <Button onPress={() => this._onUrlPress(item.ticket_url)} full><NBText>Kjøp billett</NBText></Button>
-                    </View>;
-        }
-
-        let year = null;
-        if(moment().year() !== moment(item.start_time).year()) {
-            year = <Text style={styles.year}>{this._formatYear(item.start_time)}</Text>
-        }
+        const {item} = this.props;
 
         return (
             <ScrollView>
-                {image}
+                {this.showImage()}
                 <View style={styles.card}>
-                    <Text style={styles.header} numberOfLines={2}>{item.title.decoded}</Text>
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                    {/* Date and title */}
+                    <View style={styles.dateAndTitle}>
                         <View style={styles.dateContainer}>
                             <View style={styles.dateCard}>
                                 <Text style={styles.day}>{this._formatDay(item.start_time)}</Text>
                                 <Text style={styles.month}>{this._formatMonth(item.start_time)}</Text>
-                                {year}
+                                {this.showYear()}
                             </View>
                         </View>
-                        <View style={styles.metaContainer}>
-                            <View style={styles.metaInner}>
-                                <View style={[styles.metaIcon, {paddingLeft: 1}]}><Icon name="pin" style={styles.icons} /></View>
-                                <Text style={styles.metaText}>{item.venue}</Text>
-                            </View>
-                            <View style={styles.metaInner}>
-                                <View style={styles.metaIcon}><Icon name="time" style={styles.icons} /></View>
-                                <Text style={styles.metaText}>{this._formatLocalDay(item.start_time)} kl. {this._formatTime(item.start_time)} - {this._formatTime(item.end_time)},</Text>
-                                <Text style={styles.timeRelative}> {this._formatRelative(item.start_time)}</Text>
-                            </View>
-                            {this.price()}
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.title} numberOfLines={2}>{item.title.decoded}</Text>
                         </View>
                     </View>
-                    <View style={styles.buttonContainer}>
-                            {faceButton}
-                    </View>
-                    {ticket}
+                    {/* Time and calendar */}
+                    <TouchableOpacity style={styles.metaInner}>
+                        <View style={styles.metaIcon}><Icon name="time" style={styles.icons} /></View>
+                        <View style={{flexDirection: 'column'}}>
+                            <Text style={styles.metaText}>{this._formatLocalDay(item.start_time)} kl. {this._formatTime(item.start_time)} - {this._formatTime(item.end_time)}</Text>
+                            <Text style={styles.metaSubtitle}>{this._formatRelative(item.start_time)}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    {/* Location and maps */}
+                    <TouchableOpacity style={styles.metaInner} onPress={this.onLocationPress}>
+                        <View style={[styles.metaIcon, {paddingLeft: 1}]}><Icon name="pin" style={styles.icons} /></View>
+                        <View style={{flexDirection: 'column'}}>
+                            <Text style={styles.metaText}>{item.venue}</Text>
+                            <Text style={styles.metaSubtitle} numberOfLines={1}>{CHATEAU_NEUF_ADDRESS}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    {this.showPriceAndTicket()}
+                    {this.showFacebutton()}
                     <HTMLView style={styles.content} stylesheet={HTMLStyles} value={item.content.rendered}/>
                 </View>
             </ScrollView>
@@ -127,7 +179,16 @@ export default class EventDetail extends Component {
 }
 
 const styles = StyleSheet.create({
-    header: {
+    dateAndTitle: {
+        flexDirection: 'row',
+        marginBottom: 8
+    },
+    titleContainer: {
+        paddingLeft: 10,
+        justifyContent: 'center',
+        flex: 5,
+    },
+    title: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
@@ -158,31 +219,30 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666'
     },
+    metaInner: {
+        flexDirection: 'row',
+        marginVertical: 8,
+    },
     metaIcon: {
         width: 16,
         paddingTop: 3,
-    },
-    metaContainer: {
-        flex: 3,
-        paddingLeft: 10,
-    },
-    metaInner: {
-        flexDirection: 'row'
+        marginHorizontal: 8,
+        marginVertical: 8,
     },
     metaText: {
         color: '#000',
     },
-    timeRelative: {
+    metaSubtitle: {
         color: '#666',
     },
     content: {
         borderTopWidth: 0.5,
         borderColor: '#999',
-        marginTop: 16,
+        marginTop: 8,
         paddingTop: 10,
     },
     dateContainer: {
-        width: 62,
+        flex: 1,
         justifyContent: 'center',
     },
     dateCard: {
@@ -222,26 +282,9 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingTop: 3,
     },
-    buttonContainer: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    faceText: {
-        textAlign: 'center',
-        fontSize: 14,
-        marginTop: 10,
-    },
-    faceIcon: {
-        fontSize: 25,
-        color: '#3B5998',
-        alignSelf: 'center',
-    },
-    ticketButton: {
-        paddingTop: 20,
-    },
     icons: {
-        fontSize: 14,
-    }
+        fontSize: 16,
+    },
 
 });
 
