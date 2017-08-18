@@ -1,15 +1,16 @@
 import {connect} from "react-redux";
-import EventList from "./EventList";
 
-import React from 'react';
+import React, {Component} from 'react';
 import Config from 'react-native-config';
 import moment from "moment";
 import 'moment/locale/nb';
 
+import EventList from "./EventList";
+
 moment.locale('nb');
 
 /* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
-class EventListContainer extends React.Component {
+class EventListContainer extends Component {
     constructor(props) {
         super(props);
 

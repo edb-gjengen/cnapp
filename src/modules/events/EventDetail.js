@@ -33,6 +33,12 @@ export default class EventDetail extends Component {
     _formatRelative(time) {
         return moment(time).fromNow();
     }
+    _formatLocation() {
+        if(this.props.item.venue !== 'Annetsteds') {
+            return CHATEAU_NEUF_ADDRESS;
+        }
+        return 'Ukjent adresse'
+    }
 
     _formatTicketText() {
         /* FIXME: This should be handled by API */
@@ -70,8 +76,10 @@ export default class EventDetail extends Component {
     onUrlPress(link) {
         Linking.openURL(link);
     }
-    onLocationPress() {
-        Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
+    onLocationPress(venue) {
+        if( venue !== 'Annetsteds' ) {
+            Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
+        }
     }
 
     showPriceAndTicket() {
@@ -162,11 +170,11 @@ export default class EventDetail extends Component {
                         </View>
                     </TouchableOpacity>
                     {/* Location and maps */}
-                    <TouchableOpacity style={styles.metaInner} onPress={this.onLocationPress}>
+                    <TouchableOpacity style={styles.metaInner} onPress={() => this.onLocationPress(item.venue)}>
                         <View style={[styles.metaIcon, {paddingLeft: 1}]}><Icon name="pin" style={styles.icons} /></View>
                         <View style={{flexDirection: 'column'}}>
                             <Text style={styles.metaText}>{item.venue}</Text>
-                            <Text style={styles.metaSubtitle} numberOfLines={1}>{CHATEAU_NEUF_ADDRESS}</Text>
+                            <Text style={styles.metaSubtitle} numberOfLines={1}>{this._formatLocation()}</Text>
                         </View>
                     </TouchableOpacity>
                     {this.showPriceAndTicket()}
