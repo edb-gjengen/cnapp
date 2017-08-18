@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
         color: '#666',
     },
     content: {
-        borderTopWidth: 0.5,
-        borderColor: '#999',
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderColor: '#ccc',
         marginTop: 8,
         paddingTop: 10,
     },
