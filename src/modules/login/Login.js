@@ -77,7 +77,7 @@ export default class Login extends Component {
     render() {
         return (
             <Container style={styles.container}>
-                <Content>
+                <Content keyboardShouldPersistTaps='always'>
                     <Form style={styles.card}>
                         {this.emailInput()}
                         {this.passwordInput()}
