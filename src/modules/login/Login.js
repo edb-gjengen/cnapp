@@ -19,7 +19,9 @@ export default class Login extends Component {
                 <Label>E-post / Brukernavn</Label>
                 <Input
                     keyboardType="email-address"
+                    autoFocus={true}
                     autoCapitalize="none"
+                    autoCorrect={false}
                     returnKeyType="next"
                     onChangeText={this.handleEmail}
                     onSubmitEditing={() => {
@@ -33,7 +35,9 @@ export default class Login extends Component {
             <Label>E-post / Brukernavn</Label>
             <Input
                 keyboardType="email-address"
+                autoFocus={true}
                 autoCapitalize="none"
+                autoCorrect={false}
                 returnKeyType="next"
                 onChangeText={this.handleEmail}
                 onSubmitEditing={() => {
@@ -51,6 +55,7 @@ export default class Login extends Component {
                     ref="passwordInput"
                     secureTextEntry={true}
                     autoCapitalize="none"
+                    autoCorrect={false}
                     onChangeText={this.handlePassword}
                     onSubmitEditing={this.onLoginPress}
                 />
@@ -62,6 +67,7 @@ export default class Login extends Component {
                 ref="passwordInput"
                 secureTextEntry={true}
                 autoCapitalize="none"
+                autoCorrect={false}
                 onChangeText={this.handlePassword}
                 onSubmitEditing={this.onLoginPress}
             />
