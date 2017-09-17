@@ -11,7 +11,10 @@ export default class About extends Component {
 
     openFacebook() {
         /* Ref: https://stackoverflow.com/questions/4810803/open-facebook-page-from-android-app */
-        const url = 'fb://page/23664032291/';
+        const url = Platform.select({
+            ios: 'fb://page/?id=23664032291',
+            android: 'fb://page/23664032291/'
+        });
         Linking.canOpenURL(url).then(supported => {
             if (!supported) {
                 return Linking.openURL('https://www.facebook.com/studentersamfundet/');
@@ -30,6 +33,20 @@ export default class About extends Component {
         Linking.canOpenURL(url).then(supported => {
             if (!supported) {
                 return Linking.openURL('https://www.instagram.com/studentersamfundet/');
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+    }
+
+    openMap() {
+        const url = Platform.select({
+            ios: `comgooglemaps://?q=${CHATEAU_NEUF_ADDRESS}`,
+            android: `https://www.google.com/maps/search/?api=1&query=${CHATEAU_NEUF_ADDRESS}`
+        });
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                return Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${CHATEAU_NEUF_ADDRESS}`);
             } else {
                 return Linking.openURL(url);
             }
@@ -57,7 +74,7 @@ export default class About extends Component {
                     <Text style={styles.header}>Adresse</Text>
                     <Text style={[styles.paragraph, {textAlign: 'center'}]}>Det Norske Studentersamfund{"\n"}Slemdalsveien 15, 0369 Oslo</Text>
                     <View style={styles.section}>
-                        <Button iconLeft onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${CHATEAU_NEUF_ADDRESS}`)}>
+                        <Button iconLeft onPress={this.openMap}>
                             <Icon name="map" style={styles.icon} /><NBText> Vis i kart</NBText>
                         </Button>
                     </View>

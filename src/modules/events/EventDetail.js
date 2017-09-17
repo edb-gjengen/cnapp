@@ -73,9 +73,30 @@ export default class EventDetail extends Component {
         return text;
     }
 
-    onUrlPress(link) {
+    onTicketUrlPress(link) {
         Linking.openURL(link);
     }
+
+    onFacebookUrlPress(link) {
+        const fbEventPattern = /https?:\/\/www\.facebook\.com\/events\/(\d+)\/?/i;
+        const matches = fbEventPattern.exec(link);
+        let iosURL = link;
+        if( matches.length ) {
+            iosURL = 'fb://event/?id=' + matches[1];
+        }
+        const url = Platform.select({
+            ios: iosURL,
+            android: link
+        });
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                return Linking.openURL(link);
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+    }
+
     onLocationPress(venue) {
         if( venue !== 'Annetsteds' ) {
             Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
@@ -92,7 +113,7 @@ export default class EventDetail extends Component {
 
         if(item.ticket_url) {
             return (
-                <TouchableOpacity style={styles.metaInner} onPress={() => this.onUrlPress(item.ticket_url)}>
+                <TouchableOpacity style={styles.metaInner} onPress={() => this.onTicketUrlPress(item.ticket_url)}>
                     <View style={styles.metaIcon}><Icon name="card" style={styles.icons} /></View>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={styles.metaText}>{text}</Text>
@@ -116,7 +137,7 @@ export default class EventDetail extends Component {
         if (!item.facebook_url) { return;}
 
         return (
-            <TouchableOpacity onPress={() => this.onUrlPress(item.facebook_url)} style={styles.metaInner}>
+            <TouchableOpacity onPress={() => this.onFacebookUrlPress(item.facebook_url)} style={styles.metaInner}>
                 <View style={[styles.metaIcon, {marginTop: 0}]}><Icon name="logo-facebook" style={styles.icons} /></View>
                 <View>
                     <Text style={[styles.metaText, {paddingTop: 2}]}>På Facebook</Text>
