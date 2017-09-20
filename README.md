@@ -1,7 +1,15 @@
 ## Install
     # See https://facebook.github.io/react-native/docs/getting-started.html#content
     yarn
+
+    # Environment settings
     cp env-example .env
+
+    # Sentry
+    # Get auth token from https://sentry.neuf.no/api/ with project:write scope
+    cp ios/sentry.properties-example ios/sentry.properties
+    cp android/sentry.properties-example android/sentry.properties
+
     react-native start
     react-native run-android
 
