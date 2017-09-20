@@ -81,7 +81,7 @@ export default class EventDetail extends Component {
         const fbEventPattern = /https?:\/\/www\.facebook\.com\/events\/(\d+)\/?/i;
         const matches = fbEventPattern.exec(link);
         let iosURL = link;
-        if( matches.length ) {
+        if( matches && matches.length ) {
             iosURL = 'fb://event/?id=' + matches[1];
         }
         const url = Platform.select({
