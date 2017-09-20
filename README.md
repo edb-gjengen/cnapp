@@ -1,6 +1,7 @@
 ## Install
     # See https://facebook.github.io/react-native/docs/getting-started.html#content
     yarn
+    pod install  # ios only
 
     # Environment settings
     cp env-example .env
