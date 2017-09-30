@@ -3,6 +3,7 @@ import MembershipContainer from "../modules/membership/MembershipContainer";
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {StyleProvider} from "native-base";
 import getTheme from '../../native-base-theme/components';
+import UserRegisterContainer from "../modules/membership/UserRegisterContainer";
 
 export default class MembershipScreen extends Component {
     static navigationOptions = {
@@ -30,6 +31,7 @@ export default class MembershipScreen extends Component {
     render() {
         return (
             <StyleProvider style={getTheme()}>
+                {/*<UserRegisterContainer/>*/}
                 <MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />
             </StyleProvider>
         )

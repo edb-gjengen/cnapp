@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import Membership from "./Membership";
 import MembershipProof from "./MembershipProof";
 import { requestUserData, logout } from "../../actions";
 
-class MembershipContainer extends React.Component {
+class MembershipContainer extends Component {
     constructor(props) {
         super(props);
 
