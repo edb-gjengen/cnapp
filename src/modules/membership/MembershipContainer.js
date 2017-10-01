@@ -59,12 +59,16 @@ class MembershipContainer extends Component {
     }
 }
 
-export default connect(
-    (state) => ({
+function stateToProps(state) {
+    return {
         isAuthenticated: state.isAuthenticated,
         isFetchingUserData: state.isFetchingUserData,
         userToken: state.userToken,
         user: state.user,
-    }),
+    };
+}
+
+export default connect(
+    stateToProps,
     { requestUserData, logout }
 )(MembershipContainer);

@@ -82,7 +82,7 @@ export default class Login extends Component {
                         {this.emailInput()}
                         {this.passwordInput()}
                         {this.showError()}
-                        <Button full onPress={this.onLoginPress} style={styles.registerButton}>
+                        <Button full onPress={this.onLoginPress} style={styles.loginButton}>
                             <Text>Logg inn</Text>
                         </Button>
                         <Button
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height: 52,
     },
-    registerButton: {
+    loginButton: {
         marginBottom: 16,
     },
     forgotPasswordButton: {

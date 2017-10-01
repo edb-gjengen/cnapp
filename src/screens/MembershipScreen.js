@@ -31,8 +31,8 @@ export default class MembershipScreen extends Component {
     render() {
         return (
             <StyleProvider style={getTheme()}>
-                {/*<UserRegisterContainer/>*/}
-                <MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />
+                <UserRegisterContainer/>
+                {/*<MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />*/}
             </StyleProvider>
         )
     }

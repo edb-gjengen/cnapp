@@ -3,8 +3,19 @@ import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, T
 import {Platform, StyleSheet, View} from "react-native";
 
 export default class UserRegister extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNumber: '',
+            password: ''
+        }
+    }
     emailInput() {
-        return <Item stackedLabel>
+        return <Item stackedLabel last>
             <Label>E-post</Label>
             <Input
                 ref="emailInput"
@@ -12,7 +23,9 @@ export default class UserRegister extends Component {
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
-                onChangeText={this.handleEmail}
+                onChangeText={(text) => {
+                    this.setState({email: text});
+                }}
                 onSubmitEditing={() => {
                     this.refs.phoneInput._root.focus()
                 }}
@@ -29,15 +42,17 @@ export default class UserRegister extends Component {
                 secureTextEntry={true}
                 autoCapitalize="none"
                 autoCorrect={false}
-                onChangeText={this.handlePassword}
-                onSubmitEditing={this.onLoginPress}
+                onChangeText={(text) => {
+                    this.setState({password: text});
+                }}
+                onSubmitEditing={this.onRegisterPress}
             />
         </Item>
     }
 
     showError = () => {
-        if (this.props.loginError) {
-            const err = this.props.loginError.non_field_errors;
+        if (this.props.registerError) {
+            const err = this.props.registerError.non_field_errors;
             let errorFormatted = err ? err[0] : 'Generell feil, prøv igjen...';
             // TODO: Format these and highlight error fields
             return <View style={styles.errorBox}><Text style={styles.errorMessage}>{errorFormatted}</Text></View>
@@ -48,7 +63,7 @@ export default class UserRegister extends Component {
     };
 
     showSpinner = () => {
-        if (this.props.isSubmitted) {
+        if (this.props.isRegisteringUser) {
             return <Spinner color="#f58220"/>
         }
     };
@@ -58,33 +73,42 @@ export default class UserRegister extends Component {
             <Container style={styles.container}>
                 <Content keyboardShouldPersistTaps='always'>
                     <Form style={styles.card}>
-                        <Item stackedLabel>
+                        <Item stackedLabel last>
                             <Label>Fornavn</Label>
                             <Input
                                 autoFocus={true}
                                 returnKeyType="next"
+                                onChangeText={(text) => {
+                                    this.setState({firstName: text});
+                                }}
                                 onSubmitEditing={() => {
                                     this.refs.lastNameInput._root.focus()
                                 }}
                             />
                         </Item>
-                        <Item stackedLabel>
+                        <Item stackedLabel last>
                             <Label>Etternavn</Label>
                             <Input
                                 ref="lastNameInput"
                                 returnKeyType="next"
+                                onChangeText={(text) => {
+                                    this.setState({lastName: text});
+                                }}
                                 onSubmitEditing={() => {
                                     this.refs.emailInput._root.focus()
                                 }}
                             />
                         </Item>
                         {this.emailInput()}
-                        <Item stackedLabel>
+                        <Item stackedLabel last>
                             <Label>Mobilnummer</Label>
                             <Input
                                 ref="phoneInput"
                                 returnKeyType="next"
                                 keyboardType="phone-pad"
+                                onChangeText={(text) => {
+                                    this.setState({phoneNumber: text});
+                                }}
                                 onSubmitEditing={() => {
                                     this.refs.passwordInput._root.focus()
                                 }}
@@ -92,13 +116,27 @@ export default class UserRegister extends Component {
                         </Item>
                         {this.passwordInput()}
                         {this.showError()}
-                        <Button full onPress={this.onRegisterPress} style={styles.registerButton}>
-                            <Text>Registrer</Text>
+                        <Button
+                            full
+                            onPress={this.onRegisterPress}
+                            style={styles.registerButton}
+                        >
+                                <Text>Registrer</Text>
                         </Button>
                         {this.showSpinner()}
                     </Form>
                 </Content>
             </Container>
+        );
+    }
+
+    onRegisterPress = () => {
+        this.props.onRegisterPress(
+            this.state.firstName,
+            this.state.lastName,
+            this.state.email,
+            this.state.phoneNumber,
+            this.state.password,
         );
     }
 }

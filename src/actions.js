@@ -7,6 +7,9 @@ const LOGOUT = 'LOGOUT';
 const USER_DATA_REQUEST = 'USER_DATA_REQUEST';
 const USER_DATA_SUCCESS = 'USER_DATA_SUCCESS';
 const USER_DATA_FAILURE = 'USER_DATA_FAILURE';
+const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
+const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
+const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
 
 function loginRequest() {
     return {
@@ -55,6 +58,26 @@ function userDataFailure(userError) {
     }
 }
 
+function registerUserRequest() {
+    return {
+        type: REGISTER_USER_REQUEST
+    }
+}
+
+function registerUserSuccess(data) {
+    return {
+        type: REGISTER_USER_SUCCESS,
+        data
+    }
+}
+
+function registerUserFailure(registerError) {
+    return {
+        type: REGISTER_USER_FAILURE,
+        registerError
+    }
+}
+
 export {
     LOGIN_REQUEST, loginRequest,
     LOGIN_SUCCESS, loginSuccess,
@@ -63,14 +86,16 @@ export {
     USER_DATA_REQUEST, userDataRequest,
     USER_DATA_SUCCESS, userDataSuccess,
     USER_DATA_FAILURE, userDataFailure,
+    REGISTER_USER_REQUEST, registerUserRequest,
+    REGISTER_USER_SUCCESS, registerUserSuccess,
+    REGISTER_USER_FAILURE, registerUserFailure,
 };
 
 export function requestLogin(username, password) {
     return (dispatch) => {
         // We are now logging in
         dispatch(loginRequest());
-        const apiURL = Config.DUSKEN_API_URL;
-        return fetch(`${apiURL}/auth/obtain-token/`, {
+        return fetch(`${Config.DUSKEN_API_URL}/auth/obtain-token/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -131,3 +156,40 @@ export function requestUserData(token) {
             )
     }
 }
+
+export function requestRegisterUser(firstName, lastName, email, phoneNumber, password) {
+    return (dispatch) => {
+        dispatch(registerUserRequest());
+
+        return fetch(`${Config.DUSKEN_API_URL}/api/user/register`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'first_name': firstName,
+                'last_name': lastName,
+                'email': email,
+                'phone_number': phoneNumber,
+                'password': password
+            })
+        })
+            .then(response => response.json().then(json => ({ json, response })))
+            .then(({json, response}) => {
+                if (response.ok === false) {
+                    return Promise.reject(json)
+                }
+                return json
+            })
+            .then(
+                data => {
+                    dispatch(registerUserSuccess(data))
+                },
+                data => {
+                    dispatch(registerUserFailure(data || {'non_field_errors': ['Kunne ikke registrere bruker, prøv igjen']}))
+                }
+            )
+    }
+}
+

@@ -1,5 +1,5 @@
-import {StyleSheet, ActivityIndicator, View, SectionList} from "react-native";
-import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content} from 'native-base';
+import {StyleSheet, View, SectionList} from "react-native";
+import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content, Spinner} from 'native-base';
 import React, { Component } from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
@@ -33,7 +33,7 @@ export default class EventList extends Component {
         }
 
         return (<View style={{paddingVertical: 20}}>
-            <ActivityIndicator animating size="large" />
+            <Spinner color="#f58220"/>
         </View>);
     };
 
