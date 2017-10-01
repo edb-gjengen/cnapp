@@ -3582,15 +3582,15 @@ react-native-htmlview@^0.12.0:
     prop-types "^15.5.10"
     react-timer-mixin "^0.13.3"
 
-react-native-sentry@^0.23.2:
-  version "0.23.2"
-  resolved "https://registry.yarnpkg.com/react-native-sentry/-/react-native-sentry-0.23.2.tgz#f9859263d5d274faa6d17604deae2adc94568234"
+react-native-sentry@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/react-native-sentry/-/react-native-sentry-0.25.0.tgz#f7530aa2fc48d71e0088f808a83d72c356e2abd5"
   dependencies:
     chalk "^1.1.1"
     glob "7.1.1"
     inquirer "3.0.6"
     raven-js "^3.17.0"
-    sentry-cli-binary "^1.19.1"
+    sentry-cli-binary "^1.20.0"
     xcode "0.9.3"
 
 react-native-tab-view@^0.0.65:
@@ -4110,9 +4110,9 @@ send@0.13.2:
     range-parser "~1.0.3"
     statuses "~1.2.1"
 
-sentry-cli-binary@^1.19.1:
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/sentry-cli-binary/-/sentry-cli-binary-1.19.1.tgz#0abc210ed7f35d7ec0680963e612b15bd2bc14c0"
+sentry-cli-binary@^1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/sentry-cli-binary/-/sentry-cli-binary-1.20.0.tgz#a620145863fde98c398adcc2166cf17c0738d513"
   dependencies:
     progress "2.0.0"
 

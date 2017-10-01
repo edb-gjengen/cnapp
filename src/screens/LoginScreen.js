@@ -22,7 +22,8 @@ export default class LoginScreen extends Component {
 
     render() {
         return (
-            <StyleProvider style={getTheme()}><LoginContainer onLogin={this.onLogin} />
+            <StyleProvider style={getTheme()}>
+                <LoginContainer onLogin={this.onLogin} />
             </StyleProvider>
         )
     }

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {ScrollView, Text, View, Linking, StyleSheet, Platform} from "react-native";
 import {Button, Text as NBText} from "native-base";
-import Config from 'react-native-config';
-
 export default class Membership extends Component {
     render() {
         return (
@@ -11,7 +9,7 @@ export default class Membership extends Component {
                     <Text style={styles.headerTitle}>Hei 👋</Text>
                     <Text style={styles.paragraph}>Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen</Text>
                     <View style={styles.button}>
-                        <Button onPress={() => { Linking.openURL(Config.DUSKEN_PURCHASE_URL); } } full><NBText>Bli medlem</NBText></Button>
+                        <Button onPress={this.props.onRegisterPress} full><NBText>Bli medlem</NBText></Button>
                     </View>
                     <Text style={styles.header}>Hva får jeg?</Text>
                     <Text style={[styles.paragraph, {textAlign: 'left', paddingLeft: 4}]}>
@@ -22,16 +20,13 @@ export default class Membership extends Component {
                         - Mulighet til å delta i landets eldste studentdemokrati</Text>
                     <Text style={styles.em}>Allerede medlem?</Text>
                     <View style={styles.button}>
-                        <Button onPress={this.onLoginPress} full><NBText>Logg inn</NBText></Button>
+                        <Button onPress={this.props.onLoginPress} full><NBText>Logg inn</NBText></Button>
                     </View>
                 </View>
             </ScrollView>
         )
     };
 
-    onLoginPress = () => {
-        this.props.onLoginPress();
-    };
 }
 
 

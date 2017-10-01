@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Image, Linking, StyleSheet, Platform, RefreshControl, TouchableOpacity, View} from "react-native";
 import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
-import Config from 'react-native-config';
 import Confetti from 'react-native-confetti';
 
-export default class MembershipProof extends Component {
+export default class Proof extends Component {
+    // FIXME: Move logic to container
     CONFETTI_TIMEOUT = 15000;
 
     constructor(props) {
@@ -120,9 +120,7 @@ export default class MembershipProof extends Component {
         return <CardItem>
             <Body>
                 <Button
-                    onPress={() => {
-                        Linking.openURL(Config.DUSKEN_PURCHASE_URL);
-                    }}
+                    onPress={this.props.onChargePress}
                     full
                     style={styles.purchaseButton}
                 >

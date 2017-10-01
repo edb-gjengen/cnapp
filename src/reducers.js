@@ -51,7 +51,8 @@ export default function duskenApp(state = initialState, action) {
         /* User data */
         case USER_DATA_REQUEST:
             return Object.assign({}, state, {
-                isFetchingUserData: true
+                isFetchingUserData: true,
+                userError: null
             });
 
         case USER_DATA_FAILURE:
@@ -63,13 +64,14 @@ export default function duskenApp(state = initialState, action) {
         case USER_DATA_SUCCESS:
             return Object.assign({}, state, {
                 isFetchingUserData: false,
-                user: action.data
+                user: action.data,
             });
 
         /* Register user */
         case REGISTER_USER_REQUEST:
             return Object.assign({}, state, {
-                isRegisteringUser: true
+                isRegisteringUser: true,
+                registerError: null,
             });
 
         case REGISTER_USER_FAILURE:
@@ -79,9 +81,15 @@ export default function duskenApp(state = initialState, action) {
             });
 
         case REGISTER_USER_SUCCESS:
+            let userData = action.data;
+            const token = action.data.auth_token;
+            delete userData['auth_token'];
+
             return Object.assign({}, state, {
                 isRegisteringUser: false,
-                user: action.data
+                isAuthenticated: true,
+                user: userData,
+                userToken: token,
             });
 
         default:

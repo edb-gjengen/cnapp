@@ -8,6 +8,8 @@ import EventDetailScreen from "./screens/EventDetailScreen";
 import EventListScreen from "./screens/EventListScreen";
 import LoginScreen from "./screens/LoginScreen";
 import MembershipScreen from "./screens/MembershipScreen";
+import UserRegisterScreen from "./screens/UserRegisterScreen";
+import ChargeScreen from "./screens/ChargeScreen";
 
 
 /* Navigation */
@@ -46,6 +48,8 @@ const tabNav = TabNavigator(tabBarRoutes, tabBarOptions);
 const DuskenContainer = StackNavigator({
     Root: { screen: tabNav },
     Login: { screen: LoginScreen },
+    UserRegister: { screen: UserRegisterScreen },
+    Charge: { screen: ChargeScreen },
     EventDetail: { screen: EventDetailScreen },
 });
 

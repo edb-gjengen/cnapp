@@ -161,7 +161,7 @@ export function requestRegisterUser(firstName, lastName, email, phoneNumber, pas
     return (dispatch) => {
         dispatch(registerUserRequest());
 
-        return fetch(`${Config.DUSKEN_API_URL}/api/user/register`, {
+        return fetch(`${Config.DUSKEN_API_URL}/api/user/register/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

@@ -10,6 +10,7 @@ stripe.init({
 });
 
 export default class Charge extends Component {
+    // TODO: You are here
     render() {
         return <View>
             <Text>In charge view</Text>

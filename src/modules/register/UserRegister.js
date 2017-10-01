@@ -14,6 +14,18 @@ export default class UserRegister extends Component {
             password: ''
         }
     }
+
+    canSubmitForm() {
+        /* No empty fields */
+        for([key, value] of Object.entries(this.state)) {
+            if(value === '') {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
     emailInput() {
         return <Item stackedLabel last>
             <Label>E-post</Label>
@@ -51,10 +63,10 @@ export default class UserRegister extends Component {
     }
 
     showError = () => {
-        if (this.props.registerError) {
+        // TODO: Format these and highlight error fields
+        if (this.props.registerError && Object.keys(this.props.registerError).length !== 0) {
             const err = this.props.registerError.non_field_errors;
-            let errorFormatted = err ? err[0] : 'Generell feil, prøv igjen...';
-            // TODO: Format these and highlight error fields
+            let errorFormatted = err ? err[0] : 'Kunne ikke registrere bruker, prøv igjen...';
             return <View style={styles.errorBox}><Text style={styles.errorMessage}>{errorFormatted}</Text></View>
         }
         else {
@@ -116,13 +128,7 @@ export default class UserRegister extends Component {
                         </Item>
                         {this.passwordInput()}
                         {this.showError()}
-                        <Button
-                            full
-                            onPress={this.onRegisterPress}
-                            style={styles.registerButton}
-                        >
-                                <Text>Registrer</Text>
-                        </Button>
+                        {this.registerbutton()}
                         {this.showSpinner()}
                     </Form>
                 </Content>
@@ -138,6 +144,27 @@ export default class UserRegister extends Component {
             this.state.phoneNumber,
             this.state.password,
         );
+    };
+
+    registerbutton() {
+        if( this.props.isRegisteringUser || !this.canSubmitForm() ) {
+            return (
+            <Button
+                full
+                disabled
+                style={styles.registerButton}
+            >
+                <Text>Registrer</Text>
+            </Button>);
+        }
+
+        return (<Button
+            full
+            onPress={this.onRegisterPress}
+            style={styles.registerButton}
+        >
+            <Text>Registrer</Text>
+        </Button>);
     }
 }
 const styles = StyleSheet.create({

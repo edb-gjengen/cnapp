@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import Membership from "./Membership";
-import MembershipProof from "./MembershipProof";
+import Proof from "./Proof";
 import { requestUserData, logout } from "../../actions";
 
 class MembershipContainer extends Component {
@@ -42,20 +42,29 @@ class MembershipContainer extends Component {
         this.props.onLoginPress();
     };
 
+    onRegisterPress = () => {
+        this.props.onRegisterPress();
+    };
+
+    onChargePress = () => {
+        this.props.onChargePress();
+    };
+
     onLogoutPress = () => {
         this.props.logout();
-        this.props.logoutNavigate();
+        this.props.onLogoutPress();
     };
 
     render() {
         if (this.state.user) {
-            return <MembershipProof
+            return <Proof
                 user={this.state.user}
                 fetchUser={this.fetchUser}
                 onLogoutPress={this.onLogoutPress}
+                onChargePress={this.onChargePress}
             />;
         }
-        return <Membership onLoginPress={this.onLoginPress}/>;
+        return <Membership onLoginPress={this.onLoginPress} onRegisterPress={this.onRegisterPress} />;
     }
 }
 
