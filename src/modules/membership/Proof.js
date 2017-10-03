@@ -1,26 +1,17 @@
 import React, {Component} from 'react';
-import {Image, Linking, StyleSheet, Platform, RefreshControl, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
 import Confetti from 'react-native-confetti';
 
 export default class Proof extends Component {
-    // FIXME: Move logic to container
     CONFETTI_TIMEOUT = 15000;
 
     constructor(props) {
         super(props);
         this.state = {
-            user: props.user,
-            refreshing: false,
             stopConfetti: false,
         }
     };
-
-    componentWillReceiveProps(nextProps) {
-        if(this.state.user !== nextProps.user) {
-            this.setState({user: nextProps.user})
-        }
-    }
 
     componentDidUpdate () {
         if (this._confettiView && this.state.stopConfetti) {
@@ -35,26 +26,6 @@ export default class Proof extends Component {
         }
     }
 
-    // fetchUser = () => {
-    //     this.props.fetchUser().then(() => {
-    //         this.setState({refreshing: false});
-    //     });
-    // };
-
-    // _onRefresh() {
-    //     console.log('onRefresh')
-    //     this.setState({refreshing: true});
-    //     this.fetchUser()
-    // }
-
-    // refreshControl() {
-    //     return (
-    //         <RefreshControl
-    //             refreshing={this.state.refreshing}
-    //             onRefresh={this._onRefresh.bind(this)}
-    //         />)
-    // }
-
     onMembershipPress = () => {
         this.setState({showConfetti: true}, () => {
             if(this._confettiView) {
@@ -67,12 +38,12 @@ export default class Proof extends Component {
     };
 
     membershipValidTo() {
-        if( !this.state.user.last_membership) {
+        if( !this.props.user.last_membership) {
             return;
         }
 
-        let validTo = this.state.user.last_membership.end_date;
-        if (this.state.user.last_membership.membership_type === 'lifelong') {
+        let validTo = this.props.user.last_membership.end_date;
+        if (this.props.user.last_membership.membership_type === 'lifelong') {
             validTo = 'Livsvarig'
         }
 
@@ -87,8 +58,8 @@ export default class Proof extends Component {
     }
 
     membershipStatus() {
-        if (!this.state.user.is_member) {
-            if ( !this.state.user.last_membership ) {
+        if (!this.props.user.is_member) {
+            if ( !this.props.user.last_membership ) {
                 return (
                     <CardItem>
                         <View style={styles.notMember}>
@@ -101,7 +72,7 @@ export default class Proof extends Component {
         }
 
         let statusText = 'Medlem';
-        if (this.state.user.is_volunteer) {
+        if (this.props.user.is_volunteer) {
             statusText = 'Aktiv';
         }
 
@@ -114,7 +85,7 @@ export default class Proof extends Component {
     }
 
     purchaseButton() {
-        if (this.state.user.is_member) {
+        if (this.props.user.is_member) {
             return;
         }
         return <CardItem>
@@ -131,14 +102,14 @@ export default class Proof extends Component {
     }
 
     confetti() {
-        if (this.state.user.is_member) {
+        if (this.props.user.is_member) {
             // FIXME: allmost infinite confetti. Are the animations paused when not visible, if not power hog?
             return <Confetti ref={(node) => this._confettiView = node} confettiCount={Number.MAX_SAFE_INTEGER} />
         }
     }
 
     logo() {
-        if (!this.state.user.is_member) {
+        if (!this.props.user.is_member) {
             return;
         }
         // FIXME: URL to config
@@ -149,9 +120,6 @@ export default class Proof extends Component {
         />
     }
 
-    fetchUser = () => {
-        this.props.fetchUser()
-    };
 
     render() {
         return (
@@ -174,9 +142,9 @@ export default class Proof extends Component {
     };
 
     membershipName() {
-        let name = `${this.state.user.first_name} ${this.state.user.last_name}`;
+        let name = `${this.props.user.first_name} ${this.props.user.last_name}`;
         if(name === ' ') {
-            name = this.state.user.email;
+            name = this.props.user.email;
         }
         return <CardItem>
             <Text style={styles.nameText}>{name}</Text>

@@ -8,7 +8,7 @@ import {
     USER_DATA_FAILURE,
     REGISTER_USER_REQUEST,
     REGISTER_USER_FAILURE,
-    REGISTER_USER_SUCCESS,
+    REGISTER_USER_SUCCESS, MEMBERSHIP_CHARGE_REQUEST, MEMBERSHIP_CHARGE_FAILURE, MEMBERSHIP_CHARGE_SUCCESS,
 } from './actions';
 
 const initialState = {
@@ -16,11 +16,14 @@ const initialState = {
     isLoggingIn: false,
     isFetchingUserData: false,
     isRegisteringUser: false,
+    isChargingMembership: false,
     userToken: null,
     user: null,
     loginError: null,
     userError: null,
     registerError: null,
+    chargeError: null,
+    lastOrder: null,
 };
 
 export default function duskenApp(state = initialState, action) {
@@ -90,6 +93,25 @@ export default function duskenApp(state = initialState, action) {
                 isAuthenticated: true,
                 user: userData,
                 userToken: token,
+            });
+
+        /* User data */
+        case MEMBERSHIP_CHARGE_REQUEST:
+            return Object.assign({}, state, {
+                isChargingMembership: true,
+                chargeError: null
+            });
+
+        case MEMBERSHIP_CHARGE_FAILURE:
+            return Object.assign({}, state, {
+                isChargingMembership: false,
+                chargeError: action.chargeError
+            });
+
+        case MEMBERSHIP_CHARGE_SUCCESS:
+            return Object.assign({}, state, {
+                isChargingMembership: false,
+                lastOrder: action.data,
             });
 
         default:

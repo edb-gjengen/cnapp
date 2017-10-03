@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import UserRegister from "./UserRegister";
-import {requestRegisterUser} from "../../actions";
+import {requestRegisterUser} from "../../api";
 
 class UserRegisterContainer extends Component {
 

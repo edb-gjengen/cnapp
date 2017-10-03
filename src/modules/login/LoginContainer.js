@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import Login from "./Login";
-import {requestLogin} from "../../actions";
+import {requestLogin} from "../../api";
 
 class LoginContainer extends Component {
     constructor(state) {

@@ -5,7 +5,7 @@ import getTheme from '../../native-base-theme/components';
 
 export default class UserRegisterScreen extends Component {
     static navigationOptions = {
-        title: 'Registrer',
+        title: 'Bli medlem',
         headerStyle: {
             backgroundColor: '#f58220',
         },

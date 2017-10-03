@@ -163,7 +163,7 @@ export default class UserRegister extends Component {
             onPress={this.onRegisterPress}
             style={styles.registerButton}
         >
-            <Text>Registrer</Text>
+            <Text>Registrer meg</Text>
         </Button>);
     }
 }

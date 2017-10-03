@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import Membership from "./Membership";
-import Proof from "./Proof";
-import { requestUserData, logout } from "../../actions";
+import { logout } from "../../actions";
+import {requestUserData} from "../../api";
+import ProofContainer from "./ProofContainer";
 
 class MembershipContainer extends Component {
     constructor(props) {
@@ -11,9 +12,9 @@ class MembershipContainer extends Component {
 
         this.state = {
             isAuthenticated: props.isAuthenticated,
-            userToken: props.userToken,
             isFetchingUserData: props.isFetchingUserData,
-            user: props.user,
+            userToken: props.userToken,
+            lastOrder: props.lastOrder,
         }
     }
 
@@ -29,8 +30,12 @@ class MembershipContainer extends Component {
             });
 
         }
-        if(this.state.user !== nextProps.user) {
-            this.setState({user: nextProps.user})
+        if(this.state.lastOrder !== nextProps.lastOrder) {
+            this.setState({lastOrder: nextProps.lastOrder}, () => {
+                if(nextProps.userToken) {
+                    this.fetchUser();
+                }
+            });
         }
     }
 
@@ -46,22 +51,18 @@ class MembershipContainer extends Component {
         this.props.onRegisterPress();
     };
 
-    onChargePress = () => {
-        this.props.onChargePress();
-    };
-
     onLogoutPress = () => {
         this.props.logout();
         this.props.onLogoutPress();
     };
 
     render() {
-        if (this.state.user) {
-            return <Proof
-                user={this.state.user}
+        if (this.props.user) {
+            return <ProofContainer
+                user={this.props.user}
+                userToken={this.state.userToken}
                 fetchUser={this.fetchUser}
                 onLogoutPress={this.onLogoutPress}
-                onChargePress={this.onChargePress}
             />;
         }
         return <Membership onLoginPress={this.onLoginPress} onRegisterPress={this.onRegisterPress} />;
@@ -74,6 +75,7 @@ function stateToProps(state) {
         isFetchingUserData: state.isFetchingUserData,
         userToken: state.userToken,
         user: state.user,
+        lastOrder: state.lastOrder
     };
 }
 

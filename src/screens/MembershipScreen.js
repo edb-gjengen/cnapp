@@ -31,18 +31,13 @@ export default class MembershipScreen extends Component {
         this.props.navigation.navigate('UserRegister');
     };
 
-    chargeNavigate = () => {
-        this.props.navigation.navigate('Charge');
-    };
-
     render() {
         return (
             <StyleProvider style={getTheme()}>
                 <MembershipContainer
                     onLoginPress={this.loginNavigate}
                     onLogoutPress={this.logoutNavigate}
-                    onRegisterPress={this.registerNavigate}
-                    onChargePress={this.chargeNavigate} />
+                    onRegisterPress={this.registerNavigate} />
             </StyleProvider>
         )
     }
