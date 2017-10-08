@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon} from 'native-base';
+import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon, Toast} from 'native-base';
 import {Platform, StyleSheet, View} from "react-native";
 
 export default class UserRegister extends Component {
@@ -11,23 +11,75 @@ export default class UserRegister extends Component {
             lastName: '',
             email: '',
             phoneNumber: '',
-            password: ''
+            password: '',
+            errors: {},
+            touched: new Set()
         }
-    }
+    };
 
-    canSubmitForm() {
+    validateForm(triggeredBy) {
+        const fieldNames = ['firstName', 'lastName', 'email', 'phoneNumber', 'password'];
+
+        let errors = Object.assign({}, this.state.errors);
+        let touched = new Set(this.state.touched).add(triggeredBy);
+
         /* No empty fields */
-        for([key, value] of Object.entries(this.state)) {
+        for(let key of fieldNames) {
+            const value = this.state[key];
             if(value === '') {
-                return false;
+                errors[key] = 'Feltet kan ikke være tomt';
+            } else {
+                delete errors[key];
             }
         }
 
-        return true;
+        this.setState({errors: errors, touched});
     };
 
+    fieldHasError(field) {
+        return this.state.touched.has(field) && field in this.state.errors;
+    }
+
+    canSubmitForm() {
+        return Object.keys(this.state.errors).length === 0;
+    }
+
+    firstNameInput() {
+        return <Item error={this.fieldHasError('firstName')}>
+            <Label>Fornavn</Label>
+            <Input
+                autoFocus={true}
+                returnKeyType="next"
+                onChangeText={(text) => {
+                    this.setState({firstName: text}, () => { this.validateForm('firstName'); });
+                }}
+                onSubmitEditing={() => {
+                    this.refs.lastNameInput._root.focus()
+                }}
+            />
+            {this.fieldHasError('firstName') && <Icon name='close-circle' />}
+        </Item>;
+    }
+
+    lastNameInput() {
+        return <Item error={this.fieldHasError('lastName')}>
+            <Label>Etternavn</Label>
+            <Input
+                ref="lastNameInput"
+                returnKeyType="next"
+                onChangeText={(text) => {
+                    this.setState({lastName: text}, () => { this.validateForm('lastName'); });
+                }}
+                onSubmitEditing={() => {
+                    this.refs.emailInput._root.focus()
+                }}
+            />
+            {this.fieldHasError('lastName') && <Icon name='close-circle' />}
+        </Item>;
+    }
+
     emailInput() {
-        return <Item stackedLabel last>
+        return <Item error={this.fieldHasError('email')}>
             <Label>E-post</Label>
             <Input
                 ref="emailInput"
@@ -36,18 +88,36 @@ export default class UserRegister extends Component {
                 autoCorrect={false}
                 returnKeyType="next"
                 onChangeText={(text) => {
-                    this.setState({email: text});
+                    this.setState({email: text}, () => { this.validateForm('email'); });
                 }}
                 onSubmitEditing={() => {
                     this.refs.phoneInput._root.focus()
                 }}
             />
+            {this.fieldHasError('email') && <Icon name='close-circle' />}
+        </Item>;
+    }
+
+    phoneNumberInput() {
+        return <Item error={this.fieldHasError('phoneNumber')}>
+            <Label>Mobilnummer</Label>
+            <Input
+                ref="phoneInput"
+                returnKeyType="next"
+                keyboardType="phone-pad"
+                onChangeText={(text) => {
+                    this.setState({phoneNumber: text}, () => { this.validateForm('phoneNumber'); });
+                }}
+                onSubmitEditing={() => {
+                    this.refs.passwordInput._root.focus()
+                }}
+            />
+            {this.fieldHasError('phoneNumber') && <Icon name='close-circle' />}
         </Item>;
     }
 
     passwordInput() {
-        // FIXME: How to dynamicly set error attribute? replace component, what?
-        return <Item stackedLabel last>
+        return <Item error={this.fieldHasError('password')}>
             <Label>Passord</Label>
             <Input
                 ref="passwordInput"
@@ -55,14 +125,16 @@ export default class UserRegister extends Component {
                 autoCapitalize="none"
                 autoCorrect={false}
                 onChangeText={(text) => {
-                    this.setState({password: text});
+                    this.setState({password: text}, () => { this.validateForm('password'); });
                 }}
                 onSubmitEditing={this.onRegisterPress}
             />
+            {this.fieldHasError('password') && <Icon name='close-circle' />}
         </Item>
     }
 
     showError = () => {
+        // TODO: Move these from prop to state in componentWillRecieveProps
         // TODO: Format these and highlight error fields
         if (this.props.registerError && Object.keys(this.props.registerError).length !== 0) {
             const err = this.props.registerError.non_field_errors;
@@ -85,47 +157,10 @@ export default class UserRegister extends Component {
             <Container style={styles.container}>
                 <Content keyboardShouldPersistTaps='always'>
                     <Form style={styles.card}>
-                        <Item stackedLabel last>
-                            <Label>Fornavn</Label>
-                            <Input
-                                autoFocus={true}
-                                returnKeyType="next"
-                                onChangeText={(text) => {
-                                    this.setState({firstName: text});
-                                }}
-                                onSubmitEditing={() => {
-                                    this.refs.lastNameInput._root.focus()
-                                }}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Etternavn</Label>
-                            <Input
-                                ref="lastNameInput"
-                                returnKeyType="next"
-                                onChangeText={(text) => {
-                                    this.setState({lastName: text});
-                                }}
-                                onSubmitEditing={() => {
-                                    this.refs.emailInput._root.focus()
-                                }}
-                            />
-                        </Item>
+                        {this.firstNameInput()}
+                        {this.lastNameInput()}
                         {this.emailInput()}
-                        <Item stackedLabel last>
-                            <Label>Mobilnummer</Label>
-                            <Input
-                                ref="phoneInput"
-                                returnKeyType="next"
-                                keyboardType="phone-pad"
-                                onChangeText={(text) => {
-                                    this.setState({phoneNumber: text});
-                                }}
-                                onSubmitEditing={() => {
-                                    this.refs.passwordInput._root.focus()
-                                }}
-                            />
-                        </Item>
+                        {this.phoneNumberInput()}
                         {this.passwordInput()}
                         {this.showError()}
                         {this.registerbutton()}
@@ -137,6 +172,16 @@ export default class UserRegister extends Component {
     }
 
     onRegisterPress = () => {
+        if( !this.validateForm() ) {
+            Toast.show({
+                text: 'Noen av feltene er ikke fylt ut riktig',
+                position: 'bottom',
+                buttonText: 'OK',
+                duration: 1500,
+            });
+            return;
+        }
+
         this.props.onRegisterPress(
             this.state.firstName,
             this.state.lastName,
@@ -147,19 +192,11 @@ export default class UserRegister extends Component {
     };
 
     registerbutton() {
-        if( this.props.isRegisteringUser || !this.canSubmitForm() ) {
-            return (
-            <Button
-                full
-                disabled
-                style={styles.registerButton}
-            >
-                <Text>Registrer</Text>
-            </Button>);
-        }
+        const isDisabled = this.props.isRegisteringUser || !this.canSubmitForm();
 
         return (<Button
             full
+            disabled={isDisabled}
             onPress={this.onRegisterPress}
             style={styles.registerButton}
         >
