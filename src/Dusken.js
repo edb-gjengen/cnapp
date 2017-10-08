@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {TabNavigator, StackNavigator} from "react-navigation";
 
 import AboutScreen from "./screens/AboutScreen";
@@ -22,7 +22,13 @@ const tabBarOptions = {
     tabBarPosition: 'bottom',
     tabBarOptions: {
         style: {
-            backgroundColor: "#fff"
+            ...Platform.select({
+                android: {
+                    backgroundColor: "#fff",
+                    borderTopWidth: StyleSheet.hairlineWidth,
+                    borderTopColor: 'rgba(0, 0, 0, 0.1)'
+                }
+            })
         },
         indicatorStyle: {
             backgroundColor: "#f58220"

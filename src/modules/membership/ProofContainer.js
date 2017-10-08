@@ -27,7 +27,12 @@ class ProofContainer extends Component {
     }
 
     render() {
-        return <Proof {...this.state} user={this.props.user} onChargePress={this.openStripe} />
+        return <Proof
+            {...this.state}
+            user={this.props.user}
+            onChargePress={this.openStripe}
+            onLogoutPress={this.props.onLogoutPress}
+        />
     }
 
     openStripe = () => {
