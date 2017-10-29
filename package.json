@@ -6,7 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "emulator": "emulator -avd $(emulator -list-avds | head)&",
-    "build-android": "cd android && ./gradlew assembleRelease"
+    "build-android": "cd android && ./gradlew assembleRelease",
+    "release-android": "cd android && fastlane beta"
   },
   "dependencies": {
     "moment": "^2.19.1",

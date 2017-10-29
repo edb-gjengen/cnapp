@@ -33,10 +33,13 @@
     DUSKEN_RELEASE_KEY_PASSWORD=
 
     # Build
-    yarn build-android
+    yarn build-android # Output is in android/app/build/outputs/apk
 
-    # Output is in android/app/build/outputs/apk
+    # Note: Make sure you have the file android/google_play.json
+    # Ref: https://docs.fastlane.tools/actions/supply/#setup
 
+    # Publish android build to the Google Play beta track
+    yarn release-android
 
 ## Libraries
 
