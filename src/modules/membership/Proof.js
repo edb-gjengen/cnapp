@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
-import {Button, Body, Card, CardItem, Text, Content} from 'native-base';
+import {Button, Body, Card, CardItem, Container, Content, Text} from 'native-base';
 import Confetti from 'react-native-confetti';
 
 export default class Proof extends Component {
@@ -123,7 +123,7 @@ export default class Proof extends Component {
 
     render() {
         return (
-            <View style={{flex: 1}}>
+            <Container>
                 {this.confetti()}
                 <Content style={{margin: 8}}>
                     <Card>
@@ -137,7 +137,7 @@ export default class Proof extends Component {
                         <Text>Logg ut</Text>
                     </Button>
                 </Content>
-            </View>
+            </Container>
         )
     };
 

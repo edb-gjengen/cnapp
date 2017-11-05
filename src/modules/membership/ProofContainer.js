@@ -8,7 +8,7 @@ import {requestMembershipCharge} from "../../api";
 
 
 stripe.init({
-    publishableKey: Config.STRIPE_PUBLISHABLE_KEY,
+    publishableKey: Config.STRIPE_PUBLISHABLE_KEY || '',
 });
 
 class ProofContainer extends Component {
