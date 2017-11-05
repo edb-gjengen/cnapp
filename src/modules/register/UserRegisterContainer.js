@@ -9,8 +9,6 @@ class UserRegisterContainer extends Component {
         super(state);
         this.state = {
             isAuthenticated: false,
-            isRegisteringUser: false,
-            registerError: null
         }
     }
 
@@ -20,12 +18,6 @@ class UserRegisterContainer extends Component {
                 this.props.onRegister();
             }
         }
-        if (this.state.isRegisteringUser !== nextProps.isRegisteringUser) {
-            this.setState({isRegisteringUser: nextProps.isRegisteringUser});
-        }
-        if (this.state.registerError !== nextProps.registerError) {
-            this.setState({registerError: nextProps.registerError});
-        }
     }
 
     onRegisterPress = (firstName, lastName, email, phoneNumber, password) => {
@@ -33,18 +25,24 @@ class UserRegisterContainer extends Component {
     };
 
     render() {
-        return <UserRegister {...this.state} onRegisterPress={this.onRegisterPress} />;
+        return <UserRegister
+            {...this.state}
+            onRegisterPress={this.onRegisterPress}
+            registerError={this.props.registerError}
+            isRegisteringUser={this.props.isRegisteringUser}
+        />;
     }
 }
 
-function stateToProps(state) {
+function storeToProps(store) {
+    const errors = store.registerError === null ? {} : store.registerError;
     return {
-        isAuthenticated: state.isAuthenticated,
-        isRegisteringUser: state.isRegisteringUser,
-        registerError: state.registerError
+        isAuthenticated: store.isAuthenticated,
+        isRegisteringUser: store.isRegisteringUser,
+        registerError: errors
     };
 }
 export default connect(
-    stateToProps,
+    storeToProps,
     {requestRegisterUser}
 )(UserRegisterContainer);

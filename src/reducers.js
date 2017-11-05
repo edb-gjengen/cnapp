@@ -11,6 +11,8 @@ import {
     REGISTER_USER_SUCCESS, MEMBERSHIP_CHARGE_REQUEST, MEMBERSHIP_CHARGE_FAILURE, MEMBERSHIP_CHARGE_SUCCESS,
 } from './actions';
 
+import { snakeToCamelCase } from './utils'
+
 const initialState = {
     isAuthenticated: false,
     isLoggingIn: false,
@@ -25,6 +27,17 @@ const initialState = {
     chargeError: null,
     lastOrder: null,
 };
+
+
+function formatErrors(errs) {
+    let _errs = {};
+    for(let [key, value] of Object.entries(errs)) {
+        _errs[snakeToCamelCase(key)] = value.join('\n');
+    }
+    return _errs
+}
+
+
 
 export default function duskenApp(state = initialState, action) {
     switch (action.type) {
@@ -80,7 +93,7 @@ export default function duskenApp(state = initialState, action) {
         case REGISTER_USER_FAILURE:
             return Object.assign({}, state, {
                 isRegisteringUser: false,
-                registerError: action.registerError
+                registerError: formatErrors(action.registerError)
             });
 
         case REGISTER_USER_SUCCESS:

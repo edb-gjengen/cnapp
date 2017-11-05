@@ -10,6 +10,7 @@
     "release-android": "cd android && fastlane beta"
   },
   "dependencies": {
+    "email-validator": "^1.1.1",
     "moment": "^2.19.1",
     "native-base": "^2.3.2",
     "prop-types": "^15.5.10",

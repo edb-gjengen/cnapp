@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon, Toast} from 'native-base';
 import {Platform, StyleSheet, View} from "react-native";
+import EmailValidator from 'email-validator';
+import platform from "native-base/src/theme/variables/platform";
 
 export default class UserRegister extends Component {
     constructor(props) {
@@ -27,7 +29,9 @@ export default class UserRegister extends Component {
         for(let key of fieldNames) {
             const value = this.state[key];
             if(value === '') {
-                errors[key] = 'Feltet kan ikke være tomt';
+                errors[key] = 'kan ikke være tomt';
+            } else if(key === 'email' && !EmailValidator.validate(value)) {
+                errors[key] = 'er ikke en gyldig e-post';
             } else {
                 delete errors[key];
             }
@@ -50,12 +54,13 @@ export default class UserRegister extends Component {
             <Input
                 autoFocus={true}
                 returnKeyType="next"
-                onChangeText={(text) => {
-                    this.setState({firstName: text}, () => { this.validateForm('firstName'); });
+                onChangeText={(firstName) => {
+                    this.setState({firstName}, () => { this.validateForm('firstName'); });
                 }}
                 onSubmitEditing={() => {
                     this.refs.lastNameInput._root.focus()
                 }}
+                value={this.state.firstName}
             />
             {this.fieldHasError('firstName') && <Icon name='close-circle' />}
         </Item>;
@@ -67,12 +72,13 @@ export default class UserRegister extends Component {
             <Input
                 ref="lastNameInput"
                 returnKeyType="next"
-                onChangeText={(text) => {
-                    this.setState({lastName: text}, () => { this.validateForm('lastName'); });
+                onChangeText={(lastName) => {
+                    this.setState({lastName}, () => { this.validateForm('lastName'); });
                 }}
                 onSubmitEditing={() => {
                     this.refs.emailInput._root.focus()
                 }}
+                value={this.state.lastName}
             />
             {this.fieldHasError('lastName') && <Icon name='close-circle' />}
         </Item>;
@@ -87,12 +93,13 @@ export default class UserRegister extends Component {
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
-                onChangeText={(text) => {
-                    this.setState({email: text}, () => { this.validateForm('email'); });
+                onChangeText={(email) => {
+                    this.setState({email}, () => { this.validateForm('email'); });
                 }}
                 onSubmitEditing={() => {
                     this.refs.phoneInput._root.focus()
                 }}
+                value={this.state.email}
             />
             {this.fieldHasError('email') && <Icon name='close-circle' />}
         </Item>;
@@ -105,12 +112,13 @@ export default class UserRegister extends Component {
                 ref="phoneInput"
                 returnKeyType="next"
                 keyboardType="phone-pad"
-                onChangeText={(text) => {
-                    this.setState({phoneNumber: text}, () => { this.validateForm('phoneNumber'); });
+                onChangeText={(phoneNumber) => {
+                    this.setState({phoneNumber}, () => { this.validateForm('phoneNumber'); });
                 }}
                 onSubmitEditing={() => {
                     this.refs.passwordInput._root.focus()
                 }}
+                value={this.state.phoneNumber}
             />
             {this.fieldHasError('phoneNumber') && <Icon name='close-circle' />}
         </Item>;
@@ -124,26 +132,38 @@ export default class UserRegister extends Component {
                 secureTextEntry={true}
                 autoCapitalize="none"
                 autoCorrect={false}
-                onChangeText={(text) => {
-                    this.setState({password: text}, () => { this.validateForm('password'); });
+                onChangeText={(password) => {
+                    this.setState({password}, () => { this.validateForm('password'); });
                 }}
                 onSubmitEditing={this.onRegisterPress}
+                value={this.state.password}
             />
             {this.fieldHasError('password') && <Icon name='close-circle' />}
         </Item>
     }
 
-    showError = () => {
-        // TODO: Move these from prop to state in componentWillRecieveProps
-        // TODO: Format these and highlight error fields
-        if (this.props.registerError && Object.keys(this.props.registerError).length !== 0) {
-            const err = this.props.registerError.non_field_errors;
+    componentWillReceiveProps(nextProps) {
+        if(this.props.registerError !== nextProps.registerError) {
+            this.setState({'errors': nextProps.registerError})
+        }
+    }
+
+    showNonFieldError = () => {
+        const errors = this.props.registerError;
+        if (Object.keys(errors).length !== 0 && 'non_field_errors' in errors) {
+            const err = errors.non_field_errors;
             let errorFormatted = err ? err[0] : 'Kunne ikke registrere bruker, prøv igjen...';
             return <View style={styles.errorBox}><Text style={styles.errorMessage}>{errorFormatted}</Text></View>
         }
-        else {
-            return <View style={styles.errorBox}/>
+
+        return <View style={styles.errorBox}/>
+    };
+
+    showFieldError = (field) => {
+        if(!this.fieldHasError(field) ) {
+            return;
         }
+        return <Item style={styles.errorText}><Text style={styles.errorMessage}>{this.state.errors[field]}</Text></Item>;
     };
 
     showSpinner = () => {
@@ -158,11 +178,16 @@ export default class UserRegister extends Component {
                 <Content keyboardShouldPersistTaps='always'>
                     <Form style={styles.card}>
                         {this.firstNameInput()}
+                        {this.showFieldError('firstName')}
                         {this.lastNameInput()}
+                        {this.showFieldError('lastName')}
                         {this.emailInput()}
+                        {this.showFieldError('email')}
                         {this.phoneNumberInput()}
+                        {this.showFieldError('phoneNumber')}
                         {this.passwordInput()}
-                        {this.showError()}
+                        {this.showFieldError('password')}
+                        {this.showNonFieldError()}
                         {this.registerbutton()}
                         {this.showSpinner()}
                     </Form>
@@ -172,7 +197,7 @@ export default class UserRegister extends Component {
     }
 
     onRegisterPress = () => {
-        if( !this.validateForm() ) {
+        if( !this.canSubmitForm() ) {
             Toast.show({
                 text: 'Noen av feltene er ikke fylt ut riktig',
                 position: 'bottom',
@@ -192,7 +217,7 @@ export default class UserRegister extends Component {
     };
 
     registerbutton() {
-        const isDisabled = this.props.isRegisteringUser || !this.canSubmitForm();
+        const isDisabled = this.state.touched.size === 0 || this.props.isRegisteringUser || !this.canSubmitForm();
 
         return (<Button
             full
@@ -222,7 +247,8 @@ const styles = StyleSheet.create({
     },
     errorMessage: {
         textAlign: 'center',
-        color: 'red',
+        color: platform.btnDangerBg,
+        fontSize: 14,
     },
     card: {
         borderColor: '#e1e8ee',
@@ -242,4 +268,8 @@ const styles = StyleSheet.create({
         margin: 8,
         backgroundColor: '#fff',
     },
+    errorText: {
+        paddingTop: 2,
+        paddingBottom: 12,
+    }
 });

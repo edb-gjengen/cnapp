@@ -2,16 +2,15 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import Membership from "./Membership";
+import ProofContainer from "./ProofContainer";
 import { logout } from "../../actions";
 import {requestUserData} from "../../api";
-import ProofContainer from "./ProofContainer";
 
 class MembershipContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isAuthenticated: props.isAuthenticated,
             isFetchingUserData: props.isFetchingUserData,
             userToken: props.userToken,
             lastOrder: props.lastOrder,
@@ -19,9 +18,6 @@ class MembershipContainer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.state.isAuthenticated !== nextProps.isAuthenticated) {
-            this.setState({isAuthenticated: nextProps.isAuthenticated})
-        }
         if(this.state.userToken !== nextProps.userToken) {
             this.setState({userToken: nextProps.userToken}, () => {
                 if(nextProps.userToken) {
@@ -60,6 +56,7 @@ class MembershipContainer extends Component {
         if (this.props.user) {
             return <ProofContainer
                 user={this.props.user}
+                isAuthenticated={this.props.isAuthenticated}
                 userToken={this.state.userToken}
                 fetchUser={this.fetchUser}
                 onLogoutPress={this.onLogoutPress}
@@ -69,17 +66,17 @@ class MembershipContainer extends Component {
     }
 }
 
-function stateToProps(state) {
+function storeToProps(store) {
     return {
-        isAuthenticated: state.isAuthenticated,
-        isFetchingUserData: state.isFetchingUserData,
-        userToken: state.userToken,
-        user: state.user,
-        lastOrder: state.lastOrder
+        isAuthenticated: store.isAuthenticated,
+        isFetchingUserData: store.isFetchingUserData,
+        userToken: store.userToken,
+        user: store.user,
+        lastOrder: store.lastOrder
     };
 }
 
 export default connect(
-    stateToProps,
+    storeToProps,
     { requestUserData, logout }
 )(MembershipContainer);

@@ -11,6 +11,7 @@ export function requestLogin(username, password) {
     return (dispatch) => {
         // We are now logging in
         dispatch(loginRequest());
+
         return fetch(`${Config.DUSKEN_API_URL}/auth/obtain-token/`, {
             method: 'POST',
             headers: {
