@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, Text, View, Linking, StyleSheet, Platform} from "react-native";
 import {Button, Text as NBText} from "native-base";
+import theme from "../../theme";
 export default class Membership extends Component {
     render() {
         return (
@@ -31,24 +32,7 @@ export default class Membership extends Component {
 
 
 const styles = StyleSheet.create({
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
-    },
+    card: theme.card,
     paragraph: {
         textAlign: 'center',
         fontSize: 16,

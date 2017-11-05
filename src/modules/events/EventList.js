@@ -3,6 +3,7 @@ import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button,
 import React, { Component } from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
+import theme from "../../theme";
 
 moment.locale('nb');
 
@@ -20,7 +21,7 @@ export default class EventList extends Component {
     );
 
     _renderSectionHeader = ({section}) => {
-        return (<ListItem style={[styles.listItem, {paddingBottom: 8}]}>
+        return (<ListItem style={[styles.listItem, {paddingBottom: 0, borderBottomWidth: 0}]}>
             <Body>
                 <Text style={styles.listItemSectionTitle}>{section.title}</Text>
             </Body>
@@ -71,7 +72,7 @@ export default class EventList extends Component {
             onEndReachedThreshould={10}
             initialNumToRender={10}
             ListFooterComponent={this._renderFooter}
-            style={styles.list}
+            style={[styles.list, {paddingRight: 0}]}
         />);
     }
 }
@@ -96,7 +97,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingBottom: 8
     },
-    list: {
-        backgroundColor: 'white'
-    }
+    list: theme.card,
 });

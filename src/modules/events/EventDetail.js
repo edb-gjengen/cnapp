@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableHighlight,
-        TouchableOpacity} from "react-native";
+import {Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableOpacity} from "react-native";
 import HTMLView from 'react-native-htmlview';
 import moment from "moment";
-import {Button, Icon, Text as NBText} from "native-base";
+import {Icon} from "native-base";
+import theme from "../../theme";
 
 moment.locale('nb');
 
@@ -172,7 +172,7 @@ export default class EventDetail extends Component {
                     {/* Date and title */}
                     <View style={styles.dateAndTitle}>
                         <View style={styles.dateContainer}>
-                            <View style={styles.dateCard}>
+                            <View style={[styles.card, styles.dateCard]}>
                                 <Text style={styles.day}>{this._formatDay(item.start_time)}</Text>
                                 <Text style={styles.month}>{this._formatMonth(item.start_time)}</Text>
                                 {this.showYear()}
@@ -222,24 +222,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
     },
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
-    },
+    card: theme.card,
     image: {
         height: 260,
         width: null
@@ -275,20 +258,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     dateCard: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 2,
-                shadowRadius: 2,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        backgroundColor: '#fff',
+        margin: 0,
+        padding: 0,
         paddingBottom: 6,
         width: 62,
     },

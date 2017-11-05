@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
-import {Button, Body, Card, CardItem, Container, Content, Text} from 'native-base';
+import {Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, Text as NBText} from 'native-base';
 import Confetti from 'react-native-confetti';
+import theme from "../../theme";
 
 export default class Proof extends Component {
     CONFETTI_TIMEOUT = 15000;
@@ -48,57 +49,52 @@ export default class Proof extends Component {
         }
 
         return (
-            <CardItem>
-                <View style={{alignItems: 'center', flex: 1}}>
-                    <Text>Gyldig til: </Text>
-                    <Text style={styles.validToValue}>{validTo}</Text>
-                </View>
-            </CardItem>
+            <View style={{alignItems: 'center', flex: 1}}>
+                <Text>Gyldig til: </Text>
+                <Text style={styles.validToValue}>{validTo}</Text>
+            </View>
         )
     }
 
     membershipStatus() {
         if (!this.props.user.is_member) {
             if ( !this.props.user.last_membership ) {
-                return (
-                    <CardItem>
-                        <View style={styles.notMember}>
-                            <Text style={styles.notMemberText}>Ikke medlem</Text>
-                        </View>
-                    </CardItem>)
+                return;
             }
 
-            return <View style={styles.expired}><Text style={styles.expiredText}>Utløpt</Text></View>
+            return (
+                <View style={styles.expired}>
+                    <Text style={styles.expiredText}>Utløpt</Text>
+                </View>)
         }
 
-        let statusText = 'Medlem';
-        if (this.props.user.is_volunteer) {
-            statusText = 'Aktiv';
-        }
+        const statusText = this.props.user.is_volunteer ? 'Aktiv' : 'Medlem';
 
         return (
-            <CardItem>
+            <View>
                 <TouchableOpacity onPress={this.onMembershipPress} style={styles.valid}>
                     <Text style={styles.validText}>{statusText}</Text>
                 </TouchableOpacity>
-            </CardItem>);
+            </View>);
     }
 
     purchaseButton() {
         if (this.props.user.is_member) {
             return;
         }
-        return <CardItem>
-            <Body>
+        return (
+            <View>
                 <Button
                     onPress={this.props.onChargePress}
                     full
                     style={styles.purchaseButton}
                 >
-                    <Text>Kjøp medlemskap</Text>
+                    <NBText>Kjøp medlemskap (200 NOK)</NBText>
                 </Button>
-            </Body>
-        </CardItem>
+                <View style={styles.purchaseText}>
+                    <Text style={styles.purchaseTextInner}>Medlemskapet er gyldig i ett år</Text>
+                </View>
+            </View>)
     }
 
     confetti() {
@@ -123,21 +119,21 @@ export default class Proof extends Component {
 
     render() {
         return (
-            <Container>
+            <ScrollView>
                 {this.confetti()}
-                <Content style={{margin: 8}}>
-                    <Card>
-                        {this.membershipName()}
-                        {this.logo()}
-                        {this.membershipStatus()}
-                        {this.purchaseButton()}
-                        {this.membershipValidTo()}
-                    </Card>
+                <View style={styles.card}>
+                    {this.membershipName()}
+                    {this.logo()}
+                    {this.membershipStatus()}
+                    {this.purchaseButton()}
+                    {this.membershipValidTo()}
+                </View>
+                <View>
                     <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
-                        <Text>Logg ut</Text>
+                        <NBText>Logg ut</NBText>
                     </Button>
-                </Content>
-            </Container>
+                </View>
+            </ScrollView>
         )
     };
 
@@ -146,13 +142,14 @@ export default class Proof extends Component {
         if(name === ' ') {
             name = this.props.user.email;
         }
-        return <CardItem>
+        return <View>
             <Text style={styles.nameText}>{name}</Text>
-        </CardItem>
+        </View>
     }
 }
 
 const styles = StyleSheet.create({
+    card: theme.card,
     nameText: {
         flex: 1,
         textAlign: 'center',
@@ -203,4 +200,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginVertical: 20,
     },
+    purchaseText: {
+        alignItems: 'center'
+    },
+    purchaseTextInner: {
+        fontStyle: 'italic',
+        fontSize: 16,
+        textAlign: 'center',
+        paddingTop: 10,
+        paddingBottom: 8
+    }
 });

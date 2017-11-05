@@ -3,6 +3,7 @@ import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, T
 import {Platform, StyleSheet, View} from "react-native";
 import EmailValidator from 'email-validator';
 import platform from "native-base/src/theme/variables/platform";
+import theme from "../../theme";
 
 export default class UserRegister extends Component {
     constructor(props) {
@@ -250,24 +251,7 @@ const styles = StyleSheet.create({
         color: platform.btnDangerBg,
         fontSize: 14,
     },
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
-    },
+    card: theme.card,
     errorText: {
         paddingTop: 2,
         paddingBottom: 12,
