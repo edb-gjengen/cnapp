@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {Button, Text as NBText} from 'native-base';
+import {Button, Text as NBText, Spinner} from 'native-base';
 import Confetti from 'react-native-confetti';
 import theme from "../../theme";
 
@@ -71,7 +71,7 @@ export default class Proof extends Component {
         const statusText = this.props.user.is_volunteer ? 'Aktiv' : 'Medlem';
 
         return (
-            <View>
+            <View style={styles.membershipStatus}>
                 <TouchableOpacity onPress={this.onMembershipPress} style={styles.valid}>
                     <Text style={styles.validText}>{statusText}</Text>
                 </TouchableOpacity>
@@ -84,9 +84,11 @@ export default class Proof extends Component {
         }
         return (
             <View>
+                {this.props.isChargingMembership && <Spinner color="#f58220"/>}
                 <Button
                     onPress={this.props.onChargePress}
                     full
+                    disabled={this.props.isChargingMembership}
                     style={styles.purchaseButton}
                 >
                     <NBText>Kjøp medlemskap (200 NOK)</NBText>
@@ -108,32 +110,38 @@ export default class Proof extends Component {
         if (!this.props.user.is_member) {
             return;
         }
+
         // FIXME: URL to config
-        return <Image
-            style={{width: null, height: 100}}
-            source={{uri: 'https://galtinn.neuf.no/static/dist/images/logo.png'}}
-            resizeMode="contain"
-        />
+        return (
+            <View style={{marginTop: 8}}>
+                <Image
+                    style={{width: null, height: 100}}
+                    source={{uri: 'https://galtinn.neuf.no/static/dist/images/logo.png'}}
+                    resizeMode="contain"
+                />
+            </View>)
     }
 
 
     render() {
         return (
-            <ScrollView>
+            <View>
                 {this.confetti()}
-                <View style={styles.card}>
-                    {this.membershipName()}
-                    {this.logo()}
-                    {this.membershipStatus()}
-                    {this.purchaseButton()}
-                    {this.membershipValidTo()}
-                </View>
-                <View>
-                    <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
-                        <NBText>Logg ut</NBText>
-                    </Button>
-                </View>
-            </ScrollView>
+                <ScrollView>
+                    <View style={[styles.card, {paddingVertical: 16}]}>
+                        {this.membershipName()}
+                        {this.logo()}
+                        {this.membershipStatus()}
+                        {this.purchaseButton()}
+                        {this.membershipValidTo()}
+                    </View>
+                    <View>
+                        <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
+                            <NBText>Logg ut</NBText>
+                        </Button>
+                    </View>
+                </ScrollView>
+            </View>
         )
     };
 
@@ -150,6 +158,9 @@ export default class Proof extends Component {
 
 const styles = StyleSheet.create({
     card: theme.card,
+    membershipStatus: {
+        marginVertical: 16,
+    },
     nameText: {
         flex: 1,
         textAlign: 'center',
@@ -171,7 +182,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#d9534f',
         flex: 1,
         marginHorizontal: -16,
-        padding: 16
+        padding: 16,
+        marginVertical: 16,
     },
     expiredText: {
         color: 'white',

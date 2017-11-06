@@ -20,16 +20,12 @@ class ProofContainer extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(this.state.user !== nextProps.user) {
-            this.setState({user: nextProps.user})
-        }
-    }
-
     render() {
         return <Proof
             {...this.state}
             user={this.props.user}
+            isChargingMembership={this.props.isChargingMembership}
+            chargeError={this.props.chargeError}
             onChargePress={this.openStripe}
             onLogoutPress={this.props.onLogoutPress}
         />
@@ -51,10 +47,7 @@ class ProofContainer extends Component {
                     {id: token.tokenId, email: this.props.user.email},
                     'standard');
             },
-            (error) => {
-                // TODO: display error
-                console.log(error);
-            }
+            (error) => { /* FIXME: Happens only if card dialog is canceled? */ }
         );
     };
 
@@ -80,8 +73,10 @@ class ProofContainer extends Component {
 }
 
 export default connect(
-    (state) => ({
-        userToken: state.userToken
+    (store) => ({
+        userToken: store.userToken,
+        isChargingMembership: store.isChargingMembership,
+        chargeError: store.chargeError
     }),
     {requestMembershipCharge}
 )(ProofContainer);
