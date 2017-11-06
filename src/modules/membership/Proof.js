@@ -91,7 +91,7 @@ export default class Proof extends Component {
                     disabled={this.props.isChargingMembership}
                     style={styles.purchaseButton}
                 >
-                    <NBText>Kjøp medlemskap (200 NOK)</NBText>
+                    <NBText>{`Kjøp medlemskap (${this.props.membershipPrice} NOK)`}</NBText>
                 </Button>
                 <View style={styles.purchaseText}>
                     <Text style={styles.purchaseTextInner}>Medlemskapet er gyldig i ett år</Text>

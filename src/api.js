@@ -67,7 +67,7 @@ export function requestUserData(auth_token) {
                     dispatch(userDataSuccess(data))
                 },
                 data => {
-                    dispatch(userDataFailure('Det funka ikke :-('))
+                    dispatch(userDataFailure(data || {'non_field_errors': ['Kunne ikke hente brukerdata']}))
                 }
             )
     }

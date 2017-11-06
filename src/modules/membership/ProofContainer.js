@@ -12,6 +12,8 @@ stripe.init({
 });
 
 class ProofContainer extends Component {
+    price = 200;  // TODO: fetch from backend
+
     constructor(props) {
         super(props);
 
@@ -28,6 +30,7 @@ class ProofContainer extends Component {
             chargeError={this.props.chargeError}
             onChargePress={this.openStripe}
             onLogoutPress={this.props.onLogoutPress}
+            membershipPrice={this.price}
         />
     }
 
