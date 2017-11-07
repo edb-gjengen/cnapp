@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Button, Text as NBText, Spinner} from 'native-base';
 import Confetti from 'react-native-confetti';
 import theme from "../../theme";

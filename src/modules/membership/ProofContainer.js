@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import stripe from 'tipsi-stripe'
 import Config from 'react-native-config';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import Proof from "./Proof";
 import {requestMembershipCharge} from "../../api";
@@ -11,15 +13,21 @@ stripe.init({
     publishableKey: Config.STRIPE_PUBLISHABLE_KEY || '',
 });
 
-class ProofContainer extends Component {
-    price = 200;  // TODO: fetch from backend
 
+class ProofContainer extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             refreshing: false,
         }
+    }
+
+    getPrice(membershipTypes) {
+        if (!membershipTypes || membershipTypes.length !== 1) {
+            return 0;
+        }
+
+        return membershipTypes[0].price / 100;
     }
 
     render() {
@@ -30,7 +38,7 @@ class ProofContainer extends Component {
             chargeError={this.props.chargeError}
             onChargePress={this.openStripe}
             onLogoutPress={this.props.onLogoutPress}
-            membershipPrice={this.price}
+            membershipPrice={this.getPrice(this.props.data.membershipTypes)}
         />
     }
 
@@ -75,7 +83,20 @@ class ProofContainer extends Component {
     // }
 }
 
-export default connect(
+const PROOF_QUERY = gql`{
+    membershipTypes(isDefault: true) {
+        id
+        slug
+        price
+        expiryType
+        duration
+        isActive
+        name
+        isDefault
+    }
+}`;
+
+const proofContainerWithState = connect(
     (store) => ({
         userToken: store.userToken,
         isChargingMembership: store.isChargingMembership,
@@ -83,3 +104,5 @@ export default connect(
     }),
     {requestMembershipCharge}
 )(ProofContainer);
+
+export default graphql(PROOF_QUERY)(proofContainerWithState);
