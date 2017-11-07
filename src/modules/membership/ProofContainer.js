@@ -15,6 +15,7 @@ stripe.init({
 
 
 class ProofContainer extends Component {
+    // TODO: Prevent charge if we do not have a default membership type
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +24,7 @@ class ProofContainer extends Component {
     }
 
     getPrice(membershipTypes) {
-        if (!membershipTypes || membershipTypes.length !== 1) {
+        if (!membershipTypes) {
             return 0;
         }
 
@@ -50,13 +51,15 @@ class ProofContainer extends Component {
             smsAutofillDisabled: true,
         };
 
+        const membershipTypeSlug = this.props.data.membershipTypes ? this.props.data.membershipTypes[0].slug : 'standard';
+
         stripe.paymentRequestWithCardForm(options).then(
             (token) => {
                 // returns a token.tokenId which should be saved
                 this.props.requestMembershipCharge(
                     this.props.userToken,
                     {id: token.tokenId, email: this.props.user.email},
-                    'standard');
+                    membershipTypeSlug);
             },
             (error) => { /* FIXME: Happens only if card dialog is canceled? */ }
         );
@@ -85,14 +88,8 @@ class ProofContainer extends Component {
 
 const PROOF_QUERY = gql`{
     membershipTypes(isDefault: true) {
-        id
         slug
         price
-        expiryType
-        duration
-        isActive
-        name
-        isDefault
     }
 }`;
 
