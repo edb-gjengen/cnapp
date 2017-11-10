@@ -28,7 +28,7 @@ class EventListContainer extends Component {
     _formatDate(time) {
         const m = moment(time);
         if(moment().year() === m.year() ) {
-            return m.format('D. MMM')
+            return m.format('dddd D. MMM')
         }
         return m.format('ll');
     }
