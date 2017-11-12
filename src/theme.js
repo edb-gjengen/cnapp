@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
 
+const colors = {};
+
 const card = {
-    borderColor: '#e1e8ee',
-    borderWidth: 1,
     ...Platform.select({
         ios: {
             shadowColor: 'rgba(0,0,0, .2)',
@@ -18,4 +18,4 @@ const card = {
     margin: 8,
     backgroundColor: '#fff',
 };
-export default {card};
+export default {card, colors};

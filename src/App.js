@@ -10,7 +10,6 @@ import {ApolloClient} from 'apollo-client';
 import {HttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ApolloProvider} from "react-apollo";
-import 'isomorphic-fetch';
 
 import Dusken from "./Dusken";
 import duskenApp from "./reducers";

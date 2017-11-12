@@ -21,9 +21,9 @@ export default class EventList extends Component {
     );
 
     _renderSectionHeader = ({section}) => {
-        return (<ListItem style={[styles.listItem, {paddingBottom: 0, borderBottomWidth: 0}]}>
+        return (<ListItem style={styles.sectionHeader}>
             <Body>
-                <Text style={styles.listItemSectionTitle}>{section.title}</Text>
+                <Text style={styles.sectionTitle}>{section.title}</Text>
             </Body>
         </ListItem>);
     };
@@ -72,7 +72,8 @@ export default class EventList extends Component {
             onEndReachedThreshould={10}
             initialNumToRender={10}
             ListFooterComponent={this._renderFooter}
-            style={[styles.list, {paddingRight: 0}]}
+            style={[styles.card, styles.list]}
+            ListHeaderComponent={() => { return <View style={styles.listHeader}/> }}
         />);
     }
 }
@@ -80,6 +81,7 @@ export default class EventList extends Component {
 
 const styles = StyleSheet.create({
     listItem: {
+        backgroundColor: 'white',
         marginLeft: 0
     },
     listItemTitle: {
@@ -89,13 +91,29 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666'
     },
-    listItemSectionTitle: {
-        fontSize: 14,
+    sectionHeader: {
+        backgroundColor: 'white',
+        marginLeft: 0,
+        marginBottom: -8,
+        paddingBottom: 0,
+        borderBottomWidth: 0,
+    },
+    sectionTitle: {
+        fontSize: 16,
         fontWeight: 'bold',
     },
     loadingText: {
         textAlign: 'center',
         paddingBottom: 8
     },
-    list: theme.card,
+    card: theme.card,
+    list: {
+        padding: 0,
+        marginTop: 0,
+        marginBottom: 0,
+        backgroundColor: 'transparent',
+    },
+    listHeader: {
+        paddingTop: 8,
+    }
 });
