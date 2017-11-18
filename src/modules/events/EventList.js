@@ -1,4 +1,4 @@
-import {StyleSheet, View, SectionList} from "react-native";
+import {StyleSheet, View, SectionList, Platform} from "react-native";
 import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content, Spinner} from 'native-base';
 import React, { Component } from 'react';
 import moment from "moment";
@@ -94,7 +94,10 @@ const styles = StyleSheet.create({
     sectionHeader: {
         backgroundColor: 'white',
         marginLeft: 0,
-        marginBottom: -8,
+        ...Platform.select({
+            'ios': {marginBottom: -8},
+            'android': {marginBottom: -4}
+        }),
         paddingBottom: 0,
         borderBottomWidth: 0,
     },
