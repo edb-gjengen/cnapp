@@ -62,7 +62,11 @@ class MembershipContainer extends Component {
                 onLogoutPress={this.onLogoutPress}
             />;
         }
-        return <Membership onLoginPress={this.onLoginPress} onRegisterPress={this.onRegisterPress} />;
+        return <Membership
+            isFetchingUserData={this.props.isFetchingUserData}
+            onLoginPress={this.onLoginPress}
+            onRegisterPress={this.onRegisterPress}
+        />;
     }
 }
 

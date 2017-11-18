@@ -88,7 +88,7 @@ export default class Proof extends Component {
                 <Button
                     onPress={this.props.onChargePress}
                     full
-                    disabled={this.props.isChargingMembership}
+                    disabled={this.props.isChargingMembership || this.props.isLoadingMembershipType}
                     style={styles.purchaseButton}
                 >
                     <NBText>{`Kjøp medlemskap (${this.props.membershipPrice} NOK)`}</NBText>

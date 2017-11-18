@@ -15,7 +15,6 @@ stripe.init({
 
 
 class ProofContainer extends Component {
-    // TODO: Prevent charge if we do not have a default membership type
     constructor(props) {
         super(props);
         this.state = {
@@ -36,6 +35,7 @@ class ProofContainer extends Component {
             {...this.state}
             user={this.props.user}
             isChargingMembership={this.props.isChargingMembership}
+            isLoadingMembershipType={this.props.data.loading}
             chargeError={this.props.chargeError}
             onChargePress={this.openStripe}
             onLogoutPress={this.props.onLogoutPress}

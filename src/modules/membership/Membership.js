@@ -4,6 +4,14 @@ import {Button, Text as NBText} from "native-base";
 import theme from "../../theme";
 export default class Membership extends Component {
     render() {
+        if (this.props.isFetchingUserData) {
+            return (
+                <View style={styles.card}>
+                    <Spinner color="#f58220"/>
+                </View>
+            );
+        }
+
         return (
             <ScrollView>
                 <View style={styles.card}>
