@@ -3,6 +3,7 @@ import {Linking, StyleSheet, View, Platform} from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text,
     Icon} from 'native-base';
 import Config from 'react-native-config';
+import theme from "../../theme";
 
 export default class Login extends Component {
     constructor(props) {
@@ -157,22 +158,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'red',
     },
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
-    },
+    card: theme.card,
 });

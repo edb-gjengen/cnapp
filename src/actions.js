@@ -1,5 +1,3 @@
-import Config from 'react-native-config';
-
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -7,6 +5,12 @@ const LOGOUT = 'LOGOUT';
 const USER_DATA_REQUEST = 'USER_DATA_REQUEST';
 const USER_DATA_SUCCESS = 'USER_DATA_SUCCESS';
 const USER_DATA_FAILURE = 'USER_DATA_FAILURE';
+const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
+const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
+const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
+const MEMBERSHIP_CHARGE_REQUEST = 'MEMBERSHIP_CHARGE_REQUEST';
+const MEMBERSHIP_CHARGE_SUCCESS = 'MEMBERSHIP_CHARGE_SUCCESS';
+const MEMBERSHIP_CHARGE_FAILURE = 'MEMBERSHIP_CHARGE_FAILURE';
 
 function loginRequest() {
     return {
@@ -55,6 +59,45 @@ function userDataFailure(userError) {
     }
 }
 
+function registerUserRequest() {
+    return {
+        type: REGISTER_USER_REQUEST
+    }
+}
+
+function registerUserSuccess(data) {
+    return {
+        type: REGISTER_USER_SUCCESS,
+        data
+    }
+}
+
+function registerUserFailure(registerError) {
+    return {
+        type: REGISTER_USER_FAILURE,
+        registerError
+    }
+}
+function membershipChargeRequest() {
+    return {
+        type: MEMBERSHIP_CHARGE_REQUEST
+    }
+}
+
+function membershipChargeSuccess(data) {
+    return {
+        type: MEMBERSHIP_CHARGE_SUCCESS,
+        data
+    }
+}
+
+function membershipChargeFailure(chargeError) {
+    return {
+        type: MEMBERSHIP_CHARGE_FAILURE,
+        chargeError
+    }
+}
+
 export {
     LOGIN_REQUEST, loginRequest,
     LOGIN_SUCCESS, loginSuccess,
@@ -63,71 +106,10 @@ export {
     USER_DATA_REQUEST, userDataRequest,
     USER_DATA_SUCCESS, userDataSuccess,
     USER_DATA_FAILURE, userDataFailure,
+    REGISTER_USER_REQUEST, registerUserRequest,
+    REGISTER_USER_SUCCESS, registerUserSuccess,
+    REGISTER_USER_FAILURE, registerUserFailure,
+    MEMBERSHIP_CHARGE_REQUEST, membershipChargeRequest,
+    MEMBERSHIP_CHARGE_SUCCESS, membershipChargeSuccess,
+    MEMBERSHIP_CHARGE_FAILURE, membershipChargeFailure,
 };
-
-export function requestLogin(username, password) {
-    return (dispatch) => {
-        // We are now logging in
-        dispatch(loginRequest());
-        const apiURL = Config.DUSKEN_API_URL;
-        return fetch(`${apiURL}/auth/obtain-token/`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'username': username,
-                'password': password
-            })
-        })
-            .then(response => response.json().then(json => ({ json, response })))
-            .then(({json, response}) => {
-                if (response.ok === false) {
-                    return Promise.reject(json)
-                }
-                return json
-            })
-            .then(
-                data => {
-                    dispatch(loginSuccess(username, data.token))
-                },
-                data => {
-                    console.log(data);
-                    dispatch(loginFailure(data || {'non_field_errors': ['Kunne ikke logge inn, prøv igjen']}))
-                }
-            )
-    }
-}
-
-export function requestUserData(token) {
-    return (dispatch) => {
-        // We are now fetching user data
-        dispatch(userDataRequest());
-
-        const apiURL = Config.DUSKEN_API_URL;
-        return fetch(`${apiURL}/api/me/`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Token ' + token
-            }
-        })
-            .then(response => response.json().then(json => ({ json, response })))
-            .then(({json, response}) => {
-                if (response.ok === false) {
-                    return Promise.reject(json)
-                }
-                return json
-            })
-            .then(
-                data => {
-                    dispatch(userDataSuccess(data))
-                },
-                data => {
-                    dispatch(userDataFailure('Det funka ikke :-('))
-                }
-            )
-    }
-}

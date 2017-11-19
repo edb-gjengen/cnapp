@@ -19,7 +19,7 @@ export default class MembershipScreen extends Component {
         ),
     };
 
-    onLoginPress = () => {
+    loginNavigate = () => {
         this.props.navigation.navigate('Login');
     };
 
@@ -27,10 +27,17 @@ export default class MembershipScreen extends Component {
         this.props.navigation.navigate('Membership');
     };
 
+    registerNavigate = () => {
+        this.props.navigation.navigate('UserRegister');
+    };
+
     render() {
         return (
             <StyleProvider style={getTheme()}>
-                <MembershipContainer onLoginPress={this.onLoginPress} logoutNavigate={this.logoutNavigate} />
+                <MembershipContainer
+                    onLoginPress={this.loginNavigate}
+                    onLogoutPress={this.logoutNavigate}
+                    onRegisterPress={this.registerNavigate} />
             </StyleProvider>
         )
     }

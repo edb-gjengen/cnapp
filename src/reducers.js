@@ -6,20 +6,42 @@ import {
     USER_DATA_REQUEST,
     USER_DATA_SUCCESS,
     USER_DATA_FAILURE,
+    REGISTER_USER_REQUEST,
+    REGISTER_USER_FAILURE,
+    REGISTER_USER_SUCCESS, MEMBERSHIP_CHARGE_REQUEST, MEMBERSHIP_CHARGE_FAILURE, MEMBERSHIP_CHARGE_SUCCESS,
 } from './actions';
+
+import { snakeToCamelCase } from './utils'
 
 const initialState = {
     isAuthenticated: false,
     isLoggingIn: false,
     isFetchingUserData: false,
+    isRegisteringUser: false,
+    isChargingMembership: false,
     userToken: null,
     user: null,
     loginError: null,
     userError: null,
+    registerError: null,
+    chargeError: null,
+    lastOrder: null,
 };
+
+
+function formatErrors(errs) {
+    let _errs = {};
+    for(let [key, value] of Object.entries(errs)) {
+        _errs[snakeToCamelCase(key)] = value.join('\n');
+    }
+    return _errs
+}
+
+
 
 export default function duskenApp(state = initialState, action) {
     switch (action.type) {
+        /* Login */
         case LOGIN_REQUEST:
             return Object.assign({}, state, {
                 isLoggingIn: true,
@@ -42,9 +64,11 @@ export default function duskenApp(state = initialState, action) {
         case LOGOUT:
             return initialState;
 
+        /* User data */
         case USER_DATA_REQUEST:
             return Object.assign({}, state, {
-                isFetchingUserData: true
+                isFetchingUserData: true,
+                userError: null
             });
 
         case USER_DATA_FAILURE:
@@ -56,7 +80,51 @@ export default function duskenApp(state = initialState, action) {
         case USER_DATA_SUCCESS:
             return Object.assign({}, state, {
                 isFetchingUserData: false,
-                user: action.data
+                user: action.data,
+            });
+
+        /* Register user */
+        case REGISTER_USER_REQUEST:
+            return Object.assign({}, state, {
+                isRegisteringUser: true,
+                registerError: null,
+            });
+
+        case REGISTER_USER_FAILURE:
+            return Object.assign({}, state, {
+                isRegisteringUser: false,
+                registerError: formatErrors(action.registerError)
+            });
+
+        case REGISTER_USER_SUCCESS:
+            let userData = action.data;
+            const token = action.data.auth_token;
+            delete userData['auth_token'];
+
+            return Object.assign({}, state, {
+                isRegisteringUser: false,
+                isAuthenticated: true,
+                user: userData,
+                userToken: token,
+            });
+
+        /* User data */
+        case MEMBERSHIP_CHARGE_REQUEST:
+            return Object.assign({}, state, {
+                isChargingMembership: true,
+                chargeError: null
+            });
+
+        case MEMBERSHIP_CHARGE_FAILURE:
+            return Object.assign({}, state, {
+                isChargingMembership: false,
+                chargeError: action.chargeError
+            });
+
+        case MEMBERSHIP_CHARGE_SUCCESS:
+            return Object.assign({}, state, {
+                isChargingMembership: false,
+                lastOrder: action.data,
             });
 
         default:

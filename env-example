@@ -1,5 +1,5 @@
 EVENT_API_URL=https://studentersamfundet.no
 DUSKEN_API_URL=https://galtinn.neuf.no
-DUSKEN_PURCHASE_URL=https://galtinn.neuf.no/?utm_source=purchase-button&utm_medium=app
 DUSKEN_FORGOT_PASSWORD_URL=https://galtinn.neuf.no/auth/password_reset/
 SENTRY_DSN=
+STRIPE_PUBLISHABLE_KEY=

@@ -1,8 +1,9 @@
-import {StyleSheet, ActivityIndicator, View, SectionList} from "react-native";
-import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content} from 'native-base';
+import {StyleSheet, View, SectionList, Platform} from "react-native";
+import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content, Spinner} from 'native-base';
 import React, { Component } from 'react';
 import moment from "moment";
 import 'moment/locale/nb';
+import theme from "../../theme";
 
 moment.locale('nb');
 
@@ -20,9 +21,9 @@ export default class EventList extends Component {
     );
 
     _renderSectionHeader = ({section}) => {
-        return (<ListItem style={[styles.listItem, {paddingBottom: 8}]}>
+        return (<ListItem style={styles.sectionHeader}>
             <Body>
-                <Text style={styles.listItemSectionTitle}>{section.title}</Text>
+                <Text style={styles.sectionTitle}>{section.title}</Text>
             </Body>
         </ListItem>);
     };
@@ -33,7 +34,7 @@ export default class EventList extends Component {
         }
 
         return (<View style={{paddingVertical: 20}}>
-            <ActivityIndicator animating size="large" />
+            <Spinner color="#f58220"/>
         </View>);
     };
 
@@ -71,7 +72,8 @@ export default class EventList extends Component {
             onEndReachedThreshould={10}
             initialNumToRender={10}
             ListFooterComponent={this._renderFooter}
-            style={styles.list}
+            style={[styles.card, styles.list]}
+            ListHeaderComponent={() => { return <View style={styles.listHeader}/> }}
         />);
     }
 }
@@ -79,6 +81,7 @@ export default class EventList extends Component {
 
 const styles = StyleSheet.create({
     listItem: {
+        backgroundColor: 'white',
         marginLeft: 0
     },
     listItemTitle: {
@@ -88,15 +91,31 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#666'
     },
-    listItemSectionTitle: {
-        fontSize: 14,
+    sectionHeader: {
+        backgroundColor: 'white',
+        marginLeft: 0,
+        ...Platform.select({
+            'ios': {marginBottom: -8},
+        }),
+        paddingBottom: 0,
+        borderBottomWidth: 0,
+    },
+    sectionTitle: {
+        fontSize: 16,
         fontWeight: 'bold',
     },
     loadingText: {
         textAlign: 'center',
         paddingBottom: 8
     },
+    card: theme.card,
     list: {
-        backgroundColor: 'white'
+        padding: 0,
+        marginTop: 0,
+        marginBottom: 0,
+        backgroundColor: 'transparent',
+    },
+    listHeader: {
+        paddingTop: 8,
     }
 });

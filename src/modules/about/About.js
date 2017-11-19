@@ -3,6 +3,7 @@ import {Text, ScrollView, View, Platform, StyleSheet, Image, Linking, TouchableO
 // import HTMLView from 'react-native-htmlview';
 
 import {Button, Text as NBText, Icon} from 'native-base';
+import theme from "../../theme";
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
 
@@ -125,24 +126,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         lineHeight: 25,
     },
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
-    },
+    card: theme.card,
     featuredImage: {
         height: 230,
         width: null,

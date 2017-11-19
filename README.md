@@ -1,14 +1,10 @@
 ## Install
     # See https://facebook.github.io/react-native/docs/getting-started.html#content
     yarn
+    cd ios; pod install  # ios only
 
     # Environment settings
     cp env-example .env
-
-    # Sentry
-    # Get auth token from https://sentry.neuf.no/api/ with project:write scope
-    cp ios/sentry.properties-example ios/sentry.properties
-    cp android/sentry.properties-example android/sentry.properties
 
     react-native start
     react-native run-android
@@ -22,6 +18,13 @@
 
     # Make sure you have hw.keyboard=yes in your avd config.ini (in $HOME/.android/avd/.../) for reloading when pressing R twice to work.
 
+## Prepare release build
+
+    # Sentry
+    # Get auth token from https://sentry.neuf.no/api/ with project:write scope
+    cp ios/sentry.properties-example ios/sentry.properties
+    cp android/sentry.properties-example android/sentry.properties
+
 ## Create release build (Android)
     # Aquire the keystore and put it in android/app/dusken-client.keystore
 
@@ -32,10 +35,13 @@
     DUSKEN_RELEASE_KEY_PASSWORD=
 
     # Build
-    yarn build-android
+    yarn build-android # Output is in android/app/build/outputs/apk
 
-    # Output is in android/app/build/outputs/apk
+    # Note: Make sure you have the file android/google_play.json
+    # Ref: https://docs.fastlane.tools/actions/supply/#setup
 
+    # Publish android build to the Google Play beta track
+    yarn release-android
 
 ## Libraries
 

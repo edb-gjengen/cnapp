@@ -1,17 +1,27 @@
 import React, {Component} from 'react';
-import {ScrollView, Text, View, Linking, StyleSheet, Platform} from "react-native";
-import {Button, Text as NBText} from "native-base";
-import Config from 'react-native-config';
+import {ScrollView, Text, View, StyleSheet} from "react-native";
+import {Button, Text as NBText, Spinner} from "native-base";
+
+import theme from "../../theme";
+
 
 export default class Membership extends Component {
     render() {
+        if (this.props.isFetchingUserData) {
+            return (
+                <View style={styles.card}>
+                    <Spinner color="#f58220"/>
+                </View>
+            );
+        }
+
         return (
             <ScrollView>
                 <View style={styles.card}>
                     <Text style={styles.headerTitle}>Hei 👋</Text>
                     <Text style={styles.paragraph}>Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen</Text>
                     <View style={styles.button}>
-                        <Button onPress={() => { Linking.openURL(Config.DUSKEN_PURCHASE_URL); } } full><NBText>Bli medlem</NBText></Button>
+                        <Button onPress={this.props.onRegisterPress} full><NBText>Bli medlem</NBText></Button>
                     </View>
                     <Text style={styles.header}>Hva får jeg?</Text>
                     <Text style={[styles.paragraph, {textAlign: 'left', paddingLeft: 4}]}>
@@ -22,38 +32,18 @@ export default class Membership extends Component {
                         - Mulighet til å delta i landets eldste studentdemokrati</Text>
                     <Text style={styles.em}>Allerede medlem?</Text>
                     <View style={styles.button}>
-                        <Button onPress={this.onLoginPress} full><NBText>Logg inn</NBText></Button>
+                        <Button onPress={this.props.onLoginPress} full><NBText>Logg inn</NBText></Button>
                     </View>
                 </View>
             </ScrollView>
         )
     };
 
-    onLoginPress = () => {
-        this.props.onLoginPress();
-    };
 }
 
 
 const styles = StyleSheet.create({
-    card: {
-        borderColor: '#e1e8ee',
-        borderWidth: 1,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .2)',
-                shadowOffset: {height: 0, width: 0},
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 1,
-            },
-        }),
-        padding: 8,
-        margin: 8,
-        backgroundColor: '#fff',
-    },
+    card: theme.card,
     paragraph: {
         textAlign: 'center',
         fontSize: 16,

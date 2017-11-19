@@ -1,12 +1,19 @@
-import Dusken from "./Dusken";
 import React, {Component} from 'react';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import {Provider} from 'react-redux';
+import {applyMiddleware, createStore} from 'redux';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-import {persistStore, autoRehydrate} from 'redux-persist'
+import {autoRehydrate, persistStore} from 'redux-persist'
 import {AsyncStorage} from 'react-native'
+import Config from 'react-native-config';
+import {ApolloClient} from 'apollo-client';
+import {HttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {ApolloProvider} from "react-apollo";
+
+import Dusken from "./Dusken";
 import duskenApp from "./reducers";
+
 
 let store = createStore(
     duskenApp,
@@ -14,11 +21,18 @@ let store = createStore(
     autoRehydrate()
 );
 
+const apolloClient = new ApolloClient({
+    link: new HttpLink({uri: `${Config.DUSKEN_API_URL}/api/graphql/`}),
+    cache: new InMemoryCache()
+});
+
 export default class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <Dusken />
+                <ApolloProvider client={apolloClient}>
+                    <Dusken />
+                </ApolloProvider>
             </Provider>
         )
     }

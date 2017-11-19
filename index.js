@@ -3,6 +3,8 @@ import { AppRegistry } from "react-native";
 import { Sentry } from 'react-native-sentry';
 import Config from 'react-native-config';
 
-Sentry.config(Config.SENTRY_DSN).install();
+if(Config.SENTRY_DSN) {
+    Sentry.config(Config.SENTRY_DSN).install();
+}
 
 AppRegistry.registerComponent('Dusken', () => App);

@@ -1,26 +1,23 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import Membership from "./Membership";
-import MembershipProof from "./MembershipProof";
-import { requestUserData, logout } from "../../actions";
+import ProofContainer from "./ProofContainer";
+import { logout } from "../../actions";
+import {requestUserData} from "../../api";
 
-class MembershipContainer extends React.Component {
+class MembershipContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isAuthenticated: props.isAuthenticated,
-            userToken: props.userToken,
             isFetchingUserData: props.isFetchingUserData,
-            user: props.user,
+            userToken: props.userToken,
+            lastOrder: props.lastOrder,
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.state.isAuthenticated !== nextProps.isAuthenticated) {
-            this.setState({isAuthenticated: nextProps.isAuthenticated})
-        }
         if(this.state.userToken !== nextProps.userToken) {
             this.setState({userToken: nextProps.userToken}, () => {
                 if(nextProps.userToken) {
@@ -29,8 +26,12 @@ class MembershipContainer extends React.Component {
             });
 
         }
-        if(this.state.user !== nextProps.user) {
-            this.setState({user: nextProps.user})
+        if(this.state.lastOrder !== nextProps.lastOrder) {
+            this.setState({lastOrder: nextProps.lastOrder}, () => {
+                if(nextProps.userToken) {
+                    this.fetchUser();
+                }
+            });
         }
     }
 
@@ -42,29 +43,44 @@ class MembershipContainer extends React.Component {
         this.props.onLoginPress();
     };
 
+    onRegisterPress = () => {
+        this.props.onRegisterPress();
+    };
+
     onLogoutPress = () => {
         this.props.logout();
-        this.props.logoutNavigate();
+        this.props.onLogoutPress();
     };
 
     render() {
-        if (this.state.user) {
-            return <MembershipProof
-                user={this.state.user}
+        if (this.props.user) {
+            return <ProofContainer
+                user={this.props.user}
+                isAuthenticated={this.props.isAuthenticated}
+                userToken={this.state.userToken}
                 fetchUser={this.fetchUser}
                 onLogoutPress={this.onLogoutPress}
             />;
         }
-        return <Membership onLoginPress={this.onLoginPress}/>;
+        return <Membership
+            isFetchingUserData={this.props.isFetchingUserData}
+            onLoginPress={this.onLoginPress}
+            onRegisterPress={this.onRegisterPress}
+        />;
     }
 }
 
+function storeToProps(store) {
+    return {
+        isAuthenticated: store.isAuthenticated,
+        isFetchingUserData: store.isFetchingUserData,
+        userToken: store.userToken,
+        user: store.user,
+        lastOrder: store.lastOrder
+    };
+}
+
 export default connect(
-    (state) => ({
-        isAuthenticated: state.isAuthenticated,
-        isFetchingUserData: state.isFetchingUserData,
-        userToken: state.userToken,
-        user: state.user,
-    }),
+    storeToProps,
     { requestUserData, logout }
 )(MembershipContainer);
