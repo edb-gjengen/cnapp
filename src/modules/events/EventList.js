@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         ...Platform.select({
             'ios': {marginBottom: -8},
-            'android': {marginBottom: -4}
         }),
         paddingBottom: 0,
         borderBottomWidth: 0,
