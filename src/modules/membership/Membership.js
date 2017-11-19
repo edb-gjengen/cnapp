@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-import {ScrollView, Text, View, Linking, StyleSheet, Platform} from "react-native";
-import {Button, Text as NBText} from "native-base";
+import {ScrollView, Text, View, StyleSheet} from "react-native";
+import {Button, Text as NBText, Spinner} from "native-base";
+
 import theme from "../../theme";
+
+
 export default class Membership extends Component {
     render() {
         if (this.props.isFetchingUserData) {

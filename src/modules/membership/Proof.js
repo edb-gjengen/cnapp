@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Button, Text as NBText, Spinner} from 'native-base';
 import Confetti from 'react-native-confetti';
+
 import theme from "../../theme";
 
 export default class Proof extends Component {
@@ -82,6 +83,7 @@ export default class Proof extends Component {
         if (this.props.user.is_member) {
             return;
         }
+
         return (
             <View>
                 {this.props.isChargingMembership && <Spinner color="#f58220"/>}
@@ -101,7 +103,7 @@ export default class Proof extends Component {
 
     confetti() {
         if (this.props.user.is_member) {
-            // FIXME: allmost infinite confetti. Are the animations paused when not visible, if not power hog?
+            // Confetti!!!!
             return <Confetti ref={(node) => this._confettiView = node} confettiCount={Number.MAX_SAFE_INTEGER} />
         }
     }
@@ -122,6 +124,13 @@ export default class Proof extends Component {
             </View>)
     }
 
+    chargeError() {
+        if (!this.props.chargeError) {
+            return;
+        }
+
+        return <View><Text style={styles.errorMessage}>{this.props.chargeError}</Text></View>
+    }
 
     render() {
         return (
@@ -132,6 +141,7 @@ export default class Proof extends Component {
                         {this.membershipName()}
                         {this.logo()}
                         {this.membershipStatus()}
+                        {this.chargeError()}
                         {this.purchaseButton()}
                         {this.membershipValidTo()}
                     </View>
@@ -221,5 +231,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingTop: 10,
         paddingBottom: 8
+    },
+    errorMessage: {
+        paddingTop: 10,
+        textAlign: 'center',
+        color: theme.colors.danger
     }
 });

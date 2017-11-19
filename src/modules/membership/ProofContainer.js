@@ -36,7 +36,7 @@ class ProofContainer extends Component {
             user={this.props.user}
             isChargingMembership={this.props.isChargingMembership}
             isLoadingMembershipType={this.props.data.loading}
-            chargeError={this.props.chargeError}
+            chargeError={this.props.chargeError ? 'Kunne ikke belaste bankkortet, prøv igjen...' : ''}
             onChargePress={this.openStripe}
             onLogoutPress={this.props.onLogoutPress}
             membershipPrice={this.getPrice(this.props.data.membershipTypes)}

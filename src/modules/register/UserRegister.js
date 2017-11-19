@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon, Toast} from 'native-base';
-import {Platform, StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import EmailValidator from 'email-validator';
-import platform from "native-base/src/theme/variables/platform";
+
 import theme from "../../theme";
 
 export default class UserRegister extends Component {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     },
     errorMessage: {
         textAlign: 'center',
-        color: platform.btnDangerBg,
+        color: theme.colors.danger,
         fontSize: 14,
     },
     card: theme.card,

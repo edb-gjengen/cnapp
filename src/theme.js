@@ -1,6 +1,9 @@
 import { Platform } from "react-native";
+import platform from "native-base/src/theme/variables/platform";
 
-const colors = {};
+const colors = {
+    danger: platform.btnDangerBg
+};
 
 const card = {
     ...Platform.select({

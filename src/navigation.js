@@ -9,8 +9,8 @@ import MembershipScreen from "./screens/MembershipScreen";
 import UserRegisterScreen from "./screens/UserRegisterScreen";
 
 const tabBarRoutes = {
-    Membership: { screen: MembershipScreen },
     EventList: { screen: EventListScreen },
+    Membership: { screen: MembershipScreen },
     About: { screen: AboutScreen },
 };
 
