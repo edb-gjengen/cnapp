@@ -69,7 +69,7 @@ export default class Proof extends Component {
                 </View>)
         }
 
-        const statusText = this.props.user.is_volunteer ? 'Aktiv' : 'Medlem';
+        const statusText = this.props.user.is_volunteer ? '❤️ AKTIV ❤️ ' : 'MEDLEM';
 
         return (
             <View style={styles.membershipStatus}>
@@ -186,7 +186,8 @@ const styles = StyleSheet.create({
     validText: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 24
+        fontSize: 30,
+        fontWeight: "800"
     },
     expired: {
         backgroundColor: '#d9534f',
