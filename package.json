@@ -7,7 +7,8 @@
     "test": "jest",
     "emulator": "emulator -avd $(emulator -list-avds | head)&",
     "build-android": "cd android && ./gradlew assembleRelease",
-    "release-android": "cd android && fastlane beta"
+    "release-android": "cd android && bundle exec fastlane beta",
+    "release-ios": "cd ios && bundle exec fastlane beta"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.0",
@@ -49,5 +50,8 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-navigation|native-base|@shoutem|tipsi-stripe)"
     ]
+  },
+  "resolutions": {
+    "@sentry/cli": "1.27.0"
   }
 }

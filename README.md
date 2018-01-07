@@ -19,6 +19,8 @@
     # Make sure you have hw.keyboard=yes in your avd config.ini (in $HOME/.android/avd/.../) for reloading when pressing R twice to work.
 
 ## Prepare release build
+    # Fastlane
+    bundle update
 
     # Sentry
     # Get auth token from https://sentry.neuf.no/api/ with project:write scope
