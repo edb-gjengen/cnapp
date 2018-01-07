@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     year: {
-        fontSize: 10,
+        fontSize: 9,
         color: '#fff',
         backgroundColor: '#f58220',
         textAlign: 'center',
