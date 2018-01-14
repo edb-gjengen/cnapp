@@ -155,6 +155,11 @@ export default class UserRegister extends Component {
             const err = errors.non_field_errors;
             let errorFormatted = err ? err[0] : 'Kunne ikke registrere bruker, prøv igjen...';
             return <View style={styles.errorBox}><Text style={styles.errorMessage}>{errorFormatted}</Text></View>
+
+        } else if (Object.keys(errors).length !== 0 && 'detail' in errors) {
+          const err = errors.detail;
+          let errorFormatted = err ? err : 'Kunne ikke registrere bruker, prøv igjen...';
+          return <View style={styles.errorBox}><Text style={styles.errorMessage}>{errorFormatted}</Text></View>
         }
 
         return <View style={styles.errorBox}/>

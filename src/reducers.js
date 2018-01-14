@@ -32,7 +32,7 @@ const initialState = {
 function formatErrors(errs) {
     let _errs = {};
     for(let [key, value] of Object.entries(errs)) {
-        _errs[snakeToCamelCase(key)] = value.join('\n');
+        _errs[snakeToCamelCase(key)] = Array.isArray(value) ? value.join('\n') : value;
     }
     return _errs
 }
