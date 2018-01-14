@@ -138,7 +138,7 @@ export function requestMembershipCharge(auth_token, stripe_token, membership_typ
                     dispatch(membershipChargeSuccess(data))
                 },
                 data => {
-                    dispatch(membershipChargeFailure(data || {'non_field_errors': ['Kunne ikke belaste kort, prøv igjen']}))
+                    dispatch(membershipChargeFailure(data['detail'] || 'Kunne ikke belaste bankkortet, prøv igjen'))
                 }
             )
     }
