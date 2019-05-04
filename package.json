@@ -3,12 +3,23 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
+    "android": "react-native run-android",
+    "build:android": "cd android && ./gradlew assembleRelease",
     "emulator": "emulator -avd $(emulator -list-avds | head)&",
-    "build-android": "cd android && ./gradlew assembleRelease",
-    "release-android": "cd android && bundle exec fastlane beta",
-    "release-ios": "cd ios && bundle exec fastlane beta"
+    "ios": "react-native run-ios",
+    "release:android": "cd android && bundle exec fastlane beta",
+    "release:ios": "cd ios && bundle exec fastlane beta",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "react-native",
+    "setupFiles": [
+      "<rootDir>/jest/setup.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-navigation|native-base|@shoutem|tipsi-stripe)"
+    ]
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.0",
@@ -42,15 +53,6 @@
     "jest-fetch-mock": "^1.6.5",
     "react-dom": "^16.0.0",
     "react-test-renderer": "16.2.0"
-  },
-  "jest": {
-    "preset": "react-native",
-    "setupFiles": [
-      "<rootDir>/jest/setup.js"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-navigation|native-base|@shoutem|tipsi-stripe)"
-    ]
   },
   "resolutions": {
     "@sentry/cli": "1.27.0"
