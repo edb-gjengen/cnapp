@@ -1,5 +1,5 @@
 import {Platform, StyleSheet} from 'react-native';
-import {TabNavigator, StackNavigator} from "react-navigation";
+import {createBottomTabNavigator, createStackNavigator, createAppContainer, getActiveChildNavigationOptions} from "react-navigation";
 
 import AboutScreen from "./screens/AboutScreen";
 import EventDetailScreen from "./screens/EventDetailScreen";
@@ -9,9 +9,9 @@ import MembershipScreen from "./screens/MembershipScreen";
 import UserRegisterScreen from "./screens/UserRegisterScreen";
 
 const tabBarRoutes = {
-    EventList: { screen: EventListScreen },
-    Membership: { screen: MembershipScreen },
-    About: { screen: AboutScreen },
+    EventList: EventListScreen,
+    Membership: MembershipScreen,
+    About: AboutScreen,
 };
 
 const tabBarOptions = {
@@ -41,16 +41,27 @@ const tabBarOptions = {
                 }
             }),
         },
-    }
+    },
+    navigationOptions: ({ navigation, screenProps }) => ({
+        // get header title from active child screen
+        ...getActiveChildNavigationOptions(navigation, screenProps),
+        headerStyle: {
+            backgroundColor: '#f58220',
+        },
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerTintColor: 'white',
+    })
 };
 
-const tabNav = TabNavigator(tabBarRoutes, tabBarOptions);
+const tabNav = createBottomTabNavigator(tabBarRoutes, tabBarOptions);
 
-const DuskenNavigation = StackNavigator({
-    Root: { screen: tabNav },
-    Login: { screen: LoginScreen },
-    UserRegister: { screen: UserRegisterScreen },
-    EventDetail: { screen: EventDetailScreen },
+const DuskenNavigation = createStackNavigator({
+    Root: tabNav,
+    Login: LoginScreen,
+    UserRegister: UserRegisterScreen,
+    EventDetail: EventDetailScreen,
 });
 
-export default DuskenNavigation;
+export default createAppContainer(DuskenNavigation);
