@@ -1,4 +1,5 @@
-import {StyleSheet, View, SectionList, Platform} from "react-native";
+import {StyleSheet, View, Platform} from "react-native";
+import {SectionList} from 'react-navigation';
 import {Card, ListItem, CardItem, Body, Text as Text, Left, Right, Icon, Button, Content, Spinner} from 'native-base';
 import React, { Component } from 'react';
 import moment from "moment";

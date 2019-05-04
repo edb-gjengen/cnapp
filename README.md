@@ -12,11 +12,15 @@
 ## Development
     # Improve compile times
     touch ~/.gradle/gradle.properties && echo -e "org.gradle.daemon=true\norg.gradle.jvmargs=-Xmx2048M" >> ~/.gradle/gradle.properties
-
     # Run android emulator (first avd)
     yarn emulator
-
     # Make sure you have hw.keyboard=yes in your avd config.ini (in $HOME/.android/avd/.../) for reloading when pressing R twice to work.
+
+### Linking native dependencies
+We use a Podfile to install the stripe ios library, but not for anything else.
+Before running any `react-native link` commands, rename `ios/Podfile` to something else before running, then rename the file back when you are done.
+This is to let the react-native CLI know we use the Dusken xcode project and not cocoapods for managing all other dependencies.
+This avoids alot of issues resulting from poor cocoapods support by react native.
 
 ## Prepare release build
     # Fastlane

@@ -6,13 +6,14 @@ import {
     userDataFailure, userDataRequest, userDataSuccess,
     membershipChargeFailure, membershipChargeRequest, membershipChargeSuccess,
 } from "./actions";
+import { fetchWithTimeout } from "./utils";
 
 export function requestLogin(username, password) {
     return (dispatch) => {
         // We are now logging in
         dispatch(loginRequest());
 
-        return fetch(`${Config.DUSKEN_API_URL}/auth/obtain-token/`, {
+        return fetchWithTimeout(`${Config.DUSKEN_API_URL}/auth/obtain-token/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -47,7 +48,7 @@ export function requestUserData(auth_token) {
         // We are now fetching user data
         dispatch(userDataRequest());
 
-        return fetch(`${Config.DUSKEN_API_URL}/api/me/`, {
+        return fetchWithTimeout(`${Config.DUSKEN_API_URL}/api/me/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -77,7 +78,7 @@ export function requestRegisterUser(firstName, lastName, email, phoneNumber, pas
     return (dispatch) => {
         dispatch(registerUserRequest());
 
-        return fetch(`${Config.DUSKEN_API_URL}/api/user/register/`, {
+        return fetchWithTimeout(`${Config.DUSKEN_API_URL}/api/user/register/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -113,7 +114,7 @@ export function requestMembershipCharge(auth_token, stripe_token, membership_typ
     return (dispatch) => {
         dispatch(membershipChargeRequest());
 
-        return fetch(`${Config.DUSKEN_API_URL}/api/membership/charge/`, {
+        return fetchWithTimeout(`${Config.DUSKEN_API_URL}/api/membership/charge/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

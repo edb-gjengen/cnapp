@@ -8,13 +8,6 @@ import getTheme from '../../native-base-theme/components';
 export default class AboutScreen extends Component {
     static navigationOptions = {
         title: 'Om oss',
-        headerStyle: {
-            backgroundColor: '#f58220',
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerTintColor: 'white',
         tabBarIcon: ({ tintColor }) => (
             <Icon name="info" size={16} color={tintColor} style={{marginTop: 5}} />
         ),

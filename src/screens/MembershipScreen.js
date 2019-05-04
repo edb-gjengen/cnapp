@@ -7,13 +7,6 @@ import getTheme from '../../native-base-theme/components';
 export default class MembershipScreen extends Component {
     static navigationOptions = {
         title: 'Medlemskap',
-        headerStyle: {
-            backgroundColor: '#f58220',
-        },
-        headerTitleStyle: {
-            color: 'white',
-        },
-        headerTintColor: 'white',
         tabBarIcon: ({ tintColor }) => (
             <Icon name="user" size={16} color={tintColor} style={{marginTop: 5}} />
         ),

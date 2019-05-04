@@ -9,7 +9,7 @@ import Proof from "./Proof";
 import {requestMembershipCharge} from "../../api";
 
 
-stripe.init({
+stripe.setOptions({
     publishableKey: Config.STRIPE_PUBLISHABLE_KEY || '',
 });
 
