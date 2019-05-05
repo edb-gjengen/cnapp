@@ -1,192 +1,181 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Text as NBText, Spinner } from 'native-base';
 import Confetti from 'react-native-confetti';
 
 import theme from '../../theme';
 
-export default class Proof extends Component {
-  CONFETTI_TIMEOUT = 15000;
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      stopConfetti: false,
-    };
+const MembershipValidTo = ({ user }) => {
+  if (!user.last_membership) {
+    return null;
   }
 
-  componentDidUpdate() {
-    if (this._confettiView && this.state.stopConfetti) {
-      this._confettiView.stopConfetti();
-      this.setState({ stopConfetti: false });
+  let validTo = user.last_membership.end_date;
+  if (user.last_membership.membership_type === 'lifelong') {
+    validTo = 'Livsvarig';
+  }
+
+  return (
+    <View style={{ alignItems: 'center', flex: 1 }}>
+      <Text>Gyldig til: </Text>
+      <Text style={styles.validToValue}>{validTo}</Text>
+    </View>
+  );
+};
+
+const MembershipStatus = ({ user, onMembershipPress }) => {
+  if (!user.is_member) {
+    if (!user.last_membership) {
+      return null;
     }
+
+    return (
+      <View style={styles.expired}>
+        <Text style={styles.expiredText}>Utløpt</Text>
+      </View>
+    );
   }
 
-  componentWillUnmount() {
-    if (this._confettiView) {
-      this._confettiView.stopConfetti();
-    }
+  const statusText = user.is_volunteer ? '❤️ AKTIV ❤️ ' : 'MEDLEM';
+
+  return (
+    <View style={styles.membershipStatus}>
+      <TouchableOpacity onPress={onMembershipPress} style={styles.valid}>
+        <Text style={styles.validText}>{statusText}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const PurchaseButton = ({ user, isChargingMembership, isLoadingMembershipType, onChargePress, membershipPrice }) => {
+  if (user.is_member) {
+    return null;
   }
 
-  onMembershipPress = () => {
-    this.setState({ showConfetti: true }, () => {
-      if (this._confettiView) {
-        this._confettiView.startConfetti();
-        setTimeout(
-          function() {
-            this.setState({ stopConfetti: true });
-          }.bind(this),
-          this.CONFETTI_TIMEOUT
-        );
+  return (
+    <View>
+      {isChargingMembership && <Spinner color="#f58220" />}
+      <Button
+        onPress={onChargePress}
+        full
+        disabled={isChargingMembership || isLoadingMembershipType}
+        style={styles.purchaseButton}
+      >
+        <NBText>{`Kjøp medlemskap (${membershipPrice} NOK)`}</NBText>
+      </Button>
+      <View style={styles.purchaseText}>
+        <Text style={styles.purchaseTextInner}>Medlemskapet er gyldig i ett år</Text>
+      </View>
+    </View>
+  );
+};
+
+const UserConfetti = ({ user, confettiRef }) => {
+  if (!user.is_member) {
+    return null;
+  }
+
+  // Confetti!!!!
+  return <Confetti ref={confettiRef} confettiCount={Number.MAX_SAFE_INTEGER} />;
+};
+const Logo = ({ user }) => {
+  if (!user.is_member) {
+    return null;
+  }
+
+  return (
+    <View style={{ marginTop: 8 }}>
+      <Image
+        style={{ width: null, height: 100 }}
+        source={{ uri: 'https://galtinn.neuf.no/static/dist/images/logo.png' }}
+        resizeMode="contain"
+      />
+    </View>
+  );
+};
+
+const ChargeError = ({ chargeError }) => {
+  if (!chargeError) {
+    return null;
+  }
+
+  return (
+    <View>
+      <Text style={styles.errorMessage}>{chargeError}</Text>
+    </View>
+  );
+};
+
+const MembershipName = ({ user }) => {
+  let name = `${user.first_name} ${user.last_name}`;
+  if (name === ' ') {
+    name = user.email;
+  }
+  return (
+    <View>
+      <Text style={styles.nameText}>{name}</Text>
+    </View>
+  );
+};
+
+const Proof = ({
+  chargeError,
+  user,
+  isChargingMembership,
+  isLoadingMembershipType,
+  membershipPrice,
+  onChargePress,
+  onLogoutPress,
+}) => {
+  const CONFETTI_TIMEOUT = 15000;
+
+  const confettiRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (confettiRef && confettiRef.current) {
+        confettiRef.current.stopConfetti();
       }
-    });
+    };
+  });
+
+  const onMembershipPress = () => {
+    confettiRef.current.startConfetti();
+    setTimeout(() => {
+      if (confettiRef && confettiRef.current) {
+        confettiRef.current.stopConfetti();
+      }
+    }, CONFETTI_TIMEOUT);
   };
 
-  membershipValidTo() {
-    if (!this.props.user.last_membership) {
-      return null;
-    }
-
-    let validTo = this.props.user.last_membership.end_date;
-    if (this.props.user.last_membership.membership_type === 'lifelong') {
-      validTo = 'Livsvarig';
-    }
-
-    return (
-      <View style={{ alignItems: 'center', flex: 1 }}>
-        <Text>Gyldig til: </Text>
-        <Text style={styles.validToValue}>{validTo}</Text>
-      </View>
-    );
-  }
-
-  membershipStatus() {
-    if (!this.props.user.is_member) {
-      if (!this.props.user.last_membership) {
-        return null;
-      }
-
-      return (
-        <View style={styles.expired}>
-          <Text style={styles.expiredText}>Utløpt</Text>
+  return (
+    <View>
+      <UserConfetti user={user} confettiRef={confettiRef} />
+      <ScrollView>
+        <View style={[styles.card, { paddingVertical: 16 }]}>
+          <MembershipName user={user} />
+          <Logo user={user} />
+          <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
+          <ChargeError chargeError={chargeError} />
+          <PurchaseButton
+            user={user}
+            isChargingMembership={isChargingMembership}
+            isLoadingMembershipType={isLoadingMembershipType}
+            membershipPrice={membershipPrice}
+            onChargePress={onChargePress}
+          />
+          <MembershipValidTo user={user} />
         </View>
-      );
-    }
-
-    const statusText = this.props.user.is_volunteer ? '❤️ AKTIV ❤️ ' : 'MEDLEM';
-
-    return (
-      <View style={styles.membershipStatus}>
-        <TouchableOpacity onPress={this.onMembershipPress} style={styles.valid}>
-          <Text style={styles.validText}>{statusText}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  purchaseButton() {
-    if (this.props.user.is_member) {
-      return null;
-    }
-
-    return (
-      <View>
-        {this.props.isChargingMembership && <Spinner color="#f58220" />}
-        <Button
-          onPress={this.props.onChargePress}
-          full
-          disabled={this.props.isChargingMembership || this.props.isLoadingMembershipType}
-          style={styles.purchaseButton}
-        >
-          <NBText>{`Kjøp medlemskap (${this.props.membershipPrice} NOK)`}</NBText>
-        </Button>
-        <View style={styles.purchaseText}>
-          <Text style={styles.purchaseTextInner}>Medlemskapet er gyldig i ett år</Text>
+        <View>
+          <Button onPress={onLogoutPress} style={styles.logoutButton} small>
+            <NBText>Logg ut</NBText>
+          </Button>
         </View>
-      </View>
-    );
-  }
-
-  confetti() {
-    if (!this.props.user.is_member) {
-      return null;
-    }
-
-    // Confetti!!!!
-    return (
-      <Confetti
-        ref={(node) => {
-          this._confettiView = node;
-        }}
-        confettiCount={Number.MAX_SAFE_INTEGER}
-      />
-    );
-  }
-
-  logo() {
-    if (!this.props.user.is_member) {
-      return null;
-    }
-
-    // FIXME: URL to config
-    return (
-      <View style={{ marginTop: 8 }}>
-        <Image
-          style={{ width: null, height: 100 }}
-          source={{ uri: 'https://galtinn.neuf.no/static/dist/images/logo.png' }}
-          resizeMode="contain"
-        />
-      </View>
-    );
-  }
-
-  chargeError() {
-    if (!this.props.chargeError) {
-      return null;
-    }
-
-    return (
-      <View>
-        <Text style={styles.errorMessage}>{this.props.chargeError}</Text>
-      </View>
-    );
-  }
-
-  render() {
-    return (
-      <View>
-        {this.confetti()}
-        <ScrollView>
-          <View style={[styles.card, { paddingVertical: 16 }]}>
-            {this.membershipName()}
-            {this.logo()}
-            {this.membershipStatus()}
-            {this.chargeError()}
-            {this.purchaseButton()}
-            {this.membershipValidTo()}
-          </View>
-          <View>
-            <Button onPress={this.props.onLogoutPress} style={styles.logoutButton} small>
-              <NBText>Logg ut</NBText>
-            </Button>
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
-
-  membershipName() {
-    let name = `${this.props.user.first_name} ${this.props.user.last_name}`;
-    if (name === ' ') {
-      name = this.props.user.email;
-    }
-    return (
-      <View>
-        <Text style={styles.nameText}>{name}</Text>
-      </View>
-    );
-  }
-}
+      </ScrollView>
+    </View>
+  );
+};
+export default Proof;
 
 const styles = StyleSheet.create({
   card: theme.card,
