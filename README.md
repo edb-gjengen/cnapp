@@ -49,6 +49,8 @@ This avoids alot of issues resulting from poor cocoapods support by react native
     # Publish android build to the Google Play beta track
     yarn release:android
 
+## Create release build (ios)
+We use fastlane and certificate management via fastlane match. Ask nikolai@studentersamfundet.no for access to the certs.
 ## Libraries
 
 We use https://nativebase.io/ for generic UI components
