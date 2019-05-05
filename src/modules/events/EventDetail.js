@@ -177,9 +177,14 @@ export default class EventDetail extends Component {
     return null;
   }
 
+  formatTimeFull(item) {
+    const endTime = item.end_time ? ` - ${this._formatTime(item.end_time)}` : '';
+    const startTime = `${this._formatLocalDay(item.start_time)} kl. ${this._formatTime(item.start_time)}`;
+    return `${startTime}${endTime}`;
+  }
+
   render() {
     const { item } = this.props;
-
     return (
       <ScrollView>
         {this.showImage()}
@@ -205,10 +210,7 @@ export default class EventDetail extends Component {
               <Icon name="time" style={styles.icons} />
             </View>
             <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.metaText}>
-                {this._formatLocalDay(item.start_time)} kl. {this._formatTime(item.start_time)} -{' '}
-                {this._formatTime(item.end_time)}
-              </Text>
+              <Text style={styles.metaText}>{this.formatTimeFull(item)}</Text>
               <Text style={styles.metaSubtitle}>{this._formatRelative(item.start_time)}</Text>
             </View>
           </TouchableOpacity>
