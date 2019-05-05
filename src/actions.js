@@ -13,103 +13,116 @@ const MEMBERSHIP_CHARGE_SUCCESS = 'MEMBERSHIP_CHARGE_SUCCESS';
 const MEMBERSHIP_CHARGE_FAILURE = 'MEMBERSHIP_CHARGE_FAILURE';
 
 function loginRequest() {
-    return {
-        type: LOGIN_REQUEST
-    }
+  return {
+    type: LOGIN_REQUEST,
+  };
 }
 
 function loginSuccess(username, token) {
-    return {
-        type: LOGIN_SUCCESS,
-        username,
-        token
-    }
+  return {
+    type: LOGIN_SUCCESS,
+    username,
+    token,
+  };
 }
 
 function loginFailure(loginError) {
-    return {
-        type: LOGIN_FAILURE,
-        loginError
-    }
+  return {
+    type: LOGIN_FAILURE,
+    loginError,
+  };
 }
 
 function logout() {
-    return {
-        type: LOGOUT
-    }
+  return {
+    type: LOGOUT,
+  };
 }
 
 function userDataRequest() {
-    return {
-        type: USER_DATA_REQUEST
-    }
+  return {
+    type: USER_DATA_REQUEST,
+  };
 }
 
 function userDataSuccess(data) {
-    return {
-        type: USER_DATA_SUCCESS,
-        data
-    }
+  return {
+    type: USER_DATA_SUCCESS,
+    data,
+  };
 }
 
 function userDataFailure(userError) {
-    return {
-        type: USER_DATA_FAILURE,
-        userError
-    }
+  return {
+    type: USER_DATA_FAILURE,
+    userError,
+  };
 }
 
 function registerUserRequest() {
-    return {
-        type: REGISTER_USER_REQUEST
-    }
+  return {
+    type: REGISTER_USER_REQUEST,
+  };
 }
 
 function registerUserSuccess(data) {
-    return {
-        type: REGISTER_USER_SUCCESS,
-        data
-    }
+  return {
+    type: REGISTER_USER_SUCCESS,
+    data,
+  };
 }
 
 function registerUserFailure(registerError) {
-    return {
-        type: REGISTER_USER_FAILURE,
-        registerError
-    }
+  return {
+    type: REGISTER_USER_FAILURE,
+    registerError,
+  };
 }
 function membershipChargeRequest() {
-    return {
-        type: MEMBERSHIP_CHARGE_REQUEST
-    }
+  return {
+    type: MEMBERSHIP_CHARGE_REQUEST,
+  };
 }
 
 function membershipChargeSuccess(data) {
-    return {
-        type: MEMBERSHIP_CHARGE_SUCCESS,
-        data
-    }
+  return {
+    type: MEMBERSHIP_CHARGE_SUCCESS,
+    data,
+  };
 }
 
 function membershipChargeFailure(chargeError) {
-    return {
-        type: MEMBERSHIP_CHARGE_FAILURE,
-        chargeError
-    }
+  return {
+    type: MEMBERSHIP_CHARGE_FAILURE,
+    chargeError,
+  };
 }
 
 export {
-    LOGIN_REQUEST, loginRequest,
-    LOGIN_SUCCESS, loginSuccess,
-    LOGIN_FAILURE, loginFailure,
-    LOGOUT, logout,
-    USER_DATA_REQUEST, userDataRequest,
-    USER_DATA_SUCCESS, userDataSuccess,
-    USER_DATA_FAILURE, userDataFailure,
-    REGISTER_USER_REQUEST, registerUserRequest,
-    REGISTER_USER_SUCCESS, registerUserSuccess,
-    REGISTER_USER_FAILURE, registerUserFailure,
-    MEMBERSHIP_CHARGE_REQUEST, membershipChargeRequest,
-    MEMBERSHIP_CHARGE_SUCCESS, membershipChargeSuccess,
-    MEMBERSHIP_CHARGE_FAILURE, membershipChargeFailure,
+  LOGIN_REQUEST,
+  loginRequest,
+  LOGIN_SUCCESS,
+  loginSuccess,
+  LOGIN_FAILURE,
+  loginFailure,
+  LOGOUT,
+  logout,
+  USER_DATA_REQUEST,
+  userDataRequest,
+  USER_DATA_SUCCESS,
+  userDataSuccess,
+  USER_DATA_FAILURE,
+  userDataFailure,
+  REGISTER_USER_REQUEST,
+  registerUserRequest,
+  REGISTER_USER_SUCCESS,
+  registerUserSuccess,
+  REGISTER_USER_FAILURE,
+  registerUserFailure,
+  MEMBERSHIP_CHARGE_REQUEST,
+  membershipChargeRequest,
+  MEMBERSHIP_CHARGE_SUCCESS,
+  membershipChargeSuccess,
+  MEMBERSHIP_CHARGE_FAILURE,
+  membershipChargeFailure,
 };

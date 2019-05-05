@@ -1,86 +1,89 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import Membership from "./Membership";
-import ProofContainer from "./ProofContainer";
-import { logout } from "../../actions";
-import {requestUserData} from "../../api";
+import Membership from './Membership';
+import ProofContainer from './ProofContainer';
+import { logout } from '../../actions';
+import { requestUserData } from '../../api';
 
 class MembershipContainer extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            isFetchingUserData: props.isFetchingUserData,
-            userToken: props.userToken,
-            lastOrder: props.lastOrder,
+    this.state = {
+      isFetchingUserData: props.isFetchingUserData,
+      userToken: props.userToken,
+      lastOrder: props.lastOrder,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.userToken !== nextProps.userToken) {
+      this.setState({ userToken: nextProps.userToken }, () => {
+        if (nextProps.userToken) {
+          this.fetchUser();
         }
+      });
     }
-
-    componentWillReceiveProps(nextProps) {
-        if(this.state.userToken !== nextProps.userToken) {
-            this.setState({userToken: nextProps.userToken}, () => {
-                if(nextProps.userToken) {
-                    this.fetchUser();
-                }
-            });
-
+    if (this.state.lastOrder !== nextProps.lastOrder) {
+      this.setState({ lastOrder: nextProps.lastOrder }, () => {
+        if (nextProps.userToken) {
+          this.fetchUser();
         }
-        if(this.state.lastOrder !== nextProps.lastOrder) {
-            this.setState({lastOrder: nextProps.lastOrder}, () => {
-                if(nextProps.userToken) {
-                    this.fetchUser();
-                }
-            });
-        }
+      });
     }
+  }
 
-    fetchUser = () => {
-        this.props.requestUserData(this.state.userToken)
-    };
+  fetchUser = () => {
+    this.props.requestUserData(this.state.userToken);
+  };
 
-    onLoginPress = () => {
-        this.props.onLoginPress();
-    };
+  onLoginPress = () => {
+    this.props.onLoginPress();
+  };
 
-    onRegisterPress = () => {
-        this.props.onRegisterPress();
-    };
+  onRegisterPress = () => {
+    this.props.onRegisterPress();
+  };
 
-    onLogoutPress = () => {
-        this.props.logout();
-        this.props.onLogoutPress();
-    };
+  onLogoutPress = () => {
+    this.props.logout();
+    this.props.onLogoutPress();
+  };
 
-    render() {
-        if (this.props.user) {
-            return <ProofContainer
-                user={this.props.user}
-                isAuthenticated={this.props.isAuthenticated}
-                userToken={this.state.userToken}
-                fetchUser={this.fetchUser}
-                onLogoutPress={this.onLogoutPress}
-            />;
-        }
-        return <Membership
-            isFetchingUserData={this.props.isFetchingUserData}
-            onLoginPress={this.onLoginPress}
-            onRegisterPress={this.onRegisterPress}
-        />;
+  render() {
+    if (this.props.user) {
+      return (
+        <ProofContainer
+          user={this.props.user}
+          isAuthenticated={this.props.isAuthenticated}
+          userToken={this.state.userToken}
+          fetchUser={this.fetchUser}
+          onLogoutPress={this.onLogoutPress}
+        />
+      );
     }
+    return (
+      <Membership
+        isFetchingUserData={this.props.isFetchingUserData}
+        onLoginPress={this.onLoginPress}
+        onRegisterPress={this.onRegisterPress}
+      />
+    );
+  }
 }
 
 function storeToProps(store) {
-    return {
-        isAuthenticated: store.isAuthenticated,
-        isFetchingUserData: store.isFetchingUserData,
-        userToken: store.userToken,
-        user: store.user,
-        lastOrder: store.lastOrder
-    };
+  return {
+    isAuthenticated: store.isAuthenticated,
+    isFetchingUserData: store.isFetchingUserData,
+    userToken: store.userToken,
+    user: store.user,
+    lastOrder: store.lastOrder,
+  };
 }
 
 export default connect(
-    storeToProps,
-    { requestUserData, logout }
+  storeToProps,
+  { requestUserData, logout }
 )(MembershipContainer);
