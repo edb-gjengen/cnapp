@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { Button, Text as NBText, Spinner } from 'native-base';
 import Confetti from 'react-native-confetti';
 
@@ -121,6 +121,8 @@ const MembershipName = ({ user }) => {
 const Proof = ({
   chargeError,
   user,
+  fetchUser,
+  isFetchingUserData,
   isChargingMembership,
   isLoadingMembershipType,
   membershipPrice,
@@ -128,7 +130,6 @@ const Proof = ({
   onLogoutPress,
 }) => {
   const CONFETTI_TIMEOUT = 15000;
-
   const confettiRef = useRef(null);
 
   useEffect(() => {
@@ -151,7 +152,7 @@ const Proof = ({
   return (
     <View>
       <UserConfetti user={user} confettiRef={confettiRef} />
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
         <View style={[styles.card, { paddingVertical: 16 }]}>
           <MembershipName user={user} />
           <Logo user={user} />

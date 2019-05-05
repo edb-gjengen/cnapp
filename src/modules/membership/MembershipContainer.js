@@ -56,6 +56,7 @@ class MembershipContainer extends Component {
       return (
         <ProofContainer
           user={this.props.user}
+          isFetchingUserData={this.props.isFetchingUserData}
           isAuthenticated={this.props.isAuthenticated}
           userToken={this.state.userToken}
           fetchUser={this.fetchUser}

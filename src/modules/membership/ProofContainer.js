@@ -13,13 +13,6 @@ stripe.setOptions({
 });
 
 class ProofContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
   getPrice(membershipTypes) {
     if (!membershipTypes) {
       return 0;
@@ -31,8 +24,9 @@ class ProofContainer extends Component {
   render() {
     return (
       <Proof
-        {...this.state}
         user={this.props.user}
+        fetchUser={this.props.fetchUser}
+        isFetchingUserData={this.props.isFetchingUserData}
         isChargingMembership={this.props.isChargingMembership}
         isLoadingMembershipType={this.props.data.loading}
         chargeError={this.props.chargeError ? this.props.chargeError : ''}
