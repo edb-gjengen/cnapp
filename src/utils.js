@@ -1,4 +1,6 @@
 /* global fetch */
+import AsyncStorage from '@react-native-community/async-storage';
+
 export function snakeToCamelCase(val) {
   return val.replace(/_([a-z])/g, function(g) {
     return g[1].toUpperCase();
@@ -12,4 +14,29 @@ export function fetchWithTimeout(url, options, timeout = 10000) {
     fetch(url, options),
     new Promise((_, reject) => setTimeout(() => reject(new Error('Fetch request timed out')), timeout)),
   ]);
+}
+
+export async function migrateReduxPersistFourToFive(setUserData) {
+  const authedKey = 'reduxPersist:isAuthenticated';
+  const userKey = 'reduxPersist:user';
+  const userTokenKey = 'reduxPersist:userToken';
+  const v4Keys = [authedKey, userKey, userTokenKey];
+
+  const asyncStorageKeys = await AsyncStorage.getAllKeys();
+  if (v4Keys.some((key) => !asyncStorageKeys.includes(key))) {
+    return;
+  }
+
+  const isAuthenticated = await AsyncStorage.getItem(authedKey);
+  console.log(authedKey, isAuthenticated);
+  if (isAuthenticated !== 'true') {
+    await AsyncStorage.multiRemove(v4Keys);
+    return;
+  }
+
+  const user = await AsyncStorage.getItem(userKey);
+  console.log(userKey, user, JSON.parse(user));
+  setUserData(JSON.parse(user));
+  await AsyncStorage.multiRemove(v4Keys);
+  console.log('successfully migrated to new redux-persist');
 }
