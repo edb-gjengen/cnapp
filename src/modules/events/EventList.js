@@ -1,6 +1,6 @@
 import { StyleSheet, View, Platform } from 'react-native';
 import { SectionList } from 'react-navigation';
-import { Card, ListItem, CardItem, Body, Text, Left, Right, Icon, Button, Content, Spinner } from 'native-base';
+import { Card, ListItem, CardItem, Body, Text, Right, Icon, Button, Content, Spinner } from 'native-base';
 import React, { Component } from 'react';
 import moment from 'moment';
 import 'moment/locale/nb';
@@ -64,11 +64,7 @@ export default class EventList extends Component {
       return (
         <Content>
           <Card style={{ margin: 4 }}>
-            <CardItem
-              onPress={() => {
-                this._onPressItem(item);
-              }}
-            >
+            <CardItem>
               <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
             </CardItem>
             <CardItem>

@@ -1,12 +1,7 @@
-import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React from 'react';
 
 import About from './About';
 
-class AboutContainer extends Component {
-  render() {
-    return <About {...this.state} />;
-  }
-}
+const AboutContainer = () => <About />;
 
-export default connect()(AboutContainer);
+export default AboutContainer;

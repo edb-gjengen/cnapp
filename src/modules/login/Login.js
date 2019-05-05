@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Linking, StyleSheet, View, Platform } from 'react-native';
-import { Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon } from 'native-base';
+import { Linking, StyleSheet, View } from 'react-native';
+import { Container, Content, Form, Item, Input, Label, Spinner, Button, Text } from 'native-base';
 import Config from 'react-native-config';
 import theme from '../../theme';
 
@@ -26,7 +26,7 @@ export default class Login extends Component {
             returnKeyType="next"
             onChangeText={this.handleEmail}
             onSubmitEditing={() => {
-              this.refs.passwordInput._root.focus();
+              this.passwordInputRef._root.focus();
             }}
           />
         </Item>
@@ -44,7 +44,7 @@ export default class Login extends Component {
           returnKeyType="next"
           onChangeText={this.handleEmail}
           onSubmitEditing={() => {
-            this.refs.passwordInput._root.focus();
+            this.passwordInputRef._root.focus();
           }}
         />
       </Item>
@@ -57,7 +57,9 @@ export default class Login extends Component {
         <Item stackedLabel last error>
           <Label>Passord</Label>
           <Input
-            ref="passwordInput"
+            ref={(ref) => {
+              this.passwordInputRef = ref;
+            }}
             secureTextEntry={true}
             autoCapitalize="none"
             autoCorrect={false}
@@ -71,7 +73,9 @@ export default class Login extends Component {
       <Item stackedLabel last>
         <Label>Passord</Label>
         <Input
-          ref="passwordInput"
+          ref={(ref) => {
+            this.passwordInputRef = ref;
+          }}
           secureTextEntry={true}
           autoCapitalize="none"
           autoCorrect={false}
@@ -125,11 +129,7 @@ export default class Login extends Component {
     return <View style={styles.errorBox} />;
   };
 
-  showSpinner = () => {
-    if (this.props.isLoggingIn) {
-      return <Spinner color="#f58220" />;
-    }
-  };
+  showSpinner = () => (this.props.isLoggingIn ? <Spinner color="#f58220" /> : null);
 
   handleEmail = (text) => {
     this.setState({ email: text });

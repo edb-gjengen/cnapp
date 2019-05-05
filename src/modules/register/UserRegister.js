@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon, Toast } from 'native-base';
+import { Container, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon, Toast } from 'native-base';
 import { StyleSheet, View } from 'react-native';
-import EmailValidator from 'email-validator';
+import * as EmailValidator from 'email-validator';
 
 import theme from '../../theme';
 
@@ -27,7 +27,7 @@ export default class UserRegister extends Component {
     const touched = new Set(this.state.touched).add(triggeredBy);
 
     /* No empty fields */
-    for (const key of fieldNames) {
+    fieldNames.forEach((key) => {
       const value = this.state[key];
       if (value === '') {
         errors[key] = 'kan ikke være tomt';
@@ -36,7 +36,7 @@ export default class UserRegister extends Component {
       } else {
         delete errors[key];
       }
-    }
+    });
 
     this.setState({ errors, touched });
   }
@@ -62,7 +62,7 @@ export default class UserRegister extends Component {
             });
           }}
           onSubmitEditing={() => {
-            this.refs.lastNameInput._root.focus();
+            this.lastNameInputRef._root.focus();
           }}
           value={this.state.firstName}
         />
@@ -76,7 +76,9 @@ export default class UserRegister extends Component {
       <Item error={this.fieldHasError('lastName')}>
         <Label>Etternavn</Label>
         <Input
-          ref="lastNameInput"
+          ref={(ref) => {
+            this.lastNameInputRef = ref;
+          }}
           returnKeyType="next"
           onChangeText={(lastName) => {
             this.setState({ lastName }, () => {
@@ -84,7 +86,7 @@ export default class UserRegister extends Component {
             });
           }}
           onSubmitEditing={() => {
-            this.refs.emailInput._root.focus();
+            this.emailInputRef._root.focus();
           }}
           value={this.state.lastName}
         />
@@ -98,7 +100,9 @@ export default class UserRegister extends Component {
       <Item error={this.fieldHasError('email')}>
         <Label>E-post</Label>
         <Input
-          ref="emailInput"
+          ref={(ref) => {
+            this.emailInputRef = ref;
+          }}
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
@@ -109,7 +113,7 @@ export default class UserRegister extends Component {
             });
           }}
           onSubmitEditing={() => {
-            this.refs.phoneInput._root.focus();
+            this.phoneInputRef._root.focus();
           }}
           value={this.state.email}
         />
@@ -123,7 +127,9 @@ export default class UserRegister extends Component {
       <Item error={this.fieldHasError('phoneNumber')}>
         <Label>Mobilnummer</Label>
         <Input
-          ref="phoneInput"
+          ref={(ref) => {
+            this.phoneInputRef = ref;
+          }}
           returnKeyType="next"
           keyboardType="phone-pad"
           onChangeText={(phoneNumber) => {
@@ -132,7 +138,7 @@ export default class UserRegister extends Component {
             });
           }}
           onSubmitEditing={() => {
-            this.refs.passwordInput._root.focus();
+            this.passwordInputRef._root.focus();
           }}
           value={this.state.phoneNumber}
         />
@@ -146,7 +152,9 @@ export default class UserRegister extends Component {
       <Item error={this.fieldHasError('password')}>
         <Label>Passord</Label>
         <Input
-          ref="passwordInput"
+          ref={(ref) => {
+            this.passwordInputRef = ref;
+          }}
           secureTextEntry={true}
           autoCapitalize="none"
           autoCorrect={false}
@@ -195,7 +203,7 @@ export default class UserRegister extends Component {
 
   showFieldError = (field) => {
     if (!this.fieldHasError(field)) {
-      return;
+      return null;
     }
     return (
       <Item style={styles.errorText}>
@@ -205,9 +213,10 @@ export default class UserRegister extends Component {
   };
 
   showSpinner = () => {
-    if (this.props.isRegisteringUser) {
-      return <Spinner color="#f58220" />;
+    if (!this.props.isRegisteringUser) {
+      return null;
     }
+    return <Spinner color="#f58220" />;
   };
 
   render() {

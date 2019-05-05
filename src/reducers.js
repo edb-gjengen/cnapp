@@ -33,9 +33,9 @@ const initialState = {
 
 function formatErrors(errs) {
   const _errs = {};
-  for (const [key, value] of Object.entries(errs)) {
+  Object.entries(errs).forEach(([key, value]) => {
     _errs[snakeToCamelCase(key)] = Array.isArray(value) ? value.join('\n') : value;
-  }
+  });
   return _errs;
 }
 
@@ -97,7 +97,9 @@ export default function duskenApp(state = initialState, action) {
       });
 
     case REGISTER_USER_SUCCESS:
+      // eslint-disable-next-line no-case-declarations
       const userData = action.data;
+      // eslint-disable-next-line no-case-declarations
       const token = action.data.auth_token;
       delete userData.auth_token;
 

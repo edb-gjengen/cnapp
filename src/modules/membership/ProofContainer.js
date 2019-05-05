@@ -62,7 +62,7 @@ class ProofContainer extends Component {
           membershipTypeSlug
         );
       },
-      (error) => {
+      () => {
         /* FIXME: Happens only if card dialog is canceled? */
       }
     );

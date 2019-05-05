@@ -51,7 +51,7 @@ export function requestLogin(username, password) {
   };
 }
 
-export function requestUserData(auth_token) {
+export function requestUserData(authToken) {
   return (dispatch) => {
     // We are now fetching user data
     dispatch(userDataRequest());
@@ -61,7 +61,7 @@ export function requestUserData(auth_token) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Token ${auth_token}`,
+        Authorization: `Token ${authToken}`,
       },
     })
       .then((response) => response.json().then((json) => ({ json, response })))
@@ -118,7 +118,7 @@ export function requestRegisterUser(firstName, lastName, email, phoneNumber, pas
   };
 }
 
-export function requestMembershipCharge(auth_token, stripe_token, membership_type) {
+export function requestMembershipCharge(authToken, stripeToken, membershipType) {
   return (dispatch) => {
     dispatch(membershipChargeRequest());
 
@@ -127,11 +127,11 @@ export function requestMembershipCharge(auth_token, stripe_token, membership_typ
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Token ${auth_token}`,
+        Authorization: `Token ${authToken}`,
       },
       body: JSON.stringify({
-        stripe_token,
-        membership_type,
+        stripe_token: stripeToken,
+        membership_type: membershipType,
         payment_method: 'app',
       }),
     })

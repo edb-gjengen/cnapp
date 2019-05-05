@@ -62,11 +62,24 @@ const tabBarOptions = {
 
 const tabNav = createBottomTabNavigator(tabBarRoutes, tabBarOptions);
 
-const DuskenNavigation = createStackNavigator({
-  Root: tabNav,
-  Login: LoginScreen,
-  UserRegister: UserRegisterScreen,
-  EventDetail: EventDetailScreen,
-});
+const DuskenNavigation = createStackNavigator(
+  {
+    Root: tabNav,
+    Login: LoginScreen,
+    UserRegister: UserRegisterScreen,
+    EventDetail: EventDetailScreen,
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#f58220',
+      },
+      headerTitleStyle: {
+        color: 'white',
+      },
+      headerTintColor: 'white',
+    },
+  }
+);
 
 export default createAppContainer(DuskenNavigation);

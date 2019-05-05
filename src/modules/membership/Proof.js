@@ -44,7 +44,7 @@ export default class Proof extends Component {
 
   membershipValidTo() {
     if (!this.props.user.last_membership) {
-      return;
+      return null;
     }
 
     let validTo = this.props.user.last_membership.end_date;
@@ -63,7 +63,7 @@ export default class Proof extends Component {
   membershipStatus() {
     if (!this.props.user.is_member) {
       if (!this.props.user.last_membership) {
-        return;
+        return null;
       }
 
       return (
@@ -86,7 +86,7 @@ export default class Proof extends Component {
 
   purchaseButton() {
     if (this.props.user.is_member) {
-      return;
+      return null;
     }
 
     return (
@@ -108,15 +108,24 @@ export default class Proof extends Component {
   }
 
   confetti() {
-    if (this.props.user.is_member) {
-      // Confetti!!!!
-      return <Confetti ref={(node) => (this._confettiView = node)} confettiCount={Number.MAX_SAFE_INTEGER} />;
+    if (!this.props.user.is_member) {
+      return null;
     }
+
+    // Confetti!!!!
+    return (
+      <Confetti
+        ref={(node) => {
+          this._confettiView = node;
+        }}
+        confettiCount={Number.MAX_SAFE_INTEGER}
+      />
+    );
   }
 
   logo() {
     if (!this.props.user.is_member) {
-      return;
+      return null;
     }
 
     // FIXME: URL to config
@@ -133,7 +142,7 @@ export default class Proof extends Component {
 
   chargeError() {
     if (!this.props.chargeError) {
-      return;
+      return null;
     }
 
     return (

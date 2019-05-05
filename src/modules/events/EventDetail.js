@@ -3,6 +3,7 @@ import { Linking, StyleSheet, ScrollView, Text, Platform, View, Image, Touchable
 import HTMLView from 'react-native-htmlview';
 import moment from 'moment';
 import { Icon } from 'native-base';
+
 import theme from '../../theme';
 
 moment.locale('nb');
@@ -44,8 +45,8 @@ export default class EventDetail extends Component {
   _formatTicketText() {
     /* FIXME: This should be handled by API */
     const { item } = this.props;
-    let reg_kr = '';
-    let mem_kr = '';
+    let regularPrice = '';
+    let memberPrice = '';
     if (item.price_regular === '0') {
       item.price_regular = 'Gratis';
     }
@@ -53,19 +54,19 @@ export default class EventDetail extends Component {
       item.price_member = 'Gratis';
     }
     if (item.price_regular !== 'Gratis') {
-      reg_kr = ' kr';
+      regularPrice = ' kr';
     }
     if (item.price_member !== 'Gratis') {
-      mem_kr = ' kr';
+      memberPrice = ' kr';
     }
 
     let text = '';
     if (item.price_regular && item.price_member) {
-      text = `Pris: ${item.price_regular}${reg_kr} / Medlemmer: ${item.price_member}${mem_kr}`;
+      text = `Pris: ${item.price_regular}${regularPrice} / Medlemmer: ${item.price_member}${memberPrice}`;
     } else if (item.price_regular) {
-      text = `Pris: ${item.price_regular}${reg_kr}`;
+      text = `Pris: ${item.price_regular}${regularPrice}`;
     } else if (item.price_member) {
-      text = `Pris (Medlemmer): ${item.price_member}${mem_kr}`;
+      text = `Pris (Medlemmer): ${item.price_member}${memberPrice}`;
     } else {
       return '';
     }
@@ -108,7 +109,7 @@ export default class EventDetail extends Component {
     const text = this._formatTicketText();
 
     if (text === '') {
-      return;
+      return null;
     }
 
     if (item.ticket_url) {
@@ -141,7 +142,7 @@ export default class EventDetail extends Component {
   showFacebutton() {
     const { item } = this.props;
     if (!item.facebook_url) {
-      return;
+      return null;
     }
 
     return (
@@ -162,6 +163,8 @@ export default class EventDetail extends Component {
     if (item.thumbnail.medium_large) {
       return <Image source={{ uri: item.thumbnail.medium_large }} style={styles.image} />;
     }
+
+    return null;
   }
 
   showYear() {
@@ -170,6 +173,8 @@ export default class EventDetail extends Component {
     if (moment().year() !== moment(item.start_time).year()) {
       return <Text style={styles.year}>{this._formatYear(item.start_time)}</Text>;
     }
+
+    return null;
   }
 
   render() {

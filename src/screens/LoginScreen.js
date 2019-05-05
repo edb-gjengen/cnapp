@@ -1,30 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleProvider } from 'native-base';
+import { useNavigation } from 'react-navigation-hooks';
 import LoginContainer from '../modules/login/LoginContainer';
 import getTheme from '../../native-base-theme/components';
 
-export default class LoginScreen extends Component {
-  static navigationOptions = {
-    title: 'Logg inn',
-    headerStyle: {
-      backgroundColor: '#f58220',
-    },
-    headerTitleStyle: {
-      color: 'white',
-    },
-    headerTintColor: 'white',
-  };
-
-  onLogin = () => {
-    // This works since LoginScreen is allways navigated to from MembershipScreen
-    this.props.navigation.goBack();
-  };
-
-  render() {
-    return (
-      <StyleProvider style={getTheme()}>
-        <LoginContainer onLogin={this.onLogin} />
-      </StyleProvider>
-    );
-  }
-}
+// navigation.goBack onLogin works since LoginScreen is allways navigated to from MembershipScreen
+const LoginScreen = () => {
+  const navigation = useNavigation();
+  return (
+    <StyleProvider style={getTheme()}>
+      <LoginContainer onLogin={navigation.goBack} />
+    </StyleProvider>
+  );
+};
+LoginScreen.navigationOptions = {
+  title: 'Logg inn',
+};
+export default LoginScreen;

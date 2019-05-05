@@ -1,25 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { StyleProvider } from 'native-base';
+import { useNavigation } from 'react-navigation-hooks';
 import EventListContainer from '../modules/events/EventListContainer';
 import getTheme from '../../native-base-theme/components';
 
-export default class EventsScreen extends Component {
-  static navigationOptions = {
-    title: 'Program',
-    tabBarIcon: ({ tintColor }) => <Icon name="event" size={16} color={tintColor} style={{ marginTop: 5 }} />,
-  };
+const EventsScreen = () => {
+  const { navigate } = useNavigation();
+  return (
+    <StyleProvider style={getTheme()}>
+      <EventListContainer
+        showEvent={(item) => {
+          navigate('EventDetail', { item });
+        }}
+      />
+    </StyleProvider>
+  );
+};
 
-  showEvent = (item) => {
-    const { navigate } = this.props.navigation;
-    navigate('EventDetail', { item });
-  };
+const tabBarIcon = ({ tintColor }) => <Icon name="event" size={16} color={tintColor} style={{ marginTop: 5 }} />;
 
-  render() {
-    return (
-      <StyleProvider style={getTheme()}>
-        <EventListContainer showEvent={this.showEvent} />
-      </StyleProvider>
-    );
-  }
-}
+EventsScreen.navigationOptions = {
+  title: 'Program',
+  tabBarIcon,
+};
+export default EventsScreen;

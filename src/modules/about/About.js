@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, ScrollView, View, Platform, StyleSheet, Image, Linking, TouchableOpacity } from 'react-native';
-// import HTMLView from 'react-native-htmlview';
+import { Text, View, Platform, StyleSheet, Image, Linking, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-navigation';
 
 import { Button, Text as NBText, Icon } from 'native-base';
 import theme from '../../theme';
@@ -140,8 +140,6 @@ export default class About extends Component {
             Alle studentforeninger i Oslo kan arrangere gratis på Chateau Neuf. Skal du arrangere en fest, sette en
             konsert, holde et foredrag eller gjennomføre et møte, har vi lokaler som kan brukes til dette.
           </Text>
-
-          {/* <HTMLView style={styles.content} stylesheet={HTMLStyles} value={this.props.openingHours}/> */}
         </View>
       </ScrollView>
     );

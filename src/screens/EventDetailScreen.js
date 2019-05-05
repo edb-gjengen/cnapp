@@ -1,26 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleProvider } from 'native-base';
+import { useNavigationParam } from 'react-navigation-hooks/src/Hooks';
+
 import EventDetail from '../modules/events/EventDetail';
 import getTheme from '../../native-base-theme/components';
 
-export default class EventDetailScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.item.title.decoded,
-    headerStyle: {
-      backgroundColor: '#f58220',
-    },
-    headerTitleStyle: {
-      color: 'white',
-    },
-    headerTintColor: 'white',
-  });
+const EventDetailScreen = () => {
+  const item = useNavigationParam('item');
 
-  render() {
-    const { params } = this.props.navigation.state;
-    return (
-      <StyleProvider style={getTheme()}>
-        <EventDetail item={params.item} />
-      </StyleProvider>
-    );
-  }
-}
+  return (
+    <StyleProvider style={getTheme()}>
+      <EventDetail item={item} />
+    </StyleProvider>
+  );
+};
+EventDetailScreen.navigationOptions = ({ navigation }) => ({
+  title: navigation.state.params.item.title.decoded,
+});
+
+export default EventDetailScreen;

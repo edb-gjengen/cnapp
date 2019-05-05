@@ -6,6 +6,7 @@ import moment from 'moment';
 import 'moment/locale/nb';
 
 import EventList from './EventList';
+import { fetchWithTimeout } from '../../utils';
 
 moment.locale('nb');
 
@@ -35,7 +36,7 @@ class EventListContainer extends Component {
 
   _toSectionFormat(events) {
     const sectioned = {};
-    events.map((event) => {
+    events.forEach((event) => {
       const title = this._formatDate(event.start_time);
       if (title in sectioned) {
         sectioned[title].push(event);
@@ -84,9 +85,9 @@ class EventListContainer extends Component {
     const url = `${Config.EVENT_API_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
     this.setState({ loading: true });
 
-    fetch(url)
+    fetchWithTimeout(url)
       .then((res) => {
-        this.setState({ totalPages: parseInt(res.headers.get('x-wp-totalpages')) });
+        this.setState({ totalPages: parseInt(res.headers.get('x-wp-totalpages'), 10) });
         return res.json();
       })
       .then((res) => {
