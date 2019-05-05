@@ -45,7 +45,7 @@ class ProofContainer extends Component {
     const { user, fetchUser } = this.props;
     const todaysDate = new Date().toISOString().substring(0, 10);
     const lastMembership = user.last_membership;
-    if (lastMembership && lastMembership.membership_type !== 'lifelong' && lastMembership.end_date > todaysDate) {
+    if (lastMembership && lastMembership.membership_type !== 'lifelong' && lastMembership.end_date < todaysDate) {
       fetchUser();
     }
   }
