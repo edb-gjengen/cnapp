@@ -21,6 +21,10 @@ class ProofContainer extends Component {
     return membershipTypes[0].price / 100;
   }
 
+  componentDidMount = () => {
+    this.checkExpiry();
+  };
+
   render() {
     return (
       <Proof
@@ -35,6 +39,15 @@ class ProofContainer extends Component {
         membershipPrice={this.getPrice(this.props.data.membershipTypes)}
       />
     );
+  }
+
+  checkExpiry() {
+    const { user, fetchUser } = this.props;
+    const todaysDate = new Date().toISOString().substring(0, 10);
+    const lastMembership = user.last_membership;
+    if (lastMembership && lastMembership.membership_type !== 'lifelong' && lastMembership.end_date > todaysDate) {
+      fetchUser();
+    }
   }
 
   openStripe = () => {
