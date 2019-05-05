@@ -27,7 +27,7 @@ const tabBarOptions = {
         android: {
           backgroundColor: '#fff',
           borderTopWidth: StyleSheet.hairlineWidth,
-          borderTopColor: 'rgba(0, 0, 0, 0.1)',
+          borderTopColor: 'rgba(0, 0, 0, 0.2)',
         },
       }),
     },
@@ -36,13 +36,14 @@ const tabBarOptions = {
     },
     activeTintColor: '#f58220',
     inactiveTintColor: '#333333',
-    showIcon: true,
     labelStyle: {
-      fontSize: 10,
-      marginBottom: 0,
+      fontSize: 12,
       ...Platform.select({
         android: {
-          fontWeight: 'bold',
+          marginBottom: 4,
+        },
+        ios: {
+          marginBottom: 0,
         },
       }),
     },
