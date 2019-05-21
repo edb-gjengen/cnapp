@@ -16,7 +16,7 @@ export function fetchWithTimeout(url, options, timeout = 10000) {
   ]);
 }
 
-export async function migrateReduxPersistFourToFive(setUserData) {
+export async function migrateReduxPersistFourToFive(registerUserSuccess) {
   const authedKey = 'reduxPersist:isAuthenticated';
   const userKey = 'reduxPersist:user';
   const userTokenKey = 'reduxPersist:userToken';
@@ -34,9 +34,10 @@ export async function migrateReduxPersistFourToFive(setUserData) {
     return;
   }
 
+  const userToken = await AsyncStorage.getItem(userTokenKey);
   const user = await AsyncStorage.getItem(userKey);
   console.log(userKey, user, JSON.parse(user));
-  setUserData(JSON.parse(user));
+  registerUserSuccess({ auth_token: userToken, ...JSON.parse(user) });
   await AsyncStorage.multiRemove(v4Keys);
   console.log('successfully migrated to new redux-persist');
 }
