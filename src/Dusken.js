@@ -3,12 +3,20 @@ import { connect } from 'react-redux';
 import { Root } from 'native-base';
 
 import DuskenNavigation from './navigation';
-import { userDataSuccess } from './actions';
+import { logout as logoutAction, registerUserSuccess as registerUserSuccessAction } from './actions';
 import { migrateReduxPersistFourToFive } from './utils';
 
-const DuskenContainer = ({ setUserData }) => {
+const DuskenContainer = ({ registerUserSuccess, userToken, user, logout }) => {
   useEffect(() => {
-    migrateReduxPersistFourToFive(setUserData);
+    async function inner() {
+      await migrateReduxPersistFourToFive(registerUserSuccess);
+
+      // logout authenticated users without token
+      if (user && !userToken) {
+        logout();
+      }
+    }
+    inner();
   });
 
   return (
@@ -18,11 +26,16 @@ const DuskenContainer = ({ setUserData }) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  userToken: state.userToken,
+  user: state.user,
+});
 const mapDispatchToProps = {
-  setUserData: userDataSuccess,
+  registerUserSuccess: registerUserSuccessAction,
+  logout: logoutAction,
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(DuskenContainer);
