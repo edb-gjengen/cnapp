@@ -35,9 +35,10 @@ export async function migrateReduxPersistFourToFive(registerUserSuccess) {
   }
 
   const userToken = await AsyncStorage.getItem(userTokenKey);
+  console.log(userTokenKey, userToken);
   const user = await AsyncStorage.getItem(userKey);
   console.log(userKey, user, JSON.parse(user));
-  registerUserSuccess({ auth_token: userToken, ...JSON.parse(user) });
+  registerUserSuccess({ auth_token: JSON.parse(userToken), ...JSON.parse(user) });
   await AsyncStorage.multiRemove(v4Keys);
   console.log('successfully migrated to new redux-persist');
 }
