@@ -27,7 +27,6 @@ function getPrice(membershipTypes) {
   return membershipTypes[0].price / 100;
 }
 
-// FIXME: where do these come from?
 const useProof = ({ user, fetchUser }) => {
   const dispatch = useDispatch();
   const { userToken, isChargingMembership, chargeError } = useSelector((state) => ({

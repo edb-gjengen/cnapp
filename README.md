@@ -54,3 +54,7 @@ We use fastlane and certificate management via fastlane match. Ask nikolai@stude
 ## Libraries
 
 We use https://nativebase.io/ for generic UI components
+
+
+## TODO upgrade:
+ - `@react-native-community/eslint-config"`

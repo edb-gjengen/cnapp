@@ -122,7 +122,10 @@ const MembershipName = ({ user }) => {
 const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef(null);
-  const { chargeError, isChargingMembership, isLoadingMembershipType, onChargePress, membershipPrice } = useProof();
+  const { chargeError, isChargingMembership, isLoadingMembershipType, onChargePress, membershipPrice } = useProof({
+    user,
+    fetchUser,
+  });
 
   useEffect(() => {
     return () => {

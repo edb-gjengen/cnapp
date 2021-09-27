@@ -11,7 +11,7 @@
     "lint": "eslint --quiet src",
     "release:android": "cd android && bundle exec fastlane beta",
     "release:ios": "cd ios && bundle exec fastlane beta",
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
