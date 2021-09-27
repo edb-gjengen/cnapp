@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Membership from './Membership';
-import ProofContainer from './ProofContainer';
+import Proof from './Proof';
 import { logout } from '../../actions';
 import { requestUserData } from '../../api';
 
@@ -54,7 +54,7 @@ class MembershipContainer extends Component {
   render() {
     if (this.props.user) {
       return (
-        <ProofContainer
+        <Proof
           user={this.props.user}
           isFetchingUserData={this.props.isFetchingUserData}
           isAuthenticated={this.props.isAuthenticated}
@@ -84,7 +84,4 @@ function storeToProps(store) {
   };
 }
 
-export default connect(
-  storeToProps,
-  { requestUserData, logout }
-)(MembershipContainer);
+export default connect(storeToProps, { requestUserData, logout })(MembershipContainer);

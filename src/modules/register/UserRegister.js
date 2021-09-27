@@ -23,7 +23,7 @@ export default class UserRegister extends Component {
   validateForm(triggeredBy) {
     const fieldNames = ['firstName', 'lastName', 'email', 'phoneNumber', 'password'];
 
-    const errors = Object.assign({}, this.state.errors);
+    const errors = { ...this.state.errors };
     const touched = new Set(this.state.touched).add(triggeredBy);
 
     /* No empty fields */

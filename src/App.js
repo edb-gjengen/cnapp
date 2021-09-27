@@ -2,10 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import Config from 'react-native-config';
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import Dusken from './Dusken';
 import { store, persistor } from './reduxStore';

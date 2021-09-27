@@ -44,7 +44,4 @@ function storeToProps(store) {
     registerError: errors,
   };
 }
-export default connect(
-  storeToProps,
-  { requestRegisterUser }
-)(UserRegisterContainer);
+export default connect(storeToProps, { requestRegisterUser })(UserRegisterContainer);

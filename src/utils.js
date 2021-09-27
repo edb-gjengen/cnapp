@@ -1,10 +1,8 @@
 /* global fetch */
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function snakeToCamelCase(val) {
-  return val.replace(/_([a-z])/g, function(g) {
-    return g[1].toUpperCase();
-  });
+  return val.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
 }
 
 export function fetchWithTimeout(url, options, timeout = 10000) {

@@ -35,7 +35,4 @@ const mapDispatchToProps = {
   logout: logoutAction,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DuskenContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DuskenContainer);

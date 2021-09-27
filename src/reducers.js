@@ -43,58 +43,33 @@ export default function duskenApp(state = initialState, action) {
   switch (action.type) {
     /* Login */
     case LOGIN_REQUEST:
-      return Object.assign({}, state, {
-        isLoggingIn: true,
-        loginError: null,
-      });
+      return { ...state, isLoggingIn: true, loginError: null };
 
     case LOGIN_FAILURE:
-      return Object.assign({}, state, {
-        isLoggingIn: false,
-        loginError: action.loginError,
-      });
+      return { ...state, isLoggingIn: false, loginError: action.loginError };
 
     case LOGIN_SUCCESS:
-      return Object.assign({}, state, {
-        isLoggingIn: false,
-        isAuthenticated: true,
-        userToken: action.token,
-      });
+      return { ...state, isLoggingIn: false, isAuthenticated: true, userToken: action.token };
 
     case LOGOUT:
       return initialState;
 
     /* User data */
     case USER_DATA_REQUEST:
-      return Object.assign({}, state, {
-        isFetchingUserData: true,
-        userError: null,
-      });
+      return { ...state, isFetchingUserData: true, userError: null };
 
     case USER_DATA_FAILURE:
-      return Object.assign({}, state, {
-        isFetchingUserData: false,
-        userError: action.userError,
-      });
+      return { ...state, isFetchingUserData: false, userError: action.userError };
 
     case USER_DATA_SUCCESS:
-      return Object.assign({}, state, {
-        isFetchingUserData: false,
-        user: action.data,
-      });
+      return { ...state, isFetchingUserData: false, user: action.data };
 
     /* Register user */
     case REGISTER_USER_REQUEST:
-      return Object.assign({}, state, {
-        isRegisteringUser: true,
-        registerError: null,
-      });
+      return { ...state, isRegisteringUser: true, registerError: null };
 
     case REGISTER_USER_FAILURE:
-      return Object.assign({}, state, {
-        isRegisteringUser: false,
-        registerError: formatErrors(action.registerError),
-      });
+      return { ...state, isRegisteringUser: false, registerError: formatErrors(action.registerError) };
 
     case REGISTER_USER_SUCCESS:
       // eslint-disable-next-line no-case-declarations
@@ -103,31 +78,17 @@ export default function duskenApp(state = initialState, action) {
       const token = action.data.auth_token;
       delete userData.auth_token;
 
-      return Object.assign({}, state, {
-        isRegisteringUser: false,
-        isAuthenticated: true,
-        user: userData,
-        userToken: token,
-      });
+      return { ...state, isRegisteringUser: false, isAuthenticated: true, user: userData, userToken: token };
 
     /* User data */
     case MEMBERSHIP_CHARGE_REQUEST:
-      return Object.assign({}, state, {
-        isChargingMembership: true,
-        chargeError: null,
-      });
+      return { ...state, isChargingMembership: true, chargeError: null };
 
     case MEMBERSHIP_CHARGE_FAILURE:
-      return Object.assign({}, state, {
-        isChargingMembership: false,
-        chargeError: action.chargeError,
-      });
+      return { ...state, isChargingMembership: false, chargeError: action.chargeError };
 
     case MEMBERSHIP_CHARGE_SUCCESS:
-      return Object.assign({}, state, {
-        isChargingMembership: false,
-        lastOrder: action.data,
-      });
+      return { ...state, isChargingMembership: false, lastOrder: action.data };
 
     default:
       return state;
