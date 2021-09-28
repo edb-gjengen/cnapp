@@ -1,14 +1,16 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { StyleProvider } from 'native-base';
-import { useNavigation } from 'react-navigation-hooks';
+import { useNavigation } from '@react-navigation/native';
 import EventListContainer from '../modules/events/EventListContainer';
-import getTheme from '../../native-base-theme/components';
+// FIXME: theme
+// https://docs.nativebase.io/setup-provider#add-custom-theme-optional
+// import getTheme from '../../native-base-theme/components';
 
 const EventsScreen = () => {
   const { navigate } = useNavigation();
   return (
-    <StyleProvider style={getTheme()}>
+    <StyleProvider>
       <EventListContainer
         showEvent={(item) => {
           navigate('EventDetail', { item });

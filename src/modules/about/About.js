@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, Platform, StyleSheet, Image, Linking, TouchableOpacity } from 'react-native';
-import { ScrollView } from 'react-navigation';
+import { Text, View, Platform, StyleSheet, Image, Linking, TouchableOpacity, ScrollView } from 'react-native';
 
-import { Button, Text as NBText, Icon } from 'native-base';
+import { Button, Text as NBText } from 'native-base';
+import FAIcon from 'react-native-vector-icons/FontAwesome5';
+import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import theme from '../../theme';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
@@ -73,11 +74,11 @@ export default class About extends Component {
           <Text style={styles.header}>Følg oss på</Text>
           <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
             <TouchableOpacity style={styles.someBtn} onPress={this.openFacebook}>
-              <Icon name="logo-facebook" style={styles.largeIcon} />
+              <FAIcon name="facebook" size={40} color="black" />
               <NBText>Facebook</NBText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.someBtn} onPress={this.openInstagram}>
-              <Icon name="logo-instagram" style={styles.largeIcon} />
+              <FAIcon name="instagram" size={40} color="black" />
               <NBText>Instagram</NBText>
             </TouchableOpacity>
           </View>
@@ -88,14 +89,14 @@ export default class About extends Component {
           </Text>
           <View style={styles.section}>
             <Button iconLeft onPress={this.openMap}>
-              <Icon name="map" style={styles.icon} />
+              <SimpleIcon name="map" style={styles.icon} />
               <NBText> Vis i kart</NBText>
             </Button>
           </View>
           <Text style={styles.header}>Åpningstider</Text>
           <View style={styles.section}>
             <Button iconLeft onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}>
-              <Icon name="time" style={styles.icon} />
+              <SimpleIcon name="clock" style={styles.icon} />
               <NBText>Vis Åpningstider</NBText>
             </Button>
           </View>
@@ -103,7 +104,7 @@ export default class About extends Component {
           <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
             <View>
               <Button iconLeft onPress={() => Linking.openURL('tel:+4794430002')} style={{ marginHorizontal: 10 }}>
-                <Icon name="call" style={styles.icon} />
+                <SimpleIcon name="phone" style={styles.icon} />
                 <NBText>Ring</NBText>
               </Button>
             </View>
@@ -113,7 +114,7 @@ export default class About extends Component {
                 onPress={() => Linking.openURL('mailto:ledelsen@studentersamfundet.no')}
                 style={{ marginHorizontal: 10 }}
               >
-                <Icon name="mail" style={styles.icon} />
+                <SimpleIcon name="envelope" style={styles.icon} />
                 <NBText>Send e-post</NBText>
               </Button>
             </View>
@@ -121,7 +122,9 @@ export default class About extends Component {
 
           <Text style={styles.header}>Chateau Neuf</Text>
           <Image
-            source={{ uri: 'https://studentersamfundet.no/wp-content/uploads/2015/04/26_KUL_Chateauneuf-1280x720.jpg' }}
+            source={{
+              uri: 'https://studentersamfundet.no/wp/wp-content/uploads/2015/04/26_KUL_Chateauneuf-1280x720.jpg',
+            }}
             style={styles.featuredImage}
             resizeMode="contain"
           />
