@@ -1,102 +1,81 @@
 import React from 'react';
-// import { Platform, StyleSheet } from 'react-native';
-// import { createBottomTabNavigator, getActiveChildNavigationOptions } from 'react-navigation';
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 import EventListScreen from './screens/EventListScreen';
-import AboutScreen from './screens/AboutScreen';
 import EventDetailScreen from './screens/EventDetailScreen';
-import LoginScreen from './screens/LoginScreen';
-import MembershipScreen from './screens/MembershipScreen';
-// import UserRegisterScreen from './screens/UserRegisterScreen';
+import UserRegisterScreen from './screens/UserRegisterScreen';
 
-// const tabBarRoutes = {
-//   EventList: EventListScreen,
-//   Membership: MembershipScreen,
-//   About: AboutScreen,
-// };
+import Membership from './modules/membership/Membership';
+import Login from './modules/login/Login';
+import AboutContainer from './modules/about/AboutContainer';
 
-// const tabBarOptions = {
-//   tabBarPosition: 'bottom',
-//   tabBarOptions: {
-//     style: {
-//       ...Platform.select({
-//         android: {
-//           backgroundColor: '#fff',
-//           borderTopWidth: StyleSheet.hairlineWidth,
-//           borderTopColor: 'rgba(0, 0, 0, 0.2)',
-//         },
-//       }),
-//     },
-//     indicatorStyle: {
-//       backgroundColor: '#f58220',
-//     },
-//     activeTintColor: '#f58220',
-//     inactiveTintColor: '#333333',
-//     labelStyle: {
-//       fontSize: 12,
-//       ...Platform.select({
-//         android: {
-//           marginBottom: 4,
-//         },
-//         ios: {
-//           marginBottom: 0,
-//         },
-//       }),
-//     },
-//   },
-//   navigationOptions: ({ navigation, screenProps }) => ({
-//     // get header title from active child screen
-//     ...getActiveChildNavigationOptions(navigation, screenProps),
-//     headerStyle: {
-//       backgroundColor: '#f58220',
-//     },
-//     headerTitleStyle: {
-//       color: 'white',
-//     },
-//     headerTintColor: 'white',
-//   }),
-// };
+const EventStack = createNativeStackNavigator();
+const EventStackScreen = () => (
+  <EventStack.Navigator initialRouteName="EventList">
+    <EventStack.Screen
+      name="EventList"
+      component={EventListScreen}
+      options={{
+        title: 'Program',
+      }}
+    />
+    <EventStack.Screen
+      name="EventDetail"
+      component={EventDetailScreen}
+      options={({ route }) => ({ title: route.params.item.title.decoded })}
+    />
+  </EventStack.Navigator>
+);
 
-// const tabNav = createBottomTabNavigator(tabBarRoutes, tabBarOptions);
-// const DuskenNavigation = createStackNavigator(
-//   {
-//     Root: tabNav,
-//     Login: LoginScreen,
-//     UserRegister: UserRegisterScreen,
-//     EventDetail: EventDetailScreen,
-//   },
-//   {
-//     defaultNavigationOptions: {
-//       headerStyle: {
-//         backgroundColor: '#f58220',
-//       },
-//       headerTitleStyle: {
-//         color: 'white',
-//       },
-//       headerTintColor: 'white',
-//     },
-//   }
-// );
-const Stack = createNativeStackNavigator();
+const UserStack = createNativeStackNavigator();
+const UserStackScreen = () => (
+  <UserStack.Navigator initialRouteName="Membership">
+    <UserStack.Screen name="Membership" component={Membership} options={{ title: 'Medlemskap' }} />
+    <UserStack.Screen name="Login" component={Login} options={{ title: 'Logg inn' }} />
+    <UserStack.Screen
+      name="UserRegister"
+      component={UserRegisterScreen}
+      options={{
+        title: 'Bli medlem',
+      }}
+    />
+  </UserStack.Navigator>
+);
 
-const DuskenNavigation = () => (
+const HomeTabs = createBottomTabNavigator();
+const Navigation = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="EventList">
-      <Stack.Screen name="About" component={AboutScreen} />
-      <Stack.Screen name="Membership" component={MembershipScreen} />
-      <Stack.Screen name="EventList" component={EventListScreen} />
-      <Stack.Screen
-        name="EventDetail"
-        component={EventDetailScreen}
-        options={({ route }) => ({
-          title: route.params.item.title.decoded,
-        })}
+    <HomeTabs.Navigator initialRouteName="EventStack">
+      <HomeTabs.Screen
+        name="EventStack"
+        component={EventStackScreen}
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Program',
+          tabBarIcon: ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />,
+        }}
       />
-      <Stack.Screen name="Login" component={LoginScreen} />
-    </Stack.Navigator>
+      <HomeTabs.Screen
+        name="UserStack"
+        component={UserStackScreen}
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Medlemskap',
+          tabBarIcon: ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />,
+        }}
+      />
+      <HomeTabs.Screen
+        name="About"
+        component={AboutContainer}
+        options={{
+          title: 'Om oss',
+          tabBarIcon: ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />,
+        }}
+      />
+    </HomeTabs.Navigator>
   </NavigationContainer>
 );
-export default DuskenNavigation;
+export default Navigation;

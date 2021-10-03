@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NativeBaseProvider } from 'native-base';
 
-import DuskenNavigation from './Navigation';
+import Navigation from './Navigation';
 import { logout as logoutAction, registerUserSuccess as registerUserSuccessAction } from './actions';
 import { migrateReduxPersistFourToFive } from './utils';
 
@@ -21,7 +21,7 @@ const DuskenContainer = ({ registerUserSuccess, userToken, user, logout }) => {
 
   return (
     <NativeBaseProvider>
-      <DuskenNavigation />
+      <Navigation />
     </NativeBaseProvider>
   );
 };
