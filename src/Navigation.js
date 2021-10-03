@@ -8,8 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import EventListScreen from './screens/EventListScreen';
 // import AboutScreen from './screens/AboutScreen';
 // import EventDetailScreen from './screens/EventDetailScreen';
-import LoginScreen from './screens/LoginScreen';
-// import MembershipScreen from './screens/MembershipScreen';
+// import LoginScreen from './screens/LoginScreen';
+import MembershipScreen from './screens/MembershipScreen';
 // import UserRegisterScreen from './screens/UserRegisterScreen';
 
 // const tabBarRoutes = {
@@ -86,7 +86,8 @@ const DuskenNavigation = () => (
   <NavigationContainer>
     <Stack.Navigator>
       {/* <Stack.Screen name="About" component={AboutScreen} /> */}
-      <Stack.Screen name="Login" component={LoginScreen} />
+      {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
+      <Stack.Screen name="Membership" component={MembershipScreen} />
       {/* <Stack.Screen name="EventList" component={EventListScreen} /> */}
     </Stack.Navigator>
   </NavigationContainer>

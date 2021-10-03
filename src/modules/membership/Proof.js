@@ -144,6 +144,15 @@ const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
     }, CONFETTI_TIMEOUT);
   };
 
+  if (!user) {
+    console.log('🔥', user);
+    return (
+      <View>
+        <Text>No user!</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <UserConfetti user={user} confettiRef={confettiRef} />

@@ -1,48 +1,33 @@
-import React, { Component } from 'react';
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
-import { Button, Text as NBText, Spinner } from 'native-base';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Spinner } from 'native-base';
 
 import theme from '../../theme';
+import useMembership from './useMembership';
+import MembershipInfo from './MembershipInfo';
+import Proof from './Proof';
 
-export default class Membership extends Component {
-  render() {
-    if (this.props.isFetchingUserData) {
-      return (
-        <View style={styles.card}>
-          <Spinner color="#f58220" />
-        </View>
-      );
-    }
+const Membership = () => {
+  const { isFetchingUserData, onRegisterPress, onLoginPress, onLogoutPress, user, isAuthenticated, fetchUser } =
+    useMembership();
 
+  if (isFetchingUserData) {
     return (
-      <ScrollView>
-        <View style={styles.card}>
-          <Text style={styles.headerTitle}>Hei 👋</Text>
-          <Text style={styles.paragraph}>
-            Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen
-          </Text>
-          <View style={styles.button}>
-            <Button onPress={this.props.onRegisterPress} full>
-              <NBText>Bli medlem</NBText>
-            </Button>
-          </View>
-          <Text style={styles.header}>Hva får jeg?</Text>
-          <Text style={[styles.paragraph, { textAlign: 'left', paddingLeft: 4 }]}>
-            - Minst 25% rabatt på de fleste arrangement{'\n'}- Gratis inngang på enkelte arrangement{'\n'}- Store
-            rabatter i barene{'\n'}- Egne medlemsarrangement og -tilbud{'\n'}- Mulighet til å delta i landets eldste
-            studentdemokrati
-          </Text>
-          <Text style={styles.em}>Allerede medlem?</Text>
-          <View style={styles.button}>
-            <Button onPress={this.props.onLoginPress} full>
-              <NBText>Logg inn</NBText>
-            </Button>
-          </View>
-        </View>
-      </ScrollView>
+      <View style={styles.card}>
+        <Spinner color="#f58220" />
+      </View>
     );
   }
-}
+
+  if (isAuthenticated) {
+    return (
+      <Proof onLogoutPress={onLogoutPress} user={user} fetchUser={fetchUser} isFetchingUserData={isFetchingUserData} />
+    );
+  }
+
+  return <MembershipInfo onRegister={onRegisterPress} onLogin={onLoginPress} />;
+};
+export default Membership;
 
 const styles = StyleSheet.create({
   card: theme.card,
