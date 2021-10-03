@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleProvider } from 'native-base';
-import { useNavigationParam } from 'react-navigation-hooks/src/Hooks';
+import { useNavigationState } from '@react-navigation/native';
 
 import EventDetail from '../modules/events/EventDetail';
 import getTheme from '../../native-base-theme/components';
 
 const EventDetailScreen = () => {
-  const item = useNavigationParam('item');
+  const item = useNavigationState((state) => state.item);
 
   return (
     <StyleProvider style={getTheme()}>

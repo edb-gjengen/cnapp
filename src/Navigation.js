@@ -6,9 +6,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // import EventListScreen from './screens/EventListScreen';
-import AboutScreen from './screens/AboutScreen';
+// import AboutScreen from './screens/AboutScreen';
 // import EventDetailScreen from './screens/EventDetailScreen';
-// import LoginScreen from './screens/LoginScreen';
+import LoginScreen from './screens/LoginScreen';
 // import MembershipScreen from './screens/MembershipScreen';
 // import UserRegisterScreen from './screens/UserRegisterScreen';
 
@@ -85,7 +85,8 @@ const Stack = createNativeStackNavigator();
 const DuskenNavigation = () => (
   <NavigationContainer>
     <Stack.Navigator>
-      <Stack.Screen name="About" component={AboutScreen} />
+      {/* <Stack.Screen name="About" component={AboutScreen} /> */}
+      <Stack.Screen name="Login" component={LoginScreen} />
       {/* <Stack.Screen name="EventList" component={EventListScreen} /> */}
     </Stack.Navigator>
   </NavigationContainer>
