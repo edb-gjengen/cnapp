@@ -1,46 +1,51 @@
-import { StyleSheet, View, Platform } from 'react-native';
-import { SectionList } from 'react-navigation';
-import { Card, ListItem, CardItem, Body, Text, Right, Icon, Button, Content, Spinner } from 'native-base';
-import React, { Component } from 'react';
+import { StyleSheet, View, Platform, SectionList, TouchableHighlight } from 'react-native';
+import { Card, Text, Icon, Button, Spinner } from 'native-base';
+import React from 'react';
 import moment from 'moment';
 import 'moment/locale/nb';
+
 import theme from '../../theme';
 
 moment.locale('nb');
 
-export default class EventList extends Component {
-  _renderItem = ({ item }) => (
-    <ListItem
-      button
+const _formatTime = (time) => {
+  return moment(time).format('llll');
+};
+
+const EventList = ({ eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading }) => {
+  const _renderItem = ({ item }) => (
+    <TouchableHighlight
       onPress={() => {
-        this._onPressItem(item);
+        showEvent(item);
       }}
       style={styles.listItem}
     >
-      <Body style={{ flex: 5 }}>
-        <Text style={styles.listItemTitle} numberOfLines={1}>
-          {item.title.decoded}
-        </Text>
-        <Text style={styles.listItemTime}>{this._formatTime(item.start_time)}</Text>
-      </Body>
-      <Right style={{ flex: 1 }}>
-        <Icon name="arrow-forward" />
-      </Right>
-    </ListItem>
+      <View>
+        <View style={{ flex: 5 }}>
+          <Text style={styles.listItemTitle} numberOfLines={1}>
+            {item.title.decoded}
+          </Text>
+          <Text style={styles.listItemTime}>{_formatTime(item.start_time)}</Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Icon name="arrow-forward" />
+        </View>
+      </View>
+    </TouchableHighlight>
   );
 
-  _renderSectionHeader = ({ section }) => {
+  const _renderSectionHeader = ({ section }) => {
     return (
-      <ListItem style={styles.sectionHeader}>
-        <Body>
+      <View style={styles.sectionHeader}>
+        <View>
           <Text style={styles.sectionTitle}>{section.title}</Text>
-        </Body>
-      </ListItem>
+        </View>
+      </View>
     );
   };
 
-  _renderFooter = () => {
-    if (!this.props.loading) {
+  const _renderFooter = () => {
+    if (!loading) {
       return null;
     }
 
@@ -51,52 +56,43 @@ export default class EventList extends Component {
     );
   };
 
-  _onPressItem = (item) => {
-    this.props.showEvent(item);
-  };
-
-  _formatTime(time) {
-    return moment(time).format('llll');
-  }
-
-  render() {
-    if (this.props.error) {
-      return (
-        <Content>
-          <Card style={{ margin: 4 }}>
-            <CardItem>
-              <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
-            </CardItem>
-            <CardItem>
-              <Button onPress={this.props.handleRefresh}>
-                <Text>Prøv igjen</Text>
-              </Button>
-            </CardItem>
-          </Card>
-        </Content>
-      );
-    }
-
+  if (error) {
     return (
-      <SectionList
-        sections={this.props.eventsSectioned}
-        renderItem={this._renderItem}
-        renderSectionHeader={this._renderSectionHeader}
-        keyExtractor={(item) => item.id}
-        refreshing={this.props.refreshing}
-        onRefresh={this.props.handleRefresh}
-        onEndReached={this.props.handleLoadMore}
-        onEndReachedThreshould={10}
-        initialNumToRender={10}
-        ListFooterComponent={this._renderFooter}
-        style={[styles.card, styles.list]}
-        ListHeaderComponent={() => {
-          return <View style={styles.listHeader} />;
-        }}
-      />
+      <View>
+        <Card style={{ margin: 4 }}>
+          <View>
+            <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
+          </View>
+          <View>
+            <Button onPress={handleRefresh}>
+              <Text>Prøv igjen</Text>
+            </Button>
+          </View>
+        </Card>
+      </View>
     );
   }
-}
+
+  return (
+    <SectionList
+      sections={eventsSectioned}
+      renderItem={_renderItem}
+      renderSectionHeader={_renderSectionHeader}
+      keyExtractor={(item) => item.id}
+      refreshing={refreshing}
+      onRefresh={handleRefresh}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshould={10}
+      initialNumToRender={10}
+      ListFooterComponent={_renderFooter}
+      style={[styles.card, styles.list]}
+      ListHeaderComponent={() => {
+        return <View style={styles.listHeader} />;
+      }}
+    />
+  );
+};
+export default EventList;
 
 const styles = StyleSheet.create({
   listItem: {
