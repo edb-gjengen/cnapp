@@ -6,11 +6,11 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 import EventListScreen from './screens/EventListScreen';
 import EventDetailScreen from './screens/EventDetailScreen';
-import UserRegisterScreen from './screens/UserRegisterScreen';
 
 import Membership from './modules/membership/Membership';
 import Login from './modules/login/Login';
 import AboutContainer from './modules/about/AboutContainer';
+import UserRegister from './modules/register/UserRegister';
 
 const EventStack = createNativeStackNavigator();
 const EventStackScreen = () => (
@@ -37,7 +37,7 @@ const UserStackScreen = () => (
     <UserStack.Screen name="Login" component={Login} options={{ title: 'Logg inn' }} />
     <UserStack.Screen
       name="UserRegister"
-      component={UserRegisterScreen}
+      component={UserRegister}
       options={{
         title: 'Bli medlem',
       }}

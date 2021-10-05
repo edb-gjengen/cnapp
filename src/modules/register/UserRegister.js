@@ -1,184 +1,179 @@
-import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Spinner, Button, Text, Icon, Toast } from 'native-base';
+import React, { useState, useEffect, useRef } from 'react';
+import { Container, Input, Spinner, Button, Text, Icon, Toast, FormControl } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import * as EmailValidator from 'email-validator';
 
 import theme from '../../theme';
+import useUserRegister from './useUserRegister';
 
-export default class UserRegister extends Component {
-  constructor(props) {
-    super(props);
+const UserRegister = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState(new Set());
+  const { isRegisteringUser, onRegisterPress } = useUserRegister();
 
-    this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
-      errors: {},
-      touched: new Set(),
-    };
-  }
+  const emailInputRef = useRef();
+  const lastNameInputRef = useRef();
+  const phoneInputRef = useRef();
+  const passwordInputRef = useRef();
 
-  validateForm(triggeredBy) {
-    const fieldNames = ['firstName', 'lastName', 'email', 'phoneNumber', 'password'];
+  const validateForm = (triggeredBy) => {
+    const values = { firstName, lastName, email, phoneNumber, password };
 
-    const errors = { ...this.state.errors };
-    const touched = new Set(this.state.touched).add(triggeredBy);
+    const freshErrors = { ...errors };
+    const freshTouched = new Set(touched).add(triggeredBy);
 
     /* No empty fields */
-    fieldNames.forEach((key) => {
-      const value = this.state[key];
+    Object.entries(values).forEach(([key, value]) => {
       if (value === '') {
-        errors[key] = 'kan ikke være tomt';
+        freshErrors[key] = 'kan ikke være tomt';
       } else if (key === 'email' && !EmailValidator.validate(value)) {
-        errors[key] = 'er ikke en gyldig e-post';
+        freshErrors[key] = 'er ikke en gyldig e-post';
       } else {
-        delete errors[key];
+        delete freshErrors[key];
       }
     });
+    setErrors(freshErrors);
+    setTouched(freshTouched);
+  };
 
-    this.setState({ errors, touched });
-  }
+  const fieldHasError = (field) => {
+    return touched.has(field) && field in errors;
+  };
 
-  fieldHasError(field) {
-    return this.state.touched.has(field) && field in this.state.errors;
-  }
+  const canSubmitForm = () => {
+    return Object.keys(errors).length === 0;
+  };
 
-  canSubmitForm() {
-    return Object.keys(this.state.errors).length === 0;
-  }
+  // useEffect(() => {
+  //   if (prevRegisterError !== registerError) {
+  //     setErrors(registerError);
+  //   }
+  // }, []);
 
-  firstNameInput() {
+  const showFieldError = (field) => {
+    if (!fieldHasError(field)) {
+      return null;
+    }
     return (
-      <Item error={this.fieldHasError('firstName')}>
-        <Label>Fornavn</Label>
+      <FormControl style={styles.errorText}>
+        <Text style={styles.errorMessage}>{errors[field]}</Text>
+      </FormControl>
+    );
+  };
+
+  const firstNameInput = () => {
+    return (
+      <FormControl isInvalid={fieldHasError('firstName')}>
+        <FormControl.Label>Fornavn</FormControl.Label>
         <Input
           autoFocus={true}
           returnKeyType="next"
-          onChangeText={(firstName) => {
-            this.setState({ firstName }, () => {
-              this.validateForm('firstName');
-            });
+          onChangeText={(value) => {
+            setFirstName(value);
+            validateForm('firstName');
           }}
           onSubmitEditing={() => {
-            this.lastNameInputRef._root.focus();
+            lastNameInputRef.current.focus();
           }}
-          value={this.state.firstName}
+          value={firstName}
         />
-        {this.fieldHasError('firstName') && <Icon name="close-circle" />}
-      </Item>
+        {fieldHasError('firstName') && <Icon name="close-circle" />}
+      </FormControl>
     );
-  }
+  };
 
-  lastNameInput() {
+  const lastNameInput = () => {
     return (
-      <Item error={this.fieldHasError('lastName')}>
-        <Label>Etternavn</Label>
+      <FormControl isInvalid={fieldHasError('lastName')}>
+        <FormControl.Label>Etternavn</FormControl.Label>
         <Input
-          ref={(ref) => {
-            this.lastNameInputRef = ref;
-          }}
+          ref={lastNameInputRef}
           returnKeyType="next"
-          onChangeText={(lastName) => {
-            this.setState({ lastName }, () => {
-              this.validateForm('lastName');
-            });
+          onChangeText={(value) => {
+            setLastName(value);
+            validateForm('lastName');
           }}
           onSubmitEditing={() => {
-            this.emailInputRef._root.focus();
+            emailInputRef.current.focus();
           }}
-          value={this.state.lastName}
+          value={lastName}
         />
-        {this.fieldHasError('lastName') && <Icon name="close-circle" />}
-      </Item>
+        {fieldHasError('lastName') && <Icon name="close-circle" />}
+      </FormControl>
     );
-  }
+  };
 
-  emailInput() {
+  const emailInput = () => {
     return (
-      <Item error={this.fieldHasError('email')}>
-        <Label>E-post</Label>
+      <FormControl isInvalid={fieldHasError('email')}>
+        <FormControl.Label>E-post</FormControl.Label>
         <Input
-          ref={(ref) => {
-            this.emailInputRef = ref;
-          }}
+          ref={emailInputRef}
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
           returnKeyType="next"
-          onChangeText={(email) => {
-            this.setState({ email }, () => {
-              this.validateForm('email');
-            });
+          onChangeText={(value) => {
+            setEmail(value);
+            validateForm('email');
           }}
           onSubmitEditing={() => {
-            this.phoneInputRef._root.focus();
+            phoneInputRef.current.focus();
           }}
-          value={this.state.email}
+          value={email}
         />
-        {this.fieldHasError('email') && <Icon name="close-circle" />}
-      </Item>
+        {fieldHasError('email') && <Icon name="close-circle" />}
+      </FormControl>
     );
-  }
+  };
 
-  phoneNumberInput() {
+  const phoneNumberInput = () => {
     return (
-      <Item error={this.fieldHasError('phoneNumber')}>
-        <Label>Mobilnummer</Label>
+      <FormControl isInvalid={fieldHasError('phoneNumber')}>
+        <FormControl.Label>Mobilnummer</FormControl.Label>
         <Input
-          ref={(ref) => {
-            this.phoneInputRef = ref;
-          }}
+          ref={phoneInputRef}
           returnKeyType="next"
           keyboardType="phone-pad"
-          onChangeText={(phoneNumber) => {
-            this.setState({ phoneNumber }, () => {
-              this.validateForm('phoneNumber');
-            });
+          onChangeText={(value) => {
+            setPhoneNumber(value);
+            validateForm('phoneNumber');
           }}
           onSubmitEditing={() => {
-            this.passwordInputRef._root.focus();
+            passwordInputRef.current.focus();
           }}
-          value={this.state.phoneNumber}
+          value={phoneNumber}
         />
-        {this.fieldHasError('phoneNumber') && <Icon name="close-circle" />}
-      </Item>
+        {fieldHasError('phoneNumber') && <Icon name="close-circle" />}
+      </FormControl>
     );
-  }
-
-  passwordInput() {
+  };
+  const passwordInput = () => {
     return (
-      <Item error={this.fieldHasError('password')}>
-        <Label>Passord</Label>
+      <FormControl isInvalid={fieldHasError('password')}>
+        <FormControl.Label>Passord</FormControl.Label>
         <Input
-          ref={(ref) => {
-            this.passwordInputRef = ref;
-          }}
+          ref={passwordInputRef}
           secureTextEntry={true}
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={(password) => {
-            this.setState({ password }, () => {
-              this.validateForm('password');
-            });
+          onChangeText={(value) => {
+            setPassword(value);
+            validateForm('password');
           }}
-          onSubmitEditing={this.onRegisterPress}
-          value={this.state.password}
+          onSubmitEditing={onRegisterPress}
+          value={password}
         />
-        {this.fieldHasError('password') && <Icon name="close-circle" />}
-      </Item>
+        {fieldHasError('password') && <Icon name="close-circle" />}
+      </FormControl>
     );
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.registerError !== nextProps.registerError) {
-      this.setState({ errors: nextProps.registerError });
-    }
-  }
-
-  showNonFieldError = () => {
-    const errors = this.props.registerError;
+  };
+  const showNonFieldError = () => {
     if (Object.keys(errors).length !== 0 && 'non_field_errors' in errors) {
       const err = errors.non_field_errors;
       const errorFormatted = err ? err[0] : 'Kunne ikke registrere bruker, prøv igjen...';
@@ -201,50 +196,8 @@ export default class UserRegister extends Component {
     return <View style={styles.errorBox} />;
   };
 
-  showFieldError = (field) => {
-    if (!this.fieldHasError(field)) {
-      return null;
-    }
-    return (
-      <Item style={styles.errorText}>
-        <Text style={styles.errorMessage}>{this.state.errors[field]}</Text>
-      </Item>
-    );
-  };
-
-  showSpinner = () => {
-    if (!this.props.isRegisteringUser) {
-      return null;
-    }
-    return <Spinner color="#f58220" />;
-  };
-
-  render() {
-    return (
-      <Container style={styles.container}>
-        <Content keyboardShouldPersistTaps="always">
-          <Form style={styles.card}>
-            {this.firstNameInput()}
-            {this.showFieldError('firstName')}
-            {this.lastNameInput()}
-            {this.showFieldError('lastName')}
-            {this.emailInput()}
-            {this.showFieldError('email')}
-            {this.phoneNumberInput()}
-            {this.showFieldError('phoneNumber')}
-            {this.passwordInput()}
-            {this.showFieldError('password')}
-            {this.showNonFieldError()}
-            {this.registerbutton()}
-            {this.showSpinner()}
-          </Form>
-        </Content>
-      </Container>
-    );
-  }
-
-  onRegisterPress = () => {
-    if (!this.canSubmitForm()) {
+  const onSubmit = () => {
+    if (!canSubmitForm()) {
       Toast.show({
         text: 'Noen av feltene er ikke fylt ut riktig',
         position: 'bottom',
@@ -254,25 +207,41 @@ export default class UserRegister extends Component {
       return;
     }
 
-    this.props.onRegisterPress(
-      this.state.firstName,
-      this.state.lastName,
-      this.state.email,
-      this.state.phoneNumber,
-      this.state.password
-    );
+    onRegisterPress(firstName, lastName, email, phoneNumber, password);
   };
 
-  registerbutton() {
-    const isDisabled = this.state.touched.size === 0 || this.props.isRegisteringUser || !this.canSubmitForm();
+  const registerbutton = () => {
+    const isDisabled = touched.size === 0 || isRegisteringUser || !canSubmitForm();
 
     return (
-      <Button full disabled={isDisabled} onPress={this.onRegisterPress} style={styles.registerButton}>
+      <Button full disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
         <Text>Registrer meg</Text>
       </Button>
     );
-  }
-}
+  };
+
+  return (
+    <Container style={styles.container}>
+      <View style={styles.card}>
+        {firstNameInput()}
+        {showFieldError('firstName')}
+        {lastNameInput()}
+        {showFieldError('lastName')}
+        {emailInput()}
+        {showFieldError('email')}
+        {phoneNumberInput()}
+        {showFieldError('phoneNumber')}
+        {passwordInput()}
+        {showFieldError('password')}
+        {showNonFieldError()}
+        {registerbutton()}
+        {isRegisteringUser && <Spinner color="#f58220" />}
+      </View>
+    </Container>
+  );
+};
+export default UserRegister;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
