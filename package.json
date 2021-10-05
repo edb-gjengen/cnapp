@@ -28,6 +28,7 @@
     "native-base": "^3.2.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
+    "react-hook-form": "^7.17.1",
     "react-is": "^17.0.2",
     "react-native": "0.66.0-rc.4",
     "react-native-confetti": "^0.1.0",
