@@ -1,8 +1,8 @@
 import React from 'react';
-import { Container, Input, Spinner, Button, Text, Icon, Toast, FormControl } from 'native-base';
+import { Input, Spinner, Button, Text, WarningOutlineIcon, FormControl, ScrollView } from 'native-base';
 import { StyleSheet, View } from 'react-native';
 import * as EmailValidator from 'email-validator';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
 import theme from '../../theme';
 import useUserRegister from './useUserRegister';
@@ -13,7 +13,7 @@ const FormInput = ({
   name,
   label,
   rules = {
-    required: true,
+    required: 'kan ikke være tomt.',
   },
   returnKeyType = 'next',
   ...rest
@@ -22,15 +22,21 @@ const FormInput = ({
     <Controller
       control={control}
       rules={rules}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <FormControl isInvalid={errors.firstName}>
+      render={({ field: { onChange, onBlur, value, ref } }) => (
+        <FormControl isInvalid={Boolean(errors[name])}>
           <FormControl.Label>{label}</FormControl.Label>
-          <Input returnKeyType={returnKeyType} onChangeText={onChange} onBlur={onBlur} value={value} {...rest} />
+          <Input
+            ref={ref}
+            returnKeyType={returnKeyType}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            value={value}
+            {...rest}
+          />
           {errors[name] && (
-            <View>
-              <Text>kan ikke være tomt.</Text>
-              <Icon name="close-circle" />
-            </View>
+            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+              <Text>{errors[name].message}</Text>
+            </FormControl.ErrorMessage>
           )}
         </FormControl>
       )}
@@ -47,59 +53,50 @@ const Registerbutton = ({ isDisabled, onPress }) => (
 );
 
 const NonFieldErrors = ({ errors }) => {
-  if (Object.keys(errors).length !== 0 && 'non_field_errors' in errors) {
-    const err = errors.non_field_errors;
-    const errorFormatted = err ? err[0] : 'Kunne ikke registrere bruker, prøv igjen...';
-    return (
-      <View style={styles.errorBox}>
-        <Text style={styles.errorMessage}>{errorFormatted}</Text>
-      </View>
-    );
+  if (!Object.keys(errors).length || !['non_field_errors', 'detail'].some((errorField) => errorField in errors)) {
+    return null;
   }
-  if (Object.keys(errors).length !== 0 && 'detail' in errors) {
-    const err = errors.detail;
-    const errorFormatted = err || 'Kunne ikke registrere bruker, prøv igjen...';
-    return (
-      <View style={styles.errorBox}>
-        <Text style={styles.errorMessage}>{errorFormatted}</Text>
-      </View>
-    );
+  let errorFormatted;
+  if ('non_field_errors' in errors) {
+    errorFormatted = errors.non_field_errors?.[0];
+  } else if ('detail' in errors) {
+    errorFormatted = errors.detail;
   }
+  if (!errorFormatted) errorFormatted = 'Kunne ikke registrere bruker, prøv igjen...';
 
-  return <View style={styles.errorBox} />;
+  return (
+    <View style={styles.errorBox}>
+      <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+        <Text>{errorFormatted}</Text>
+      </FormControl.ErrorMessage>
+    </View>
+  );
 };
 
 const UserRegister = () => {
-  const { isRegisteringUser, onRegisterPress } = useUserRegister();
-  // TODO: email validation
-  // TODO: focus next field
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isDirty, isValid },
-  } = useForm();
-  const isDisabled = !isDirty || isRegisteringUser || !isValid;
-  const onSubmit = (data) => {
-    console.log(data);
-    // if (!canSubmitForm()) {
-    //   Toast.show({
-    //     text: 'Noen av feltene er ikke fylt ut riktig',
-    //     position: 'bottom',
-    //     buttonText: 'OK',
-    //     duration: 1500,
-    //   });
-    //   return;
-    // }
-
-    // onRegisterPress(firstName, lastName, email, phoneNumber, password);
-  };
+  const { isRegisteringUser, onSubmit, control, isValid, errors, setFocus } = useUserRegister();
+  const isDisabled = isRegisteringUser || !isValid;
+  // TODO: validate on type
+  // TODO: highlight errorfields
 
   return (
-    <Container style={styles.container}>
+    <ScrollView>
       <View style={styles.card}>
-        <FormInput name="firstName" label="Fornavn" control={control} errors={errors} autoFocus={true} />
-        <FormInput name="lastName" label="Etternavn" control={control} errors={errors} />
+        <FormInput
+          name="firstName"
+          label="Fornavn"
+          control={control}
+          errors={errors}
+          autoFocus={true}
+          onSubmitEditing={() => setFocus('lastName')}
+        />
+        <FormInput
+          name="lastName"
+          label="Etternavn"
+          control={control}
+          errors={errors}
+          onSubmitEditing={() => setFocus('email')}
+        />
         <FormInput
           name="email"
           label="E-post"
@@ -108,8 +105,20 @@ const UserRegister = () => {
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
+          rules={{
+            required: 'kan ikke være tomt.',
+            validate: (v) => EmailValidator.validate(v) || 'er ikke en gyldig e-post',
+          }}
+          onSubmitEditing={() => setFocus('phoneNumber')}
         />
-        <FormInput name="phoneNumber" label="Mobilnummer" control={control} errors={errors} keyboardType="phone-pad" />
+        <FormInput
+          name="phoneNumber"
+          label="Mobilnummer"
+          control={control}
+          errors={errors}
+          keyboardType="phone-pad"
+          onSubmitEditing={() => setFocus('password')}
+        />
         <FormInput
           name="password"
           label="Passord"
@@ -118,12 +127,14 @@ const UserRegister = () => {
           secureTextEntry={true}
           autoCapitalize="none"
           autoCorrect={false}
+          returnKeyType="send"
+          onSubmitEditing={onSubmit}
         />
         <NonFieldErrors errors={errors} />
-        <Registerbutton isDisabled={isDisabled} onPress={handleSubmit(onSubmit)} />
+        <Registerbutton isDisabled={isDisabled} onPress={onSubmit} />
         {isRegisteringUser && <Spinner color="#f58220" />}
       </View>
-    </Container>
+    </ScrollView>
   );
 };
 
@@ -145,14 +156,5 @@ const styles = StyleSheet.create({
   errorBox: {
     marginVertical: 10,
   },
-  errorMessage: {
-    textAlign: 'center',
-    color: theme.colors.danger,
-    fontSize: 14,
-  },
   card: theme.card,
-  errorText: {
-    paddingTop: 2,
-    paddingBottom: 12,
-  },
 });

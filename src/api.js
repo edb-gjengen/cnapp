@@ -82,7 +82,7 @@ export function requestUserData(authToken) {
   };
 }
 
-export function requestRegisterUser(firstName, lastName, email, phoneNumber, password) {
+export function requestRegisterUser({ firstName, lastName, email, phoneNumber, password }) {
   return (dispatch) => {
     dispatch(registerUserRequest());
 

@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Toast } from 'native-base';
+import { useForm } from 'react-hook-form';
 
 import { usePrevious } from '../../hooks';
 import { requestRegisterUser } from '../../api';
@@ -15,8 +17,26 @@ const useUserRegister = () => {
   }));
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
-  const onRegisterPress = () => (firstName, lastName, email, phoneNumber, password) =>
-    dispatch(requestRegisterUser(firstName, lastName, email, phoneNumber, password));
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+    setFocus,
+  } = useForm();
+  const onSubmit = handleSubmit((values) => {
+    if (!isValid) {
+      Toast.show({
+        text: 'Noen av feltene er ikke fylt ut riktig',
+        position: 'bottom',
+        buttonText: 'OK',
+        duration: 1500,
+      });
+      return;
+    }
+
+    dispatch(requestRegisterUser(values));
+  });
 
   useEffect(() => {
     if (isAuthenticatedPrev !== isAuthenticated && isAuthenticated) {
@@ -24,6 +44,6 @@ const useUserRegister = () => {
     }
   }, [isAuthenticatedPrev, isAuthenticated]);
 
-  return { onRegisterPress, isRegisteringUser, registerError };
+  return { onSubmit, isRegisteringUser, registerError, control, setFocus, errors };
 };
 export default useUserRegister;
