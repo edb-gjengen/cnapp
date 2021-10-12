@@ -1,5 +1,5 @@
-import { StyleSheet, View, Platform, SectionList, TouchableHighlight } from 'react-native';
-import { Card, Text, Icon, Button, Spinner } from 'native-base';
+import { StyleSheet, View, Platform, SectionList, TouchableOpacity } from 'react-native';
+import { Card, Text, Button, Spinner, ArrowForwardIcon, HStack } from 'native-base';
 import React from 'react';
 import moment from 'moment';
 import 'moment/locale/nb';
@@ -14,13 +14,13 @@ const _formatTime = (time) => {
 
 const EventList = ({ eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading }) => {
   const _renderItem = ({ item }) => (
-    <TouchableHighlight
+    <TouchableOpacity
       onPress={() => {
         showEvent(item);
       }}
       style={styles.listItem}
     >
-      <View>
+      <HStack>
         <View style={{ flex: 5 }}>
           <Text style={styles.listItemTitle} numberOfLines={1}>
             {item.title.decoded}
@@ -28,18 +28,16 @@ const EventList = ({ eventsSectioned, refreshing, handleRefresh, handleLoadMore,
           <Text style={styles.listItemTime}>{_formatTime(item.start_time)}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Icon name="arrow-forward" />
+          <ArrowForwardIcon size={4} color="#999999" marginTop={3} />
         </View>
-      </View>
-    </TouchableHighlight>
+      </HStack>
+    </TouchableOpacity>
   );
 
   const _renderSectionHeader = ({ section }) => {
     return (
       <View style={styles.sectionHeader}>
-        <View>
-          <Text style={styles.sectionTitle}>{section.title}</Text>
-        </View>
+        <Text style={styles.sectionTitle}>{section.title}</Text>
       </View>
     );
   };
@@ -97,7 +95,9 @@ export default EventList;
 const styles = StyleSheet.create({
   listItem: {
     backgroundColor: 'white',
-    marginLeft: 0,
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   listItemTitle: {
     fontSize: 14,
@@ -108,12 +108,12 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     backgroundColor: 'white',
-    marginLeft: 0,
     ...Platform.select({
       ios: { marginBottom: -8 },
     }),
-    paddingBottom: 0,
-    borderBottomWidth: 0,
+    paddingTop: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   sectionTitle: {
     fontSize: 16,

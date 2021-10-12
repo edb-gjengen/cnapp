@@ -8,8 +8,8 @@ import useLogin from './useLogin';
 import FormInput from '../../components/FormInput';
 import FormErrors from '../../components/FormErrors';
 
-const Login = ({ onLogin }) => {
-  const { isLoggingIn, errors, control, setFocus, onSubmit } = useLogin(onLogin);
+const Login = () => {
+  const { isLoggingIn, errors, control, setFocus, onSubmit } = useLogin();
 
   return (
     <ScrollView>
