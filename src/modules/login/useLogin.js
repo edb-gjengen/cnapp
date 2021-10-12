@@ -1,24 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import { requestLogin } from '../../api';
 
 const useLogin = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
-
-  const onLoginPress = () => {
-    dispatch(requestLogin(email, password));
-  };
 
   const { isAuthenticated, isLoggingIn, loginError } = useSelector((store) => ({
     isAuthenticated: store.isAuthenticated,
     isLoggingIn: store.isLoggingIn,
     loginError: store.loginError,
   }));
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setFocus,
+  } = useForm();
+
+  const onSubmit = handleSubmit(({ email, password }) => {
+    dispatch(requestLogin(email, password));
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,7 +33,7 @@ const useLogin = () => {
     }
   }, [isAuthenticated]);
 
-  return { email, setEmail, password, setPassword, onLoginPress, isLoggingIn, loginError };
+  return { onSubmit, isLoggingIn, control, setFocus, errors: { ...errors, ...loginError } };
 };
 
 export default useLogin;

@@ -8,7 +8,7 @@ import rootReducer from './reducers';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['isLoggingIn', 'isFetchingUserData', 'isRegisteringUser', 'isChargingMembership'],
+  blacklist: ['isLoggingIn', 'isFetchingUserData', 'isRegisteringUser', 'isChargingMembership', 'loginError'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
