@@ -32,7 +32,7 @@
     "react-is": "^17.0.2",
     "react-native": "0.68.2",
     "react-native-confetti": "^0.1.0",
-    "react-native-config": "^0.11.7",
+    "react-native-config": "^1.4.6",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-htmlview": "^0.14.0",
     "react-native-safe-area-context": "^3.3.2",

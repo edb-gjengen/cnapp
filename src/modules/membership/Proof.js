@@ -145,7 +145,6 @@ const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
   };
 
   if (!user) {
-    console.log('🔥', user);
     return (
       <View>
         <Text>No user!</Text>
