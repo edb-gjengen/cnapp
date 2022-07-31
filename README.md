@@ -1,4 +1,9 @@
+# dusken-client
+
+The mobile app for Chateau Neuf using React Native.
+
 ## Install
+
     # See https://facebook.github.io/react-native/docs/getting-started.html#content
     yarn
     cd ios; pod install  # ios only
@@ -6,23 +11,25 @@
     # Environment settings
     cp env-example .env
 
-    react-native start
-    react-native run-android
+    yarn start
+    yarn android
 
 ## Development
+
     # Improve compile times
     touch ~/.gradle/gradle.properties && echo -e "org.gradle.daemon=true\norg.gradle.jvmargs=-Xmx2048M" >> ~/.gradle/gradle.properties
     # Run android emulator (first avd)
     yarn emulator
-    # Make sure you have hw.keyboard=yes in your avd config.ini (in $HOME/.android/avd/.../) for reloading when pressing R twice to work.
 
 ### Linking native dependencies
+
 We use a Podfile to install the stripe ios library, but not for anything else.
 Before running any `react-native link` commands, rename `ios/Podfile` to something else before running, then rename the file back when you are done.
 This is to let the react-native CLI know we use the Dusken xcode project and not cocoapods for managing all other dependencies.
 This avoids alot of issues resulting from poor cocoapods support by react native.
 
 ## Prepare release build
+
     # Fastlane
     bundle update
 
@@ -32,6 +39,7 @@ This avoids alot of issues resulting from poor cocoapods support by react native
     cp android/sentry.properties-example android/sentry.properties
 
 ## Create release build (Android)
+
     # Aquire the keystore and put it in android/app/dusken-client.keystore
 
     # Put these properties in ~/.gradle/gradle.properties along with the correct passwords
@@ -50,11 +58,16 @@ This avoids alot of issues resulting from poor cocoapods support by react native
     yarn release:android
 
 ## Create release build (ios)
+
 We use fastlane and certificate management via fastlane match. Ask nikolai@studentersamfundet.no for access to the certs.
+
 ## Libraries
 
-We use https://nativebase.io/ for generic UI components
+We use <https://nativebase.io/> for generic UI components
 
+## TODO upgrade
 
-## TODO upgrade:
- - `@react-native-community/eslint-config"`
+- Make stripe work again
+- Fix icons
+- Fix colors in native base theme
+- Refactor EventDetail and EventList to functional components
