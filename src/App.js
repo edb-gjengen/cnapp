@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Config from 'react-native-config';
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
-// import { StripeProvider } from '@stripe/stripe-react-native';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 import Dusken from './Dusken';
 import { store, persistor } from './reduxStore';
@@ -13,16 +13,21 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-// <StripeProvider publishableKey={Config.STRIPE_PUBLISHABLE_KEY || ''}>
 export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ApolloProvider client={apolloClient}>
-          <Dusken />
+          {/* FIXME: Read urlScheme and merchantIdentifier from .Config */}
+          <StripeProvider
+            publishableKey={Config.STRIPE_PUBLISHABLE_KEY || ''}
+            urlScheme="no-neuf-chateau"
+            merchantIdentifier="merchant.com.dusken"
+          >
+            <Dusken />
+          </StripeProvider>
         </ApolloProvider>
       </PersistGate>
     </Provider>
   );
 }
-// </StripeProvider>
