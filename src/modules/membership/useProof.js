@@ -1,15 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import stripe from 'tipsi-stripe';
-import Config from 'react-native-config';
 import { gql, useQuery } from '@apollo/client';
 
 import { requestMembershipCharge } from '../../api';
-
-// TODO: switch to official stripe client
-// stripe.setOptions({
-//   publishableKey: Config.STRIPE_PUBLISHABLE_KEY || '',
-// });
 
 const PROOF_QUERY = gql`
   {

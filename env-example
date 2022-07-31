@@ -3,4 +3,3 @@ DUSKEN_API_URL=https://galtinn.neuf.no
 DUSKEN_FORGOT_PASSWORD_URL=https://galtinn.neuf.no/auth/password_reset/
 SENTRY_DSN=
 STRIPE_PUBLISHABLE_KEY=
-SLACK_URL=
