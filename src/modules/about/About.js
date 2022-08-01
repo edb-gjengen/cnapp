@@ -84,33 +84,36 @@ const About = () => (
         Det Norske Studentersamfund{'\n'}Slemdalsveien 15, 0369 Oslo
       </Text>
       <View style={styles.section}>
-        <Button iconLeft onPress={openMap}>
-          <SimpleIcon name="map" style={styles.icon} />
+        <Button leftIcon={<SimpleIcon name="map" style={styles.icon} />} onPress={openMap}>
           <NBText> Vis i kart</NBText>
         </Button>
       </View>
       <Text style={styles.header}>Åpningstider</Text>
       <View style={styles.section}>
-        <Button iconLeft onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}>
-          <SimpleIcon name="clock" style={styles.icon} />
-          <NBText>Vis Åpningstider</NBText>
+        <Button
+          leftIcon={<SimpleIcon name="clock" style={styles.icon} />}
+          onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}
+        >
+          <NBText>Vis åpningstider</NBText>
         </Button>
       </View>
       <Text style={styles.header}>Ta kontakt</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <View>
-          <Button iconLeft onPress={() => Linking.openURL('tel:+4794430002')} style={{ marginHorizontal: 10 }}>
-            <SimpleIcon name="phone" style={styles.icon} />
+          <Button
+            leftIcon={<SimpleIcon name="phone" style={styles.icon} />}
+            onPress={() => Linking.openURL('tel:+4794430002')}
+            style={{ marginHorizontal: 10 }}
+          >
             <NBText>Ring</NBText>
           </Button>
         </View>
         <View>
           <Button
-            iconLeft
+            leftIcon={<SimpleIcon name="envelope" style={styles.icon} />}
             onPress={() => Linking.openURL('mailto:ledelsen@studentersamfundet.no')}
             style={{ marginHorizontal: 10 }}
           >
-            <SimpleIcon name="envelope" style={styles.icon} />
             <NBText>Send e-post</NBText>
           </Button>
         </View>
