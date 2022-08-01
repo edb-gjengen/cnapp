@@ -9,7 +9,7 @@ import EventDetail from './modules/events/EventDetail';
 
 import Membership from './modules/membership/Membership';
 import Login from './modules/login/Login';
-import AboutContainer from './modules/about/AboutContainer';
+import About from './modules/about/About';
 import UserRegister from './modules/register/UserRegister';
 
 const EventStack = createNativeStackNavigator();
@@ -69,7 +69,7 @@ const Navigation = () => (
       />
       <HomeTabs.Screen
         name="About"
-        component={AboutContainer}
+        component={About}
         options={{
           title: 'Om oss',
           tabBarIcon: ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />,

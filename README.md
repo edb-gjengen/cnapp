@@ -67,7 +67,9 @@ We use <https://nativebase.io/> for generic UI components
 
 ## TODO upgrade
 
-- Refactor EventDetail and EventList to functional components
 - Make stripe work again
-- Fix icons
 - Fix colors in native base theme
+- UX testy testy
+- build android
+- ios bugfixes
+- ios build
