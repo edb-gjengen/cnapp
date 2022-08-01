@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-import EventListScreen from './screens/EventListScreen';
+import EventList from './modules/events/EventList';
 import EventDetail from './modules/events/EventDetail';
 
 import Membership from './modules/membership/Membership';
@@ -17,7 +17,7 @@ const EventStackScreen = () => (
   <EventStack.Navigator initialRouteName="EventList">
     <EventStack.Screen
       name="EventList"
-      component={EventListScreen}
+      component={EventList}
       options={{
         title: 'Program',
       }}

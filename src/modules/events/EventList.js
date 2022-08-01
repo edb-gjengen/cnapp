@@ -4,6 +4,7 @@ import React from 'react';
 import moment from 'moment';
 import 'moment/locale/nb';
 
+import useEventList from './useEventList';
 import theme from '../../theme';
 
 moment.locale('nb');
@@ -12,8 +13,16 @@ const _formatTime = (time) => {
   return moment(time).format('llll');
 };
 
-const EventList = ({ eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading }) => {
-  const _renderItem = ({ item }) => (
+const renderSectionHeader = ({ section }) => (
+  <View style={styles.sectionHeader}>
+    <Text style={styles.sectionTitle}>{section.title}</Text>
+  </View>
+);
+
+const EventList = () => {
+  const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading } = useEventList();
+
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
         showEvent(item);
@@ -34,25 +43,12 @@ const EventList = ({ eventsSectioned, refreshing, handleRefresh, handleLoadMore,
     </TouchableOpacity>
   );
 
-  const _renderSectionHeader = ({ section }) => {
-    return (
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{section.title}</Text>
-      </View>
-    );
-  };
-
-  const _renderFooter = () => {
-    if (!loading) {
-      return null;
-    }
-
-    return (
+  const Footer = () =>
+    !loading && (
       <View style={{ paddingVertical: 20 }}>
         <Spinner color="#f58220" />
       </View>
     );
-  };
 
   if (error) {
     return (
@@ -74,15 +70,15 @@ const EventList = ({ eventsSectioned, refreshing, handleRefresh, handleLoadMore,
   return (
     <SectionList
       sections={eventsSectioned}
-      renderItem={_renderItem}
-      renderSectionHeader={_renderSectionHeader}
+      renderItem={renderItem}
+      renderSectionHeader={renderSectionHeader}
       keyExtractor={(item) => item.id}
       refreshing={refreshing}
       onRefresh={handleRefresh}
       onEndReached={handleLoadMore}
       onEndReachedThreshould={10}
       initialNumToRender={10}
-      ListFooterComponent={_renderFooter}
+      ListFooterComponent={Footer}
       style={[styles.card, styles.list]}
       ListHeaderComponent={() => {
         return <View style={styles.listHeader} />;
