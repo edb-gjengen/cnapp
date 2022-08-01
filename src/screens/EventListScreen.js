@@ -7,8 +7,8 @@ const EventListScreen = () => {
   const { navigate } = useNavigation();
   return (
     <EventListContainer
-      showEvent={(item) => {
-        navigate('EventDetail', { item });
+      showEvent={(event) => {
+        navigate('EventDetail', { event });
       }}
     />
   );

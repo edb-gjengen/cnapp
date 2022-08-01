@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 import EventListScreen from './screens/EventListScreen';
-import EventDetailScreen from './screens/EventDetailScreen';
+import EventDetail from './modules/events/EventDetail';
 
 import Membership from './modules/membership/Membership';
 import Login from './modules/login/Login';
@@ -24,8 +24,8 @@ const EventStackScreen = () => (
     />
     <EventStack.Screen
       name="EventDetail"
-      component={EventDetailScreen}
-      options={({ route }) => ({ title: route.params.item.title.decoded })}
+      component={EventDetail}
+      options={({ route }) => ({ title: route.params.event.title.decoded })}
     />
   </EventStack.Navigator>
 );

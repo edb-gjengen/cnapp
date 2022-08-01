@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableOpacity } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 import moment from 'moment';
@@ -10,230 +10,192 @@ moment.locale('nb');
 
 const CHATEAU_NEUF_ADDRESS = 'Chateau Neuf, Slemdalsveien 15, 0369 Oslo';
 
-export default class EventDetail extends Component {
-  _formatTime(time) {
-    return moment(time).format('HH:mm');
+const FORMAT_TIME = 'HH:mm';
+const FORMAT_MONTH = 'MMM';
+const FORMAT_DAY = 'DD.';
+const FORMAT_LOCAL_DAY = 'ddd';
+const FORMAT_YEAR = 'YYYY';
+
+const formatRelative = (time) => moment(time).fromNow();
+
+const format = (time, formatString = FORMAT_TIME) => moment(time).format(formatString);
+
+const formatTicketText = (event) => {
+  /* FIXME: This should be handled by API */
+  let regularPrice = '';
+  let memberPrice = '';
+  if (event.price_regular === '0') {
+    event.price_regular = 'Gratis';
+  }
+  if (event.price_member === '0') {
+    event.price_member = 'Gratis';
+  }
+  if (event.price_regular !== 'Gratis') {
+    regularPrice = ' kr';
+  }
+  if (event.price_member !== 'Gratis') {
+    memberPrice = ' kr';
   }
 
-  _formatMonth(time) {
-    return moment(time).format('MMM');
+  let text = '';
+  if (event.price_regular && event.price_member) {
+    text = `Pris: ${event.price_regular}${regularPrice} / Medlemmer: ${event.price_member}${memberPrice}`;
+  } else if (event.price_regular) {
+    text = `Pris: ${event.price_regular}${regularPrice}`;
+  } else if (event.price_member) {
+    text = `Pris (Medlemmer): ${event.price_member}${memberPrice}`;
+  } else {
+    return '';
+  }
+  return text;
+};
+
+const onFacebookUrlPress = (link) => {
+  const fbEventPattern = /https?:\/\/www\.facebook\.com\/events\/(\d+)\/?/i;
+  const matches = fbEventPattern.exec(link);
+  let iosURL = link;
+  if (matches && matches.length) {
+    iosURL = `fb://event/?id=${matches[1]}`;
+  }
+  const url = Platform.select({
+    ios: iosURL,
+    android: link,
+  });
+  Linking.canOpenURL(url)
+    .then((supported) => {
+      if (!supported) {
+        return Linking.openURL(link);
+      }
+      return Linking.openURL(url);
+    })
+    .catch((err) => console.error('An error occurred', err));
+};
+
+const onLocationPress = (venue) => {
+  if (venue !== 'Annetsteds') {
+    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
+  }
+};
+
+const VenueLocation = ({ venue }) => (venue !== 'Annetsteds' ? CHATEAU_NEUF_ADDRESS : 'Ukjent adresse');
+
+const PriceAndTicket = ({ event }) => {
+  const text = formatTicketText(event);
+
+  if (text === '') {
+    return null;
   }
 
-  _formatDay(time) {
-    return moment(time).format('DD.');
-  }
-
-  _formatLocalDay(time) {
-    return moment(time).format('ddd');
-  }
-
-  _formatYear(time) {
-    return moment(time).format('YYYY');
-  }
-
-  _formatRelative(time) {
-    return moment(time).fromNow();
-  }
-
-  _formatLocation() {
-    if (this.props.item.venue !== 'Annetsteds') {
-      return CHATEAU_NEUF_ADDRESS;
-    }
-    return 'Ukjent adresse';
-  }
-
-  _formatTicketText() {
-    /* FIXME: This should be handled by API */
-    const { item } = this.props;
-    let regularPrice = '';
-    let memberPrice = '';
-    if (item.price_regular === '0') {
-      item.price_regular = 'Gratis';
-    }
-    if (item.price_member === '0') {
-      item.price_member = 'Gratis';
-    }
-    if (item.price_regular !== 'Gratis') {
-      regularPrice = ' kr';
-    }
-    if (item.price_member !== 'Gratis') {
-      memberPrice = ' kr';
-    }
-
-    let text = '';
-    if (item.price_regular && item.price_member) {
-      text = `Pris: ${item.price_regular}${regularPrice} / Medlemmer: ${item.price_member}${memberPrice}`;
-    } else if (item.price_regular) {
-      text = `Pris: ${item.price_regular}${regularPrice}`;
-    } else if (item.price_member) {
-      text = `Pris (Medlemmer): ${item.price_member}${memberPrice}`;
-    } else {
-      return '';
-    }
-    return text;
-  }
-
-  onTicketUrlPress(link) {
-    Linking.openURL(link);
-  }
-
-  onFacebookUrlPress(link) {
-    const fbEventPattern = /https?:\/\/www\.facebook\.com\/events\/(\d+)\/?/i;
-    const matches = fbEventPattern.exec(link);
-    let iosURL = link;
-    if (matches && matches.length) {
-      iosURL = `fb://event/?id=${matches[1]}`;
-    }
-    const url = Platform.select({
-      ios: iosURL,
-      android: link,
-    });
-    Linking.canOpenURL(url)
-      .then((supported) => {
-        if (!supported) {
-          return Linking.openURL(link);
-        }
-        return Linking.openURL(url);
-      })
-      .catch((err) => console.error('An error occurred', err));
-  }
-
-  onLocationPress(venue) {
-    if (venue !== 'Annetsteds') {
-      Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
-    }
-  }
-
-  showPriceAndTicket() {
-    const { item } = this.props;
-    const text = this._formatTicketText();
-
-    if (text === '') {
-      return null;
-    }
-
-    if (item.ticket_url) {
-      return (
-        <TouchableOpacity style={styles.metaInner} onPress={() => this.onTicketUrlPress(item.ticket_url)}>
-          <View style={styles.metaIcon}>
-            <Icon name="card" style={styles.icons} />
-          </View>
-          <View style={{ flexDirection: 'column' }}>
-            <Text style={styles.metaText}>{text}</Text>
-            <Text style={styles.metaSubtitle}>Kjøp billett</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    }
-
+  if (event.ticket_url) {
     return (
-      <View style={styles.metaInner}>
+      <TouchableOpacity style={styles.metaInner} onPress={() => Linking.openURL(event.ticket_url)}>
         <View style={styles.metaIcon}>
           <Icon name="card" style={styles.icons} />
         </View>
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.metaText}>{text}</Text>
-          <Text style={styles.metaSubtitle}>Billett i døra</Text>
-        </View>
-      </View>
-    );
-  }
-
-  showFacebutton() {
-    const { item } = this.props;
-    if (!item.facebook_url) {
-      return null;
-    }
-
-    return (
-      <TouchableOpacity onPress={() => this.onFacebookUrlPress(item.facebook_url)} style={styles.metaInner}>
-        <View style={[styles.metaIcon, { marginTop: 0 }]}>
-          <Icon name="logo-facebook" style={styles.icons} />
-        </View>
-        <View>
-          <Text style={[styles.metaText, { paddingTop: 2 }]}>På Facebook</Text>
+          <Text style={styles.metaSubtitle}>Kjøp billett</Text>
         </View>
       </TouchableOpacity>
     );
   }
 
-  showImage() {
-    const { item } = this.props;
+  return (
+    <View style={styles.metaInner}>
+      <View style={styles.metaIcon}>
+        <Icon name="card" style={styles.icons} />
+      </View>
+      <View style={{ flexDirection: 'column' }}>
+        <Text style={styles.metaText}>{text}</Text>
+        <Text style={styles.metaSubtitle}>Billett i døra</Text>
+      </View>
+    </View>
+  );
+};
 
-    if (item.thumbnail.medium_large) {
-      return <Image source={{ uri: item.thumbnail.medium_large }} style={styles.image} />;
-    }
-
+const FaceButton = ({ event }) => {
+  if (!event.facebook_url) {
     return null;
   }
 
-  showYear() {
-    const { item } = this.props;
+  return (
+    <TouchableOpacity onPress={() => onFacebookUrlPress(event.facebook_url)} style={styles.metaInner}>
+      <View style={[styles.metaIcon, { marginTop: 0 }]}>
+        <Icon name="logo-facebook" style={styles.icons} />
+      </View>
+      <View>
+        <Text style={[styles.metaText, { paddingTop: 2 }]}>På Facebook</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-    if (moment().year() !== moment(item.start_time).year()) {
-      return <Text style={styles.year}>{this._formatYear(item.start_time)}</Text>;
-    }
-
+const Year = ({ startTime }) => {
+  if (moment().year() === moment(startTime).year()) {
     return null;
   }
+  return <Text style={styles.year}>{format(startTime, FORMAT_YEAR)}</Text>;
+};
 
-  formatTimeFull(item) {
-    const endTime = item.end_time ? ` - ${this._formatTime(item.end_time)}` : '';
-    const startTime = `${this._formatLocalDay(item.start_time)} kl. ${this._formatTime(item.start_time)}`;
-    return `${startTime}${endTime}`;
-  }
+const formatTimeFull = (event) => {
+  const endTime = event.end_time ? ` - ${format(event.end_time, FORMAT_TIME)}` : '';
+  const startTime = `${format(event.start_time, FORMAT_LOCAL_DAY)} kl. ${format(event.start_time, FORMAT_TIME)}`;
+  return `${startTime}${endTime}`;
+};
 
-  render() {
-    const { item } = this.props;
-    return (
-      <ScrollView>
-        {this.showImage()}
-        <View style={styles.card}>
-          {/* Date and title */}
-          <View style={styles.dateAndTitle}>
-            <View style={styles.dateContainer}>
-              <View style={[styles.card, styles.dateCard]}>
-                <Text style={styles.day}>{this._formatDay(item.start_time)}</Text>
-                <Text style={styles.month}>{this._formatMonth(item.start_time)}</Text>
-                {this.showYear()}
-              </View>
-            </View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title} numberOfLines={2}>
-                {item.title.decoded}
-              </Text>
-            </View>
+const EventDetail = ({
+  route: {
+    params: { event },
+  },
+}) => (
+  <ScrollView>
+    {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
+    <View style={styles.card}>
+      {/* Date and title */}
+      <View style={styles.dateAndTitle}>
+        <View style={styles.dateContainer}>
+          <View style={[styles.card, styles.dateCard]}>
+            <Text style={styles.day}>{format(event.start_time, FORMAT_DAY)}</Text>
+            <Text style={styles.month}>{format(event.start_time, FORMAT_MONTH)}</Text>
+            <Year startTime={event.start_time} />
           </View>
-          {/* Time and calendar */}
-          <TouchableOpacity style={styles.metaInner}>
-            <View style={styles.metaIcon}>
-              <Icon name="time" style={styles.icons} />
-            </View>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.metaText}>{this.formatTimeFull(item)}</Text>
-              <Text style={styles.metaSubtitle}>{this._formatRelative(item.start_time)}</Text>
-            </View>
-          </TouchableOpacity>
-          {/* Location and maps */}
-          <TouchableOpacity style={styles.metaInner} onPress={() => this.onLocationPress(item.venue)}>
-            <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
-              <Icon name="pin" style={styles.icons} />
-            </View>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.metaText}>{item.venue}</Text>
-              <Text style={styles.metaSubtitle} numberOfLines={1}>
-                {this._formatLocation()}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          {this.showPriceAndTicket()}
-          {this.showFacebutton()}
-          <HTMLView style={styles.content} stylesheet={HTMLStyles} value={item.content.rendered} />
         </View>
-      </ScrollView>
-    );
-  }
-}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title} numberOfLines={2}>
+            {event.title.decoded}
+          </Text>
+        </View>
+      </View>
+      {/* Time and calendar */}
+      <TouchableOpacity style={styles.metaInner}>
+        <View style={styles.metaIcon}>
+          <Icon name="time" style={styles.icons} />
+        </View>
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
+          <Text style={styles.metaSubtitle}>{formatRelative(event.start_time)}</Text>
+        </View>
+      </TouchableOpacity>
+      {/* Location and maps */}
+      <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
+        <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
+          <Icon name="pin" style={styles.icons} />
+        </View>
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={styles.metaText}>{event.venue}</Text>
+          <Text style={styles.metaSubtitle} numberOfLines={1}>
+            <VenueLocation venue={event.venue} />
+          </Text>
+        </View>
+      </TouchableOpacity>
+      <PriceAndTicket event={event} />
+      <FaceButton event={event} />
+      <HTMLView style={styles.content} stylesheet={HTMLStyles} value={event.content.rendered} />
+    </View>
+  </ScrollView>
+);
+
+export default EventDetail;
 
 const styles = StyleSheet.create({
   dateAndTitle: {
