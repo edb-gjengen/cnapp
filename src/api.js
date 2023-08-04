@@ -1,5 +1,3 @@
-import Config from 'react-native-config';
-
 import {
   loginFailure,
   loginRequest,
@@ -21,7 +19,7 @@ export function requestLogin(username, password) {
     // We are now logging in
     dispatch(loginRequest());
 
-    return fetchWithTimeout(`${Config.DUSKEN_API_URL}/auth/obtain-token/`, {
+    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/auth/obtain-token/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -56,7 +54,7 @@ export function requestUserData(authToken) {
     // We are now fetching user data
     dispatch(userDataRequest());
 
-    return fetchWithTimeout(`${Config.DUSKEN_API_URL}/api/me/`, {
+    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/me/`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -86,7 +84,7 @@ export function requestRegisterUser({ firstName, lastName, email, phoneNumber, p
   return (dispatch) => {
     dispatch(registerUserRequest());
 
-    return fetchWithTimeout(`${Config.DUSKEN_API_URL}/api/user/register/`, {
+    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/user/register/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -122,7 +120,7 @@ export function requestMembershipCharge(authToken, stripeToken, membershipType) 
   return (dispatch) => {
     dispatch(membershipChargeRequest());
 
-    return fetchWithTimeout(`${Config.DUSKEN_API_URL}/api/membership/charge/`, {
+    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/membership/charge/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

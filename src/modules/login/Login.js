@@ -1,7 +1,6 @@
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { ScrollView, Spinner, Button, Text } from 'native-base';
-import Config from 'react-native-config';
 
 import theme from '../../theme';
 import useLogin from './useLogin';
@@ -44,7 +43,7 @@ const Login = () => {
           small
           light
           onPress={() => {
-            Linking.openURL(Config.DUSKEN_FORGOT_PASSWORD_URL);
+            Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL);
           }}
           style={styles.forgotPasswordButton}
         >

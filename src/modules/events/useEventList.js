@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Config from 'react-native-config';
 import moment from 'moment';
 import 'moment/locale/nb';
 
@@ -56,7 +55,7 @@ const useEventList = () => {
   };
 
   const fetchEvents = async () => {
-    const url = `${Config.EVENT_API_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
+    const url = `${process.env.EXPO_PUBLIC_EVENT_API_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
     setLoading(true);
 
     let eventData;
