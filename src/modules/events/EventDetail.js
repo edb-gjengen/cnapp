@@ -1,6 +1,6 @@
 import React from 'react';
-import { Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableOpacity } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+import { Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 import moment from 'moment';
 import { Icon } from 'native-base';
 
@@ -147,7 +147,9 @@ const EventDetail = ({
   route: {
     params: { event },
   },
-}) => (
+}) => {
+  const { width } = useWindowDimensions();
+  return (
   <ScrollView>
     {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
     <View style={styles.card}>
@@ -190,10 +192,10 @@ const EventDetail = ({
       </TouchableOpacity>
       <PriceAndTicket event={event} />
       <FaceButton event={event} />
-      <HTMLView style={styles.content} stylesheet={HTMLStyles} value={event.content.rendered} />
+      <RenderHtml contentWidth={width} source={{html:event.content.rendered}} />
     </View>
-  </ScrollView>
-);
+  </ScrollView>)
+};
 
 export default EventDetail;
 
