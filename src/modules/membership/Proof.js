@@ -1,6 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
-import { Text as NBText, Spinner } from 'native-base';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
 import { Button } from 'react-native-ui-lib';
 import Confetti from 'react-native-confetti';
 
@@ -56,14 +64,14 @@ const PurchaseButton = ({ user, isChargingMembership, isLoadingMembershipType, o
 
   return (
     <View>
-      {isChargingMembership && <Spinner color="#f58220" />}
+      {isChargingMembership && <ActivityIndicator color="#f58220" />}
       <Button
         onPress={onChargePress}
         fullWidth
         disabled={isChargingMembership || isLoadingMembershipType}
         style={styles.purchaseButton}
       >
-        <NBText>{`Kjøp medlemskap (${membershipPrice} NOK)`}</NBText>
+        <Text>{`Kjøp medlemskap (${membershipPrice} NOK)`}</Text>
       </Button>
       <View style={styles.purchaseText}>
         <Text style={styles.purchaseTextInner}>Medlemskapet er gyldig i ett år</Text>
@@ -174,7 +182,7 @@ const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
         </View>
         <View>
           <Button onPress={onLogoutPress} style={styles.logoutButton} small>
-            <NBText>Logg ut</NBText>
+            <Text>Logg ut</Text>
           </Button>
         </View>
       </ScrollView>

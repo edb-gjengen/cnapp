@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Spinner } from 'native-base';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
 import theme from '../../theme';
 import useMembership from './useMembership';
@@ -14,7 +13,7 @@ const Membership = () => {
   if (isFetchingUserData) {
     return (
       <View style={styles.card}>
-        <Spinner color="#f58220" />
+        <ActivityIndicator color="#f58220" />
       </View>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
-import { ScrollView, Spinner, Text } from 'native-base';
+import { ActivityIndicator, Linking, StyleSheet, View, Text } from 'react-native';
+import { ScrollView } from 'native-base';
 import { Button } from 'react-native-ui-lib';
 
 import theme from '../../theme';
@@ -50,7 +50,7 @@ const Login = () => {
         >
           <Text>Glemt passord?</Text>
         </Button>
-        {isLoggingIn && <Spinner color="#f58220" />}
+        {isLoggingIn && <ActivityIndicator color="#f58220" />}
       </View>
     </ScrollView>
   );
