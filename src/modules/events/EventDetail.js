@@ -290,18 +290,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-// FIXME: Ninja margin
-const HTMLStyles = StyleSheet.create({
-  p: {
-    fontSize: 16,
-    marginBottom: -30,
-    color: '#000',
-  },
-  ul: {
-    fontSize: 16,
-    color: '#000',
-    marginTop: -20,
-    marginBottom: -30,
-  },
-});

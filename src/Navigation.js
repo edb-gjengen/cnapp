@@ -46,6 +46,9 @@ const UserStackScreen = () => (
 );
 
 const HomeTabs = createBottomTabNavigator();
+const EventIcon = ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />;
+const UserIcon = ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />;
+const AboutIcon = ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />;
 const Navigation = () => (
   <NavigationContainer>
     <HomeTabs.Navigator initialRouteName="EventStack">
@@ -55,7 +58,7 @@ const Navigation = () => (
         options={{
           headerShown: false,
           tabBarLabel: 'Program',
-          tabBarIcon: ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />,
+          tabBarIcon: EventIcon,
         }}
       />
       <HomeTabs.Screen
@@ -64,7 +67,7 @@ const Navigation = () => (
         options={{
           headerShown: false,
           tabBarLabel: 'Medlemskap',
-          tabBarIcon: ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />,
+          tabBarIcon: UserIcon,
         }}
       />
       <HomeTabs.Screen
@@ -72,7 +75,7 @@ const Navigation = () => (
         component={About}
         options={{
           title: 'Om oss',
-          tabBarIcon: ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />,
+          tabBarIcon: AboutIcon,
         }}
       />
     </HomeTabs.Navigator>

@@ -20,6 +20,7 @@ const renderSectionHeader = ({ section }) => (
     <Text style={styles.sectionTitle}>{section.title}</Text>
   </View>
 );
+const Header = () => <View style={styles.listHeader} />;
 
 const EventList = () => {
   const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading } = useEventList();
@@ -45,6 +46,8 @@ const EventList = () => {
     </TouchableOpacity>
   );
 
+  // FIXME: Hoist component definition
+  // eslint-disable-next-line react/no-unstable-nested-components
   const Footer = () =>
     !loading && (
       <View style={{ paddingVertical: 20 }}>
@@ -82,9 +85,7 @@ const EventList = () => {
       initialNumToRender={10}
       ListFooterComponent={Footer}
       style={[styles.card, styles.list]}
-      ListHeaderComponent={() => {
-        return <View style={styles.listHeader} />;
-      }}
+      ListHeaderComponent={Header}
     />
   );
 };

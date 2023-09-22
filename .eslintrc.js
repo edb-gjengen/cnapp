@@ -20,6 +20,7 @@ module.exports = {
     'react/sort-comp': 0,
     'max-len': 0,
     'no-use-before-define': ['error', { functions: true, classes: true, variables: false }], // disable the rule for variables, but enable it for functions and classes
+    'react-native/no-inline-styles': 'off', // FIXME: refactor
   },
   plugins: ['prettier'],
   parser: '@babel/eslint-parser',

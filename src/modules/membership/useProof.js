@@ -1,3 +1,5 @@
+// FIXME: fix lint violations
+/* eslint-disable no-unused-vars, react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { gql, useQuery } from '@apollo/client';
@@ -40,6 +42,7 @@ const useProof = ({ user, fetchUser }) => {
 
     const membershipTypeSlug = data?.membershipTypes?.[0]?.slug ?? 'standard';
 
+    // TODO: Implement stripe payment
     // stripe.paymentRequestWithCardForm(options).then(
     //   (token) => {
     //     // returns a token.tokenId which should be saved

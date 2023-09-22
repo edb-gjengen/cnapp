@@ -129,9 +129,10 @@ const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
   });
 
   useEffect(() => {
+    const currentRef = confettiRef.current;
     return () => {
-      if (confettiRef && confettiRef.current) {
-        confettiRef.current.stopConfetti();
+      if (currentRef) {
+        currentRef.stopConfetti();
       }
     };
   });

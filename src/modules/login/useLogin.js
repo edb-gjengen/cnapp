@@ -32,7 +32,7 @@ const useLogin = () => {
       // navigation.goBack onLogin works since LoginScreen is allways navigated to from MembershipScreen
       navigation.goBack();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigation]);
 
   return { onSubmit, isLoggingIn, control, setFocus, errors: { ...errors, ...loginError } };
 };
