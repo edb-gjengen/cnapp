@@ -1,6 +1,7 @@
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
-import { ScrollView, Spinner, Button, Text } from 'native-base';
+import { ScrollView, Spinner, Text } from 'native-base';
+import { Button } from 'react-native-ui-lib';
 
 import theme from '../../theme';
 import useLogin from './useLogin';
@@ -36,7 +37,7 @@ const Login = () => {
           onSubmitEditing={onSubmit}
           returnKeyType="send"
         />
-        <Button full onPress={onSubmit} style={styles.loginButton}>
+        <Button fullWidth onPress={onSubmit} style={styles.loginButton}>
           <Text>Logg inn</Text>
         </Button>
         <Button

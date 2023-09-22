@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View, Platform, StyleSheet, Image, Linking, TouchableOpacity, ScrollView } from 'react-native';
 
-import {SimpleLineIcons as SimpleIcon, FontAwesome5 as FAIcon} from '@expo/vector-icons';
-import {Button} from 'react-native-ui-lib';
+import { SimpleLineIcons as SimpleIcon, FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { Button } from 'react-native-ui-lib';
 import theme from '../../theme';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
@@ -90,9 +90,7 @@ const About = () => (
       </View>
       <Text style={styles.header}>Åpningstider</Text>
       <View style={styles.section}>
-        <Button
-          onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}
-        >
+        <Button onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}>
           <SimpleIcon name="clock" style={styles.icon} />
           <Text>Vis åpningstider</Text>
         </Button>
@@ -100,10 +98,8 @@ const About = () => (
       <Text style={styles.header}>Ta kontakt</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <View>
-          <Button
-            onPress={() => Linking.openURL('tel:+4794430002')}
-            style={{ marginHorizontal: 10 }}
-          ><SimpleIcon name="phone" style={styles.icon} />
+          <Button onPress={() => Linking.openURL('tel:+4794430002')} style={{ marginHorizontal: 10 }}>
+            <SimpleIcon name="phone" style={styles.icon} />
             <Text>Ring</Text>
           </Button>
         </View>
@@ -111,7 +107,8 @@ const About = () => (
           <Button
             onPress={() => Linking.openURL('mailto:ledelsen@studentersamfundet.no')}
             style={{ marginHorizontal: 10 }}
-          ><SimpleIcon name="envelope" style={styles.icon} />
+          >
+            <SimpleIcon name="envelope" style={styles.icon} />
             <Text>Send e-post</Text>
           </Button>
         </View>
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 16,
-    marginRight: 4
+    marginRight: 4,
   },
   largeIcon: {
     fontSize: 40,

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
-import { Button, Text as NBText, Spinner } from 'native-base';
+import { Text as NBText, Spinner } from 'native-base';
+import { Button } from 'react-native-ui-lib';
 import Confetti from 'react-native-confetti';
 
 import theme from '../../theme';
@@ -58,7 +59,7 @@ const PurchaseButton = ({ user, isChargingMembership, isLoadingMembershipType, o
       {isChargingMembership && <Spinner color="#f58220" />}
       <Button
         onPress={onChargePress}
-        full
+        fullWidth
         disabled={isChargingMembership || isLoadingMembershipType}
         style={styles.purchaseButton}
       >

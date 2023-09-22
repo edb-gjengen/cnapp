@@ -44,7 +44,7 @@ export function requestLogin(username, password) {
         (data) => {
           console.log(data);
           dispatch(loginFailure(data || { non_field_errors: ['Kunne ikke logge inn, prøv igjen'] }));
-        }
+        },
       );
   };
 }
@@ -75,7 +75,7 @@ export function requestUserData(authToken) {
         },
         (data) => {
           dispatch(userDataFailure(data || { non_field_errors: ['Kunne ikke hente brukerdata'] }));
-        }
+        },
       );
   };
 }
@@ -111,7 +111,7 @@ export function requestRegisterUser({ firstName, lastName, email, phoneNumber, p
         },
         (data) => {
           dispatch(registerUserFailure(data || { non_field_errors: ['Kunne ikke registrere bruker, prøv igjen'] }));
-        }
+        },
       );
   };
 }
@@ -146,7 +146,7 @@ export function requestMembershipCharge(authToken, stripeToken, membershipType) 
         },
         (data) => {
           dispatch(membershipChargeFailure(data.detail || 'Kunne ikke belaste bankkortet, prøv igjen'));
-        }
+        },
       );
   };
 }

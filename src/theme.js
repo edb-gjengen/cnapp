@@ -1,6 +1,8 @@
 import { Platform } from 'react-native';
+import { Colors } from 'react-native-ui-lib';
 
 const colors = {
+  primary: '#f58220',
   danger: '#d9534f',
 };
 
@@ -20,4 +22,9 @@ const card = {
   margin: 8,
   backgroundColor: '#fff',
 };
+
+export function loadTheme() {
+  Colors.loadDesignTokens({ primaryColor: colors.primary });
+}
+
 export default { card, colors };

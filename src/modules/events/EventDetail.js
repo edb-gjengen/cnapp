@@ -1,5 +1,15 @@
 import React from 'react';
-import { Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
+import {
+  Linking,
+  StyleSheet,
+  ScrollView,
+  Text,
+  Platform,
+  View,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import moment from 'moment';
 import { Icon } from 'native-base';
@@ -150,51 +160,52 @@ const EventDetail = ({
 }) => {
   const { width } = useWindowDimensions();
   return (
-  <ScrollView>
-    {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
-    <View style={styles.card}>
-      {/* Date and title */}
-      <View style={styles.dateAndTitle}>
-        <View style={styles.dateContainer}>
-          <View style={[styles.card, styles.dateCard]}>
-            <Text style={styles.day}>{format(event.start_time, FORMAT_DAY)}</Text>
-            <Text style={styles.month}>{format(event.start_time, FORMAT_MONTH)}</Text>
-            <Year startTime={event.start_time} />
+    <ScrollView>
+      {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
+      <View style={styles.card}>
+        {/* Date and title */}
+        <View style={styles.dateAndTitle}>
+          <View style={styles.dateContainer}>
+            <View style={[styles.card, styles.dateCard]}>
+              <Text style={styles.day}>{format(event.start_time, FORMAT_DAY)}</Text>
+              <Text style={styles.month}>{format(event.start_time, FORMAT_MONTH)}</Text>
+              <Year startTime={event.start_time} />
+            </View>
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title} numberOfLines={2}>
+              {event.title.decoded}
+            </Text>
           </View>
         </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title} numberOfLines={2}>
-            {event.title.decoded}
-          </Text>
-        </View>
+        {/* Time and calendar */}
+        <TouchableOpacity style={styles.metaInner}>
+          <View style={styles.metaIcon}>
+            <Icon name="time" style={styles.icons} />
+          </View>
+          <View style={{ flexDirection: 'column' }}>
+            <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
+            <Text style={styles.metaSubtitle}>{formatRelative(event.start_time)}</Text>
+          </View>
+        </TouchableOpacity>
+        {/* Location and maps */}
+        <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
+          <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
+            <Icon name="pin" style={styles.icons} />
+          </View>
+          <View style={{ flexDirection: 'column' }}>
+            <Text style={styles.metaText}>{event.venue}</Text>
+            <Text style={styles.metaSubtitle} numberOfLines={1}>
+              <VenueLocation venue={event.venue} />
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <PriceAndTicket event={event} />
+        <FaceButton event={event} />
+        <RenderHtml contentWidth={width} source={{ html: event.content.rendered }} />
       </View>
-      {/* Time and calendar */}
-      <TouchableOpacity style={styles.metaInner}>
-        <View style={styles.metaIcon}>
-          <Icon name="time" style={styles.icons} />
-        </View>
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
-          <Text style={styles.metaSubtitle}>{formatRelative(event.start_time)}</Text>
-        </View>
-      </TouchableOpacity>
-      {/* Location and maps */}
-      <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
-        <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
-          <Icon name="pin" style={styles.icons} />
-        </View>
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.metaText}>{event.venue}</Text>
-          <Text style={styles.metaSubtitle} numberOfLines={1}>
-            <VenueLocation venue={event.venue} />
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <PriceAndTicket event={event} />
-      <FaceButton event={event} />
-      <RenderHtml contentWidth={width} source={{html:event.content.rendered}} />
-    </View>
-  </ScrollView>)
+    </ScrollView>
+  );
 };
 
 export default EventDetail;

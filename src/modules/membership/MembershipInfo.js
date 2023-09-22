@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
-import { Button, Text as NBText } from 'native-base';
+import { Text as NBText } from 'native-base';
+import { Button } from 'react-native-ui-lib';
 import theme from '../../theme';
 
 const MembershipInfo = ({ onRegister, onLogin }) => (
@@ -12,7 +13,7 @@ const MembershipInfo = ({ onRegister, onLogin }) => (
         Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen
       </Text>
       <View style={styles.button}>
-        <Button onPress={onRegister} full>
+        <Button onPress={onRegister} fullWidth>
           <NBText>Bli medlem</NBText>
         </Button>
       </View>
@@ -23,7 +24,7 @@ const MembershipInfo = ({ onRegister, onLogin }) => (
       </Text>
       <Text style={styles.em}>Allerede medlem?</Text>
       <View style={styles.button}>
-        <Button onPress={onLogin} full>
+        <Button onPress={onLogin} fullWidth>
           <NBText>Logg inn</NBText>
         </Button>
       </View>
