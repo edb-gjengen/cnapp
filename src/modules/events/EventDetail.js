@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import moment from 'moment';
-import { Icon } from 'native-base';
+import { FontAwesome } from '@expo/vector-icons';
 
 import theme from '../../theme';
 
@@ -100,7 +100,7 @@ const PriceAndTicket = ({ event }) => {
     return (
       <TouchableOpacity style={styles.metaInner} onPress={() => Linking.openURL(event.ticket_url)}>
         <View style={styles.metaIcon}>
-          <Icon name="card" style={styles.icons} />
+          <FontAwesome name="credit-card" style={styles.icons} />
         </View>
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.metaText}>{text}</Text>
@@ -113,7 +113,7 @@ const PriceAndTicket = ({ event }) => {
   return (
     <View style={styles.metaInner}>
       <View style={styles.metaIcon}>
-        <Icon name="card" style={styles.icons} />
+        <FontAwesome name="credit-card" style={styles.icons} />
       </View>
       <View style={{ flexDirection: 'column' }}>
         <Text style={styles.metaText}>{text}</Text>
@@ -131,7 +131,7 @@ const FaceButton = ({ event }) => {
   return (
     <TouchableOpacity onPress={() => onFacebookUrlPress(event.facebook_url)} style={styles.metaInner}>
       <View style={[styles.metaIcon, { marginTop: 0 }]}>
-        <Icon name="logo-facebook" style={styles.icons} />
+        <FontAwesome name="facebook-square" style={styles.icons} />
       </View>
       <View>
         <Text style={[styles.metaText, { paddingTop: 2 }]}>På Facebook</Text>
@@ -181,7 +181,7 @@ const EventDetail = ({
         {/* Time and calendar */}
         <TouchableOpacity style={styles.metaInner}>
           <View style={styles.metaIcon}>
-            <Icon name="time" style={styles.icons} />
+            <FontAwesome name="clock-o" style={styles.icons} />
           </View>
           <View style={{ flexDirection: 'column' }}>
             <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
@@ -191,7 +191,7 @@ const EventDetail = ({
         {/* Location and maps */}
         <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
           <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
-            <Icon name="pin" style={styles.icons} />
+            <FontAwesome name="map-pin" style={styles.icons} />
           </View>
           <View style={{ flexDirection: 'column' }}>
             <Text style={styles.metaText}>{event.venue}</Text>
@@ -287,6 +287,6 @@ const styles = StyleSheet.create({
     paddingTop: 3,
   },
   icons: {
-    fontSize: 16,
+    fontSize: 15,
   },
 });
