@@ -1,6 +1,8 @@
 import React from 'react';
-import { Spinner, Button, Text, ScrollView } from 'native-base';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView } from 'native-base';
+import { Button } from 'react-native-ui-lib';
+
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import * as EmailValidator from 'email-validator';
 
 import theme from '../../theme';
@@ -68,10 +70,10 @@ const UserRegister = () => {
         <View style={styles.errorBox}>
           <FormErrors errors={errors} />
         </View>
-        <Button full disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
+        <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
           <Text>Registrer meg</Text>
         </Button>
-        {isRegisteringUser && <Spinner color="#f58220" />}
+        {isRegisteringUser && <ActivityIndicator color="#f58220" />}
       </View>
     </ScrollView>
   );

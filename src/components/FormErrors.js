@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, HStack, Text } from 'native-base';
+import { Text } from 'react-native';
+import { Alert, HStack } from 'native-base';
 
 const FormErrors = ({ errors }) => {
   if (!Object.keys(errors).length || !['non_field_errors', 'detail'].some((errorField) => errorField in errors)) {

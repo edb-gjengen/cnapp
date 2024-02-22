@@ -42,7 +42,7 @@ const useUserRegister = () => {
     if (isAuthenticatedPrev !== isAuthenticated && isAuthenticated) {
       navigation.goBack();
     }
-  }, [isAuthenticatedPrev, isAuthenticated]);
+  }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
   return { onSubmit, isRegisteringUser, registerError, control, setFocus, errors };
 };

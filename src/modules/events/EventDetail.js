@@ -1,8 +1,18 @@
 import React from 'react';
-import { Linking, StyleSheet, ScrollView, Text, Platform, View, Image, TouchableOpacity } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+import {
+  Linking,
+  StyleSheet,
+  ScrollView,
+  Text,
+  Platform,
+  View,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+} from 'react-native';
+import RenderHtml from 'react-native-render-html';
 import moment from 'moment';
-import { Icon } from 'native-base';
+import { FontAwesome } from '@expo/vector-icons';
 
 import theme from '../../theme';
 
@@ -90,7 +100,7 @@ const PriceAndTicket = ({ event }) => {
     return (
       <TouchableOpacity style={styles.metaInner} onPress={() => Linking.openURL(event.ticket_url)}>
         <View style={styles.metaIcon}>
-          <Icon name="card" style={styles.icons} />
+          <FontAwesome name="credit-card" style={styles.icons} />
         </View>
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.metaText}>{text}</Text>
@@ -103,7 +113,7 @@ const PriceAndTicket = ({ event }) => {
   return (
     <View style={styles.metaInner}>
       <View style={styles.metaIcon}>
-        <Icon name="card" style={styles.icons} />
+        <FontAwesome name="credit-card" style={styles.icons} />
       </View>
       <View style={{ flexDirection: 'column' }}>
         <Text style={styles.metaText}>{text}</Text>
@@ -121,7 +131,7 @@ const FaceButton = ({ event }) => {
   return (
     <TouchableOpacity onPress={() => onFacebookUrlPress(event.facebook_url)} style={styles.metaInner}>
       <View style={[styles.metaIcon, { marginTop: 0 }]}>
-        <Icon name="logo-facebook" style={styles.icons} />
+        <FontAwesome name="facebook-square" style={styles.icons} />
       </View>
       <View>
         <Text style={[styles.metaText, { paddingTop: 2 }]}>På Facebook</Text>
@@ -147,53 +157,56 @@ const EventDetail = ({
   route: {
     params: { event },
   },
-}) => (
-  <ScrollView>
-    {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
-    <View style={styles.card}>
-      {/* Date and title */}
-      <View style={styles.dateAndTitle}>
-        <View style={styles.dateContainer}>
-          <View style={[styles.card, styles.dateCard]}>
-            <Text style={styles.day}>{format(event.start_time, FORMAT_DAY)}</Text>
-            <Text style={styles.month}>{format(event.start_time, FORMAT_MONTH)}</Text>
-            <Year startTime={event.start_time} />
+}) => {
+  const { width } = useWindowDimensions();
+  return (
+    <ScrollView>
+      {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
+      <View style={styles.card}>
+        {/* Date and title */}
+        <View style={styles.dateAndTitle}>
+          <View style={styles.dateContainer}>
+            <View style={[styles.card, styles.dateCard]}>
+              <Text style={styles.day}>{format(event.start_time, FORMAT_DAY)}</Text>
+              <Text style={styles.month}>{format(event.start_time, FORMAT_MONTH)}</Text>
+              <Year startTime={event.start_time} />
+            </View>
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title} numberOfLines={2}>
+              {event.title.decoded}
+            </Text>
           </View>
         </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title} numberOfLines={2}>
-            {event.title.decoded}
-          </Text>
-        </View>
+        {/* Time and calendar */}
+        <TouchableOpacity style={styles.metaInner}>
+          <View style={styles.metaIcon}>
+            <FontAwesome name="clock-o" style={styles.icons} />
+          </View>
+          <View style={{ flexDirection: 'column' }}>
+            <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
+            <Text style={styles.metaSubtitle}>{formatRelative(event.start_time)}</Text>
+          </View>
+        </TouchableOpacity>
+        {/* Location and maps */}
+        <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
+          <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
+            <FontAwesome name="map-pin" style={styles.icons} />
+          </View>
+          <View style={{ flexDirection: 'column' }}>
+            <Text style={styles.metaText}>{event.venue}</Text>
+            <Text style={styles.metaSubtitle} numberOfLines={1}>
+              <VenueLocation venue={event.venue} />
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <PriceAndTicket event={event} />
+        <FaceButton event={event} />
+        <RenderHtml contentWidth={width} source={{ html: event.content.rendered }} />
       </View>
-      {/* Time and calendar */}
-      <TouchableOpacity style={styles.metaInner}>
-        <View style={styles.metaIcon}>
-          <Icon name="time" style={styles.icons} />
-        </View>
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
-          <Text style={styles.metaSubtitle}>{formatRelative(event.start_time)}</Text>
-        </View>
-      </TouchableOpacity>
-      {/* Location and maps */}
-      <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
-        <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
-          <Icon name="pin" style={styles.icons} />
-        </View>
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.metaText}>{event.venue}</Text>
-          <Text style={styles.metaSubtitle} numberOfLines={1}>
-            <VenueLocation venue={event.venue} />
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <PriceAndTicket event={event} />
-      <FaceButton event={event} />
-      <HTMLView style={styles.content} stylesheet={HTMLStyles} value={event.content.rendered} />
-    </View>
-  </ScrollView>
-);
+    </ScrollView>
+  );
+};
 
 export default EventDetail;
 
@@ -274,21 +287,6 @@ const styles = StyleSheet.create({
     paddingTop: 3,
   },
   icons: {
-    fontSize: 16,
-  },
-});
-
-// FIXME: Ninja margin
-const HTMLStyles = StyleSheet.create({
-  p: {
-    fontSize: 16,
-    marginBottom: -30,
-    color: '#000',
-  },
-  ul: {
-    fontSize: 16,
-    color: '#000',
-    marginTop: -20,
-    marginBottom: -30,
+    fontSize: 15,
   },
 });

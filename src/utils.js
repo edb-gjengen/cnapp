@@ -9,7 +9,11 @@ export function fetchWithTimeout(url, options, timeout = 10000) {
   // FIXME: show timeout message in UI
   return Promise.race([
     fetch(url, options),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('Fetch request timed out')), timeout)),
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error('Fetch request timed out'));
+      }, timeout);
+    }),
   ]);
 }
 

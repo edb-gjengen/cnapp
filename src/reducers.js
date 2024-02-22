@@ -39,6 +39,7 @@ function formatErrors(errs) {
   return _errs;
 }
 
+// eslint-disable-next-line default-param-last
 export default function duskenApp(state = initialState, action) {
   switch (action.type) {
     /* Login */

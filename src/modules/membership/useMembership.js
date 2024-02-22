@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { logout } from '../../actions';
@@ -25,9 +25,9 @@ const useMembership = () => {
   };
   const onRegisterPress = () => navigation.navigate('UserRegister');
   const onLoginPress = () => navigation.navigate('Login');
-  const fetchUser = () => {
+  const fetchUser = useCallback(() => {
     dispatch(requestUserData(userToken));
-  };
+  }, [dispatch, userToken]);
 
   useEffect(() => {
     if (userToken !== prevUserToken && userToken) {

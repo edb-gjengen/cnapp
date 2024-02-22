@@ -1,5 +1,7 @@
 import { StyleSheet, View, Platform, SectionList, TouchableOpacity } from 'react-native';
-import { Card, Text, Button, Spinner, ArrowForwardIcon, HStack } from 'native-base';
+import { Card, Text, Spinner, ArrowForwardIcon, HStack } from 'native-base';
+import { Button } from 'react-native-ui-lib';
+
 import React from 'react';
 import moment from 'moment';
 import 'moment/locale/nb';
@@ -18,6 +20,7 @@ const renderSectionHeader = ({ section }) => (
     <Text style={styles.sectionTitle}>{section.title}</Text>
   </View>
 );
+const Header = () => <View style={styles.listHeader} />;
 
 const EventList = () => {
   const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading } = useEventList();
@@ -43,6 +46,8 @@ const EventList = () => {
     </TouchableOpacity>
   );
 
+  // FIXME: Hoist component definition
+  // eslint-disable-next-line react/no-unstable-nested-components
   const Footer = () =>
     !loading && (
       <View style={{ paddingVertical: 20 }}>
@@ -80,9 +85,7 @@ const EventList = () => {
       initialNumToRender={10}
       ListFooterComponent={Footer}
       style={[styles.card, styles.list]}
-      ListHeaderComponent={() => {
-        return <View style={styles.listHeader} />;
-      }}
+      ListHeaderComponent={Header}
     />
   );
 };

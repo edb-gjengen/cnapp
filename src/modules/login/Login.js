@@ -1,6 +1,7 @@
 import React from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
-import { ScrollView, Spinner, Button, Text } from 'native-base';
+import { ActivityIndicator, Linking, StyleSheet, View, Text } from 'react-native';
+import { ScrollView } from 'native-base';
+import { Button } from 'react-native-ui-lib';
 
 import theme from '../../theme';
 import useLogin from './useLogin';
@@ -36,7 +37,7 @@ const Login = () => {
           onSubmitEditing={onSubmit}
           returnKeyType="send"
         />
-        <Button full onPress={onSubmit} style={styles.loginButton}>
+        <Button fullWidth onPress={onSubmit} style={styles.loginButton}>
           <Text>Logg inn</Text>
         </Button>
         <Button
@@ -49,7 +50,7 @@ const Login = () => {
         >
           <Text>Glemt passord?</Text>
         </Button>
-        {isLoggingIn && <Spinner color="#f58220" />}
+        {isLoggingIn && <ActivityIndicator color="#f58220" />}
       </View>
     </ScrollView>
   );

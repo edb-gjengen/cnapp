@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+
 import { requestLogin } from '../../api';
 
 const useLogin = () => {
@@ -31,7 +32,7 @@ const useLogin = () => {
       // navigation.goBack onLogin works since LoginScreen is allways navigated to from MembershipScreen
       navigation.goBack();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigation]);
 
   return { onSubmit, isLoggingIn, control, setFocus, errors: { ...errors, ...loginError } };
 };

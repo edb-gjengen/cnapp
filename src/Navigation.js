@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 
 import EventList from './modules/events/EventList';
 import EventDetail from './modules/events/EventDetail';
@@ -46,6 +46,9 @@ const UserStackScreen = () => (
 );
 
 const HomeTabs = createBottomTabNavigator();
+const EventIcon = ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />;
+const UserIcon = ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />;
+const AboutIcon = ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />;
 const Navigation = () => (
   <NavigationContainer>
     <HomeTabs.Navigator initialRouteName="EventStack">
@@ -55,7 +58,7 @@ const Navigation = () => (
         options={{
           headerShown: false,
           tabBarLabel: 'Program',
-          tabBarIcon: ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />,
+          tabBarIcon: EventIcon,
         }}
       />
       <HomeTabs.Screen
@@ -64,7 +67,7 @@ const Navigation = () => (
         options={{
           headerShown: false,
           tabBarLabel: 'Medlemskap',
-          tabBarIcon: ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />,
+          tabBarIcon: UserIcon,
         }}
       />
       <HomeTabs.Screen
@@ -72,7 +75,7 @@ const Navigation = () => (
         component={About}
         options={{
           title: 'Om oss',
-          tabBarIcon: ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />,
+          tabBarIcon: AboutIcon,
         }}
       />
     </HomeTabs.Navigator>
