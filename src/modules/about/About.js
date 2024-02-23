@@ -1,9 +1,21 @@
 import React from 'react';
-import { Text, View, Platform, StyleSheet, Image, Linking, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  Text,
+  View,
+  Platform,
+  StyleSheet,
+  Image,
+  Linking,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 
 import { SimpleLineIcons as SimpleIcon, FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Button } from 'react-native-ui-lib';
 import theme from '../../theme';
+
+import logo from '../../../assets/CN-logo-hel-svart.png';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
 
@@ -60,11 +72,7 @@ const About = () => (
     <View style={styles.card}>
       <Text style={[styles.header, { marginTop: 8 }]}>Det Norske Studentersamfund</Text>
       <TouchableOpacity onPress={() => Linking.openURL('https://www.studentersamfundet.no/')}>
-        <Image
-          source={{ uri: 'https://galtinn.neuf.no/static/dist/images/logo.png' }}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        <Image style={styles.logo} source={logo} />
       </TouchableOpacity>
       <Text style={styles.header}>Følg oss på</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
@@ -160,11 +168,13 @@ const styles = StyleSheet.create({
   featuredImage: {
     height: 230,
     width: null,
+    display: 'flex',
   },
   logo: {
-    height: 128,
-    width: null,
-    marginBottom: 10,
+    margin: 10,
+    resizeMode: 'contain',
+    width: Dimensions.get('window').width * 0.8, // 80% of screen width
+    alignSelf: 'center',
   },
   icon: {
     fontSize: 16,
