@@ -9,7 +9,7 @@ moment.locale('nb');
 
 const formatDate = (time) => {
   const m = moment(time);
-  return moment().year() === m.year() ? m.format('dddd D. MMM') : m.format('ll');
+  return moment().year() === m.year() ? m.format('dddd D. MMMM') : m.format('ll');
 };
 
 /* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
