@@ -1,75 +1,36 @@
-# dusken-client
+# cnapp
 
-The mobile app for Chateau Neuf using React Native.
+The mobile app for Chateau Neuf using React and [Expo](https://expo.dev/).
+
+[📚 Expo Documentation](https://docs.expo.dev/)
 
 ## Install
 
-    # See https://facebook.github.io/react-native/docs/getting-started.html#content
-    yarn
-    cd ios; pod install  # ios only
-
-    # Environment settings
-    cp env-example .env
-
-    yarn start
-    yarn android
+    npm install
+    cp env-example .env.local
 
 ## Development
 
-    # Improve compile times
-    touch ~/.gradle/gradle.properties && echo -e "org.gradle.daemon=true\norg.gradle.jvmargs=-Xmx2048M" >> ~/.gradle/gradle.properties
-    # Run android emulator (first avd)
-    yarn emulator
+Install [Expo Go](https://expo.dev/client) to run the app on your phone.
 
-### Linking native dependencies
+    npm run start
 
-We use a Podfile to install the stripe ios library, but not for anything else.
-Before running any `react-native link` commands, rename `ios/Podfile` to something else before running, then rename the file back when you are done.
-This is to let the react-native CLI know we use the Dusken xcode project and not cocoapods for managing all other dependencies.
-This avoids alot of issues resulting from poor cocoapods support by react native.
+## History
 
-## Prepare release build
+This is a fork of [dusken-client](https://git.neuf.no/edb/dusken-client) with some
+history, code and binary blobs related to React Native functionality filtered out before
+[commit 7f6b2c21](https://git.neuf.no/edb/cnapp/-/commit/7f6b2c2129068d2fe8623172582bffd31eb4a131).
 
-    # Fastlane
-    bundle update
 
-    # Sentry
-    # Get auth token from https://sentry.neuf.no/api/ with project:write scope
-    cp ios/sentry.properties-example ios/sentry.properties
-    cp android/sentry.properties-example android/sentry.properties
+## TODO
 
-## Create release build (Android)
-
-    # Aquire the keystore and put it in android/app/dusken-client.keystore
-
-    # Put these properties in ~/.gradle/gradle.properties along with the correct passwords
-    DUSKEN_RELEASE_STORE_FILE=dusken-client.keystore
-    DUSKEN_RELEASE_KEY_ALIAS=dusken-client
-    DUSKEN_RELEASE_STORE_PASSWORD=
-    DUSKEN_RELEASE_KEY_PASSWORD=
-
-    # Build
-    yarn build:android # Output is in android/app/build/outputs/apk
-
-    # Note: Make sure you have the file android/google_play.json
-    # Ref: https://docs.fastlane.tools/actions/supply/#setup
-
-    # Publish android build to the Google Play beta track
-    yarn release:android
-
-## Create release build (ios)
-
-We use fastlane and certificate management via fastlane match. Ask nikolai@studentersamfundet.no for access to the certs.
-
-## Libraries
-
-We use <https://nativebase.io/> for generic UI components
-
-## TODO upgrade
-
-- Make stripe work again
-- Fix colors in native base theme
-- UX testy testy
-- build android
-- ios bugfixes
-- ios build
+- switch to [https://docs.expo.dev/versions/latest/sdk/stripe/](stripe-react-native)
+- add support for new stripe api version / payment flows in galtinn (gotta support old flow as well for outdated apps)
+- add functionality needed to pass new store requirements
+  - privacy policy
+  - delete my account
+  - ???
+- add some basic unit tests
+- test in android emulator? (`npm run android`)
+- test in ios emulator? (`npm run ios`, requires macOS)
+- use [Expo Application Services](https://expo.dev/eas) to build and submit app to stores
