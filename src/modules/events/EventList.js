@@ -94,12 +94,15 @@ export default EventList;
 const styles = StyleSheet.create({
   listItem: {
     backgroundColor: 'white',
-    padding: 8,
+    paddingTop: 8,
+    paddingBottom: 12,
+    paddingLeft: 12,
+    paddingRight: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
   listItemTitle: {
-    fontSize: 14,
+    fontSize: 16,
   },
   listItemTime: {
     fontSize: 14,
@@ -110,12 +113,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { marginBottom: -8 },
     }),
-    paddingTop: 8,
     paddingLeft: 8,
-    paddingRight: 8,
+    paddingTop: 12,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   loadingText: {
