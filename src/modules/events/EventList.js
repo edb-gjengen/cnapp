@@ -39,7 +39,7 @@ const EventList = () => {
           </Text>
           <Text style={styles.listItemTime}>{_formatTime(item.start_time)}</Text>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={styles.arrow}>
           <ArrowForwardIcon size={4} color="#999999" marginTop={3} />
         </View>
       </HStack>
@@ -131,5 +131,9 @@ const styles = StyleSheet.create({
   },
   listHeader: {
     paddingTop: 8,
+  },
+  arrow: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
 });
