@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo-skeleton",
-    "slug": "expo-skeleton",
+    "name": "Chateau Neuf",
+    "slug": "neuf.chateau",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
