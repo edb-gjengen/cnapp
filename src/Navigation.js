@@ -58,13 +58,6 @@ const UserStackScreen = () => (
   </UserStack.Navigator>
 );
 
-const AboutStack = createNativeStackNavigator();
-const AboutStackScreen = () => (
-  <AboutStack.Navigator initialRouteName="About" screenOptions={{ ...defaultNaviationStyle }}>
-    <AboutStack.Screen name="About" component={About} options={{ title: 'Om oss' }} />
-  </AboutStack.Navigator>
-);
-
 const HomeTabs = createBottomTabNavigator();
 const EventIcon = ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />;
 const UserIcon = ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />;
@@ -92,11 +85,12 @@ const Navigation = () => (
       />
       <HomeTabs.Screen
         name="About"
-        component={AboutStackScreen}
+        component={About}
         options={{
-          headerShown: false,
+          title: 'Om oss',
           tabBarLabel: 'Om oss',
-          tabBarIcon: UserIcon,
+          tabBarIcon: AboutIcon,
+          ...defaultNaviationStyle
         }}
       />
     </HomeTabs.Navigator>
