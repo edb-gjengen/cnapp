@@ -9,7 +9,7 @@ const FormInput = ({
   name,
   label,
   rules = {
-    required: 'kan ikke være tomt.',
+    required: 'Kan ikke være tomt!',
   },
   returnKeyType = 'next',
   ...rest

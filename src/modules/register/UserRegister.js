@@ -43,7 +43,7 @@ const UserRegister = () => {
           autoCapitalize="none"
           autoCorrect={false}
           rules={{
-            required: 'kan ikke være tomt.',
+            required: 'Kan ikke være tomt!',
             validate: (v) => EmailValidator.validate(v) || 'er ikke en gyldig e-post',
           }}
           onSubmitEditing={() => setFocus('phoneNumber')}
