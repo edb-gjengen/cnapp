@@ -64,7 +64,7 @@ const PurchaseButton = ({ user, isChargingMembership, isLoadingMembershipType, o
 
   return (
     <View>
-      {isChargingMembership && <ActivityIndicator color="#f58220" />}
+      {isChargingMembership && <ActivityIndicator color={theme.colors.neufOrange} />}
       <Button
         onPress={onChargePress}
         fullWidth
@@ -203,37 +203,37 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   valid: {
-    backgroundColor: '#5cb85c',
+    backgroundColor: theme.colors.success,
     flex: 1,
     marginHorizontal: -16,
     padding: 16,
   },
   validText: {
-    color: 'white',
+    color: theme.colors.neufWhite,
     textAlign: 'center',
     fontSize: 30,
     fontWeight: '800',
   },
   expired: {
-    backgroundColor: '#d9534f',
+    backgroundColor: theme.colors.danger,
     flex: 1,
     marginHorizontal: -16,
     padding: 16,
     marginVertical: 16,
   },
   expiredText: {
-    color: 'white',
+    color: theme.colors.neufWhite,
     textAlign: 'center',
     fontSize: 24,
   },
   notMember: {
-    backgroundColor: '#62B1F6',
+    backgroundColor: theme.colors.neufBlue,
     flex: 1,
     marginHorizontal: -16,
     padding: 16,
   },
   notMemberText: {
-    color: 'white',
+    color: theme.colors.neufWhite,
     textAlign: 'center',
     fontSize: 24,
   },

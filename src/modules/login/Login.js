@@ -50,7 +50,7 @@ const Login = () => {
         >
           <Text>Glemt passord?</Text>
         </Button>
-        {isLoggingIn && <ActivityIndicator color="#f58220" />}
+        {isLoggingIn && <ActivityIndicator color={theme.colors.neufOrange} />}
       </View>
     </ScrollView>
   );

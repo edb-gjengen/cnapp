@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000',
+    color: theme.colors.neufBlack,
   },
   card: theme.card,
   image: {
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 14,
-    color: '#666',
+    color: theme.colors.lightText,
   },
   metaInner: {
     flexDirection: 'row',
@@ -245,14 +245,14 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   metaText: {
-    color: '#000',
+    color: theme.colors.neufBlack,
   },
   metaSubtitle: {
-    color: '#666',
+    color: theme.colors.neufBlack,
   },
   content: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ccc',
+    borderColor: theme.colors.neufGray,
     marginTop: 8,
     paddingTop: 10,
   },
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   day: {
     paddingTop: 5,
     fontSize: 20,
-    color: '#000',
+    color: theme.colors.neufBlack,
     textAlign: 'center',
   },
   month: {
@@ -278,8 +278,8 @@ const styles = StyleSheet.create({
   },
   year: {
     fontSize: 9,
-    color: '#fff',
-    backgroundColor: '#f58220',
+    color: theme.colors.neufWhite,
+    backgroundColor: theme.colors.neufOrange,
     textAlign: 'center',
     paddingRight: 20,
     paddingBottom: 3,

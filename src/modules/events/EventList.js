@@ -40,7 +40,7 @@ const EventList = () => {
           <Text style={styles.listItemTime}>{_formatTime(item.start_time)}</Text>
         </View>
         <View style={styles.arrow}>
-          <ArrowForwardIcon size={4} color="#999999" marginTop={3} />
+          <ArrowForwardIcon size={4} color={theme.colors.neufBlack} marginTop={3} />
         </View>
       </HStack>
     </TouchableOpacity>
@@ -51,7 +51,7 @@ const EventList = () => {
   const Footer = () =>
     !loading && (
       <View style={{ paddingVertical: 20 }}>
-        <Spinner color="#f58220" />
+        <Spinner color={theme.colors.neufOrange} />
       </View>
     );
 
@@ -93,23 +93,23 @@ export default EventList;
 
 const styles = StyleSheet.create({
   listItem: {
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.neufWhite,
     paddingTop: 8,
     paddingBottom: 12,
     paddingLeft: 12,
     paddingRight: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: theme.colors.neufGray,
   },
   listItemTitle: {
     fontSize: 16,
   },
   listItemTime: {
     fontSize: 14,
-    color: '#666',
+    color: theme.colors.lightText,
   },
   sectionHeader: {
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.neufWhite,
     ...Platform.select({
       ios: { marginBottom: -8 },
     }),

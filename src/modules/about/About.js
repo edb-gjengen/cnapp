@@ -77,11 +77,11 @@ const About = () => (
       <Text style={styles.header}>Følg oss på</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <TouchableOpacity style={styles.someBtn} onPress={openFacebook}>
-          <FAIcon name="facebook" size={40} color="black" />
+          <FAIcon name="facebook" size={40} color={theme.colors.neufBlack} />
           <Text>Facebook</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.someBtn} onPress={openInstagram}>
-          <FAIcon name="instagram" size={40} color="black" />
+          <FAIcon name="instagram" size={40} color={theme.colors.neufBlack} />
           <Text>Instagram</Text>
         </TouchableOpacity>
       </View>
@@ -155,12 +155,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000',
+    color: theme.colors.neufBlack,
     textAlign: 'center',
   },
   paragraph: {
     fontSize: 16,
-    color: '#000',
+    color: theme.colors.neufBlack,
     paddingBottom: 10,
     lineHeight: 25,
   },

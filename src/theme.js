@@ -2,8 +2,17 @@ import { Platform } from 'react-native';
 import { Colors } from 'react-native-ui-lib';
 
 const colors = {
-  primary: '#f58220',
   danger: '#d9534f',
+  success: '#5cb85c',
+  lightText: '#666',
+  neufPurple: '#720328',
+  neufPink: '#CD96AB',
+  neufGray: '#E5E2D7',
+  neufOrange: '#f58220',
+  neufBeige: '#F8BC90',
+  neufBlue: '#0A0F6D',
+  neufWhite: '#FFFFFF',
+  neufBlack: '#161516',
 };
 
 const card = {
@@ -20,11 +29,11 @@ const card = {
   }),
   padding: 8,
   margin: 8,
-  backgroundColor: '#fff',
+  backgroundColor: colors.neufWhite,
 };
 
 export function loadTheme() {
-  Colors.loadDesignTokens({ primaryColor: colors.primary });
+  Colors.loadDesignTokens({ primaryColor: colors.neufOrange });
 }
 
 export default { card, colors };

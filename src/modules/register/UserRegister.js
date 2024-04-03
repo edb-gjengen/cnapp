@@ -73,7 +73,7 @@ const UserRegister = () => {
         <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
           <Text>Registrer meg</Text>
         </Button>
-        {isRegisteringUser && <ActivityIndicator color="#f58220" />}
+        {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}
       </View>
     </ScrollView>
   );

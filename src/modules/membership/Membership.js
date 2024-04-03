@@ -13,7 +13,7 @@ const Membership = () => {
   if (isFetchingUserData) {
     return (
       <View style={styles.card}>
-        <ActivityIndicator color="#f58220" />
+        <ActivityIndicator color={theme.colors.neufOrange} />
       </View>
     );
   }
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   paragraph: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#000',
+    color: theme.colors.neufBlack,
     paddingBottom: 10,
     lineHeight: 25,
   },
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   em: {
     fontSize: 16,
-    color: '#000',
+    color: theme.colors.neufBlack,
     fontStyle: 'italic',
     textAlign: 'center',
     marginVertical: 10,
@@ -52,14 +52,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 20,
-    color: '#000',
+    color: theme.colors.neufBlack,
     paddingVertical: 10,
     lineHeight: 25,
   },
   header: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
+    color: theme.colors.neufBlack,
     lineHeight: 25,
     paddingLeft: 2,
   },
