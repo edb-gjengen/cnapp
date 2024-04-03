@@ -8,12 +8,15 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import { Button } from 'react-native-ui-lib';
 import Confetti from 'react-native-confetti';
 
 import theme from '../../theme';
 import useProof from './useProof';
+
+import logo from '../../../assets/CN-logo-hel-svart.png';
 
 const MembershipValidTo = ({ user }) => {
   if (!user.last_membership) {
@@ -95,11 +98,7 @@ const Logo = ({ user }) => {
 
   return (
     <View style={{ marginTop: 8 }}>
-      <Image
-        style={{ width: null, height: 100 }}
-        source={{ uri: 'https://galtinn.neuf.no/static/dist/images/logo.png' }}
-        resizeMode="contain"
-      />
+      <Image style={styles.logo} source={logo} />
     </View>
   );
 };
@@ -262,5 +261,11 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     textAlign: 'center',
     color: theme.colors.danger,
+  },
+  logo: {
+    margin: 10,
+    resizeMode: 'contain',
+    width: Dimensions.get('window').width * 0.8, // 80% of screen width
+    alignSelf: 'center',
   },
 });
