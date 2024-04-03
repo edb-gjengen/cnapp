@@ -12,9 +12,22 @@ import Login from './modules/login/Login';
 import About from './modules/about/About';
 import UserRegister from './modules/register/UserRegister';
 
+import theme from './theme';
+
+// This looks ugly, even though it's a recommended style from the branding profile.
+// TODO: Change this
+// also TODO: make sure battery indicator etc. is visible
+defaultNaviationStyle = {
+  headerTintColor: theme.colors.neufOrange,
+  headerTitleAlign: 'center',
+  headerStyle: {
+    backgroundColor: theme.colors.neufPurple,
+  },
+};
+
 const EventStack = createNativeStackNavigator();
 const EventStackScreen = () => (
-  <EventStack.Navigator initialRouteName="EventList">
+  <EventStack.Navigator initialRouteName="EventList" screenOptions={{ ...defaultNaviationStyle }}>
     <EventStack.Screen
       name="EventList"
       component={EventList}
@@ -32,7 +45,7 @@ const EventStackScreen = () => (
 
 const UserStack = createNativeStackNavigator();
 const UserStackScreen = () => (
-  <UserStack.Navigator initialRouteName="Membership">
+  <UserStack.Navigator initialRouteName="Membership" screenOptions={{ ...defaultNaviationStyle }}>
     <UserStack.Screen name="Membership" component={Membership} options={{ title: 'Medlemskap' }} />
     <UserStack.Screen name="Login" component={Login} options={{ title: 'Logg inn' }} />
     <UserStack.Screen
@@ -43,6 +56,13 @@ const UserStackScreen = () => (
       }}
     />
   </UserStack.Navigator>
+);
+
+const AboutStack = createNativeStackNavigator();
+const AboutStackScreen = () => (
+  <AboutStack.Navigator initialRouteName="About" screenOptions={{ ...defaultNaviationStyle }}>
+    <AboutStack.Screen name="About" component={About} options={{ title: 'Om oss' }} />
+  </AboutStack.Navigator>
 );
 
 const HomeTabs = createBottomTabNavigator();
@@ -72,10 +92,11 @@ const Navigation = () => (
       />
       <HomeTabs.Screen
         name="About"
-        component={About}
+        component={AboutStackScreen}
         options={{
-          title: 'Om oss',
-          tabBarIcon: AboutIcon,
+          headerShown: false,
+          tabBarLabel: 'Om oss',
+          tabBarIcon: UserIcon,
         }}
       />
     </HomeTabs.Navigator>
