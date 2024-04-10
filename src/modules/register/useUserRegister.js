@@ -44,6 +44,6 @@ const useUserRegister = () => {
     }
   }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
-  return { onSubmit, isRegisteringUser, registerError, control, setFocus, errors };
+  return { isRegisteringUser, onSubmit, control, isValid, registerError, errors, setFocus };
 };
 export default useUserRegister;
