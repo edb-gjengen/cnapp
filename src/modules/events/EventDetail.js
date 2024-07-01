@@ -179,7 +179,7 @@ const EventDetail = ({
           </View>
         </View>
         {/* Time and calendar */}
-        <TouchableOpacity style={styles.metaInner}>
+        <View style={styles.metaInner}>
           <View style={styles.metaIcon}>
             <FontAwesome name="clock-o" style={styles.icons} />
           </View>
@@ -187,7 +187,7 @@ const EventDetail = ({
             <Text style={styles.metaText}>{formatTimeFull(event)}</Text>
             <Text style={styles.metaSubtitle}>{formatRelative(event.start_time)}</Text>
           </View>
-        </TouchableOpacity>
+        </View>
         {/* Location and maps */}
         <TouchableOpacity style={styles.metaInner} onPress={() => onLocationPress(event.venue)}>
           <View style={[styles.metaIcon, { paddingLeft: 1 }]}>
