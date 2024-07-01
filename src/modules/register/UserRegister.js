@@ -11,7 +11,7 @@ import FormInput from '../../components/FormInput';
 import FormErrors from '../../components/FormErrors';
 
 const UserRegister = () => {
-  const { isRegisteringUser, onSubmit, control, isValid, errors, setFocus } = useUserRegister();
+  const { isRegisteringUser, onSubmit, control, isValid, errors, registerError, setFocus } = useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
   // TODO: validate on type
   // TODO: highlight errorfields
@@ -69,6 +69,7 @@ const UserRegister = () => {
         />
         <View style={styles.errorBox}>
           <FormErrors errors={errors} />
+          <FormErrors errors={registerError} />
         </View>
         <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
           <Text>Registrer meg</Text>
