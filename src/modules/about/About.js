@@ -15,7 +15,7 @@ import { SimpleLineIcons as SimpleIcon, FontAwesome5 as FAIcon } from '@expo/vec
 import { Button } from 'react-native-ui-lib';
 import theme from '../../theme';
 
-import logo from '../../../assets/CN-logo-hel-svart.png';
+import logo from '../../../assets/DNS-logo-svart.png';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
 

@@ -16,7 +16,7 @@ import Confetti from 'react-native-confetti';
 import theme from '../../theme';
 import useProof from './useProof';
 
-import logo from '../../../assets/CN-logo-hel-svart.png';
+import logo from '../../../assets/DNS-logo-svart.png';
 
 const MembershipValidTo = ({ user }) => {
   if (!user.last_membership) {
