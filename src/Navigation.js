@@ -18,10 +18,10 @@ import theme from './theme';
 // TODO: Change this
 // also TODO: make sure battery indicator etc. is visible
 defaultNaviationStyle = {
-  headerTintColor: theme.colors.neufOrange,
+  headerTintColor: theme.colors.neufPurple,
   headerTitleAlign: 'center',
   headerStyle: {
-    backgroundColor: theme.colors.neufPurple,
+    backgroundColor: theme.colors.neufPink,
   },
 };
 
