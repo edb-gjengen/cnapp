@@ -23,6 +23,7 @@ const useUserRegister = () => {
     handleSubmit,
     formState: { errors, isValid },
     setFocus,
+    setError,
   } = useForm();
   const onSubmit = handleSubmit((values) => {
     if (!isValid) {
@@ -36,6 +37,11 @@ const useUserRegister = () => {
     }
 
     dispatch(requestRegisterUser(values));
+
+    // Display error messages from API on form fields
+    for (const key in registerError) {
+      setError(key, { type: 'manual', message: registerError[key] });
+    }
   });
 
   useEffect(() => {
