@@ -23,7 +23,7 @@ const CHATEAU_NEUF_ADDRESS = 'Chateau Neuf, Slemdalsveien 15, 0369 Oslo';
 const FORMAT_TIME = 'HH:mm';
 const FORMAT_MONTH = 'MMM';
 const FORMAT_DAY = 'DD.';
-const FORMAT_LOCAL_DAY = 'ddd';
+const FORMAT_LOCAL_DAY = 'dddd';
 const FORMAT_YEAR = 'YYYY';
 
 const formatRelative = (time) => moment(time).fromNow();
