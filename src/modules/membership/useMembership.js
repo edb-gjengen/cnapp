@@ -9,13 +9,11 @@ import { usePrevious } from '../../hooks';
 const useMembership = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { isAuthenticated, isFetchingUserData, userToken, user, lastOrder } = useSelector((store) => ({
-    isAuthenticated: store.isAuthenticated,
-    isFetchingUserData: store.isFetchingUserData,
-    userToken: store.userToken,
-    user: store.user,
-    lastOrder: store.lastOrder,
-  }));
+  const isAuthenticated = useSelector((store) => store.isAuthenticated);
+  const isFetchingUserData = useSelector((store) => store.isFetchingUserData);
+  const lastOrder = useSelector((store) => store.lastOrder);
+  const user = useSelector((store) => store.user);
+  const userToken = useSelector((store) => store.userToken);
   const prevUserToken = usePrevious(userToken);
   const prevLastOrder = usePrevious(lastOrder);
 

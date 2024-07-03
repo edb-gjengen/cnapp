@@ -10,11 +10,9 @@ const useLogin = () => {
 
   const dispatch = useDispatch();
 
-  const { isAuthenticated, isLoggingIn, loginError } = useSelector((store) => ({
-    isAuthenticated: store.isAuthenticated,
-    isLoggingIn: store.isLoggingIn,
-    loginError: store.loginError,
-  }));
+  const isAuthenticated = useSelector((store) => store.isAuthenticated);
+  const isLoggingIn = useSelector((store) => store.isLoggingIn);
+  const loginError = useSelector((store) => store.loginError);
 
   const {
     control,

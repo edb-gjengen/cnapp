@@ -10,11 +10,9 @@ import { requestRegisterUser } from '../../api';
 const useUserRegister = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { isAuthenticated, isRegisteringUser, registerError } = useSelector((store) => ({
-    isAuthenticated: store.isAuthenticated,
-    isRegisteringUser: store.isRegisteringUser,
-    registerError: store.registerError === null ? {} : store.registerError,
-  }));
+  const isAuthenticated = useSelector((store) => store.isAuthenticated);
+  const isRegisteringUser = useSelector((store) => store.isRegisteringUser);
+  const registerError = useSelector((store) => (store.registerError === null ? {} : store.registerError));
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
 

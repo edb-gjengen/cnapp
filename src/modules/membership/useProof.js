@@ -25,11 +25,9 @@ function getPrice(membershipTypes) {
 
 const useProof = ({ user, fetchUser }) => {
   const dispatch = useDispatch();
-  const { userToken, isChargingMembership, chargeError } = useSelector((state) => ({
-    userToken: state.userToken,
-    isChargingMembership: state.isChargingMembership,
-    chargeError: state.chargeError,
-  }));
+  const userToken = useSelector((state) => state.userToken);
+  const isChargingMembership = useSelector((state) => state.isChargingMembership);
+  const chargeError = useSelector((state) => state.chargeError);
   const { data, loading } = useQuery(PROOF_QUERY);
 
   const openStripe = () => {
