@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toast } from 'native-base';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ const useUserRegister = () => {
   const isAuthenticated = useSelector((store) => store.isAuthenticated);
   const isRegisteringUser = useSelector((store) => store.isRegisteringUser);
   const registerError = useSelector((store) => store.registerError) || {};
+  const [toast, setToast] = useState(null);
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
 
@@ -25,14 +26,14 @@ const useUserRegister = () => {
   } = useForm();
   const onSubmit = handleSubmit((values) => {
     if (!isValid) {
-      Toast.show({
-        text: 'Noen av feltene er ikke fylt ut riktig',
-        position: 'bottom',
-        buttonText: 'OK',
-        duration: 1500,
+      setToast({
+        message: 'Noen av feltene er ikke fylt ut riktig',
+        visible: true,
+        preset: 'failure',
       });
       return;
     }
+    setToast(null);
 
     dispatch(requestRegisterUser(values));
 
@@ -48,6 +49,6 @@ const useUserRegister = () => {
     }
   }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
-  return { isRegisteringUser, onSubmit, control, isValid, registerError, errors, setFocus };
+  return { isRegisteringUser, onSubmit, control, isValid, registerError, errors, setFocus, toast, setToast };
 };
 export default useUserRegister;

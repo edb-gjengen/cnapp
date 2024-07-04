@@ -99,26 +99,31 @@ function membershipChargeFailure(chargeError) {
 }
 
 export {
+  /* Login */
   LOGIN_REQUEST,
   loginRequest,
   LOGIN_SUCCESS,
   loginSuccess,
   LOGIN_FAILURE,
   loginFailure,
+  /* Logout */
   LOGOUT,
   logout,
+  /* User data */
   USER_DATA_REQUEST,
   userDataRequest,
   USER_DATA_SUCCESS,
   userDataSuccess,
   USER_DATA_FAILURE,
   userDataFailure,
+  /* Register */
   REGISTER_USER_REQUEST,
   registerUserRequest,
   REGISTER_USER_SUCCESS,
   registerUserSuccess,
   REGISTER_USER_FAILURE,
   registerUserFailure,
+  /* Charge */
   MEMBERSHIP_CHARGE_REQUEST,
   membershipChargeRequest,
   MEMBERSHIP_CHARGE_SUCCESS,

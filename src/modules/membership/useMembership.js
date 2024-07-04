@@ -45,6 +45,7 @@ const useMembership = () => {
     onLogoutPress,
     onRegisterPress,
     onLoginPress,
+    fetchUser,
   };
 };
 export default useMembership;

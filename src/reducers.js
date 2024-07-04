@@ -81,7 +81,7 @@ export default function duskenApp(state = initialState, action) {
 
       return { ...state, isRegisteringUser: false, isAuthenticated: true, user: userData, userToken: token };
 
-    /* User data */
+    /* Membership charge */
     case MEMBERSHIP_CHARGE_REQUEST:
       return { ...state, isChargingMembership: true, chargeError: null };
 

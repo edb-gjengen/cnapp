@@ -1,10 +1,10 @@
-// FIXME: fix lint violations
-/* eslint-disable no-unused-vars, react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { gql, useQuery } from '@apollo/client';
+import { useStripe } from '@stripe/stripe-react-native';
+import Constants from 'expo-constants';
 
-import { requestMembershipCharge } from '../../api';
+import { requestStripePaymentSheet } from '../../api';
 
 const PROOF_QUERY = gql`
   {
@@ -24,48 +24,67 @@ function getPrice(membershipTypes) {
 }
 
 const useProof = ({ user, fetchUser }) => {
-  const dispatch = useDispatch();
   const userToken = useSelector((state) => state.userToken);
-  const isChargingMembership = useSelector((state) => state.isChargingMembership);
   const chargeError = useSelector((state) => state.chargeError);
   const { data, loading } = useQuery(PROOF_QUERY);
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const membershipTypeSlug = data?.membershipTypes?.[0]?.slug ?? 'standard';
+  const [toast, setToast] = useState(null);
 
-  const openStripe = () => {
-    const options = {
-      prefilledInformation: {
-        email: user.email,
-      },
-      smsAutofillDisabled: true,
-    };
-
-    const membershipTypeSlug = data?.membershipTypes?.[0]?.slug ?? 'standard';
-
-    // TODO: Implement stripe payment
-    // stripe.paymentRequestWithCardForm(options).then(
-    //   (token) => {
-    //     // returns a token.tokenId which should be saved
-    //     dispatch(requestMembershipCharge(userToken, { id: token.tokenId, email: user.email }, membershipTypeSlug));
-    //   },
-    //   () => {
-    //     /* FIXME: Happens only if card dialog is canceled? */
-    //   }
-    // );
+  const openPaymentSheet = async () => {
+    try {
+      await initializePaymentSheet();
+    } catch (err) {
+      console.error('🔥', err);
+      setToast({ message: 'Oops! Could not initialise payment', visible: true, preset: 'failure' });
+    }
+    const { error } = await presentPaymentSheet();
+    const message = error ? `Error code: ${error.code} ${error.message}` : 'Your order is confirmed!';
+    setToast({ message, visible: true, preset: error ? 'failure' : 'success' });
+    setPaymentLoading(false);
   };
 
+  const initializePaymentSheet = async () => {
+    setPaymentLoading(true);
+    const { paymentIntent, ephemeralKey, customer } = await requestStripePaymentSheet(userToken, membershipTypeSlug);
+
+    const { error } = await initPaymentSheet({
+      merchantDisplayName: 'Det Norske Studentersamfund',
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      defaultBillingDetails: {
+        email: user.email,
+        name: `${user.first_name} ${user.last_name}`,
+        address: {
+          country: 'NO',
+        },
+      },
+      returnURL: `${Constants.expoConfig.scheme}://stripe-redirect`,
+    });
+    if (!error) {
+      setPaymentLoading(true);
+    }
+  };
+
+  /* Refetech user data if memberships has expired */
   useEffect(() => {
     const todaysDate = new Date().toISOString().substring(0, 10);
     const lastMembership = user?.last_membership;
     if (lastMembership && lastMembership.membership_type !== 'lifelong' && lastMembership.end_date < todaysDate) {
       fetchUser();
     }
-  }, []);
+  }, [fetchUser, user?.last_membership]);
 
   return {
     chargeError: chargeError || '',
-    isChargingMembership,
     isLoadingMembershipType: loading,
     membershipPrice: getPrice(data?.membershipTypes),
-    onChargePress: openStripe,
+    onChargePress: openPaymentSheet,
+    paymentLoading,
+    toast,
+    setToast,
   };
 };
 
