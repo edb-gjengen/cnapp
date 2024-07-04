@@ -12,7 +12,7 @@ const useUserRegister = () => {
   const navigation = useNavigation();
   const isAuthenticated = useSelector((store) => store.isAuthenticated);
   const isRegisteringUser = useSelector((store) => store.isRegisteringUser);
-  const registerError = useSelector((store) => (store.registerError === null ? {} : store.registerError));
+  const registerError = useSelector((store) => store.registerError) || {};
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
 
@@ -37,9 +37,9 @@ const useUserRegister = () => {
     dispatch(requestRegisterUser(values));
 
     // Display error messages from API on form fields
-    for (const key in registerError) {
+    Object.keys(registerError).forEach((key) => {
       setError(key, { type: 'manual', message: registerError[key] });
-    }
+    });
   });
 
   useEffect(() => {
