@@ -1,17 +1,16 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { StripeProvider } from '@stripe/stripe-react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { LogBox } from 'react-native';
-
 import Constants from 'expo-constants';
-import { loadTheme } from './theme';
-import { useDeepLinking } from './hooks';
+import React from 'react';
+import { LogBox } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import Dusken from './Dusken';
+import { useDeepLinking } from './hooks';
 import { store, persistor } from './reduxStore';
+import { loadTheme } from './theme';
 
 const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/` }),

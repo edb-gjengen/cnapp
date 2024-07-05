@@ -1,6 +1,6 @@
+import { useStripe } from '@stripe/stripe-react-native';
 import { useCallback, useRef, useEffect } from 'react';
 import { Linking } from 'react-native';
-import { useStripe } from '@stripe/stripe-react-native';
 
 export function usePrevious(value) {
   const ref = useRef();

@@ -1,12 +1,12 @@
+import { ScrollView } from 'native-base';
 import React from 'react';
 import { ActivityIndicator, Linking, StyleSheet, View, Text } from 'react-native';
-import { ScrollView } from 'native-base';
 import { Button } from 'react-native-ui-lib';
 
-import theme from '../../theme';
 import useLogin from './useLogin';
-import FormInput from '../../components/FormInput';
 import FormErrors from '../../components/FormErrors';
+import FormInput from '../../components/FormInput';
+import theme from '../../theme';
 
 const Login = () => {
   const { isLoggingIn, errors, control, setFocus, onSubmit } = useLogin();

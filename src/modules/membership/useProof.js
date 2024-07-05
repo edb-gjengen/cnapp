@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { gql, useQuery } from '@apollo/client';
 import { useStripe } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { requestStripePaymentSheet } from '../../api';
 

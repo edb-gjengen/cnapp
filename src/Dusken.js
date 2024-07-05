@@ -1,6 +1,6 @@
+import { NativeBaseProvider } from 'native-base';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { NativeBaseProvider } from 'native-base';
 
 import Navigation from './Navigation';
 import { logout as logoutAction, registerUserSuccess as registerUserSuccessAction } from './actions';

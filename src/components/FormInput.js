@@ -1,7 +1,6 @@
+import { Input, Text, WarningOutlineIcon, FormControl } from 'native-base';
 import React from 'react';
 import { Controller } from 'react-hook-form';
-
-import { Input, Text, WarningOutlineIcon, FormControl } from 'native-base';
 
 const FormInput = ({
   control,

@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { usePrevious } from '../../hooks';
 import { requestRegisterUser } from '../../api';
+import { usePrevious } from '../../hooks';
 
 const useUserRegister = () => {
   const dispatch = useDispatch();

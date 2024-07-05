@@ -1,3 +1,5 @@
+import { FontAwesome } from '@expo/vector-icons';
+import moment from 'moment';
 import React from 'react';
 import {
   Linking,
@@ -11,8 +13,6 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import moment from 'moment';
-import { FontAwesome } from '@expo/vector-icons';
 
 import theme from '../../theme';
 

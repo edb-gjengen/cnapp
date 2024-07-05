@@ -1,9 +1,8 @@
-import { StyleSheet, View, Platform, SectionList, TouchableOpacity } from 'react-native';
-import { Card, Text, Spinner, ArrowForwardIcon, HStack } from 'native-base';
-import { Button } from 'react-native-ui-lib';
-
-import React from 'react';
 import moment from 'moment';
+import { Card, Text, Spinner, ArrowForwardIcon, HStack } from 'native-base';
+import React from 'react';
+import { StyleSheet, View, Platform, SectionList, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
 import useEventList from './useEventList';

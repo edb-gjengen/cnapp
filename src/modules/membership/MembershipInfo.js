@@ -1,7 +1,7 @@
 import React from 'react';
-
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-ui-lib';
+
 import theme from '../../theme';
 
 const MembershipInfo = ({ onRegister, onLogin }) => (

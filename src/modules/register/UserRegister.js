@@ -1,13 +1,12 @@
+import * as EmailValidator from 'email-validator';
 import React from 'react';
+import { ActivityIndicator, StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Button, Incubator } from 'react-native-ui-lib';
 
-import { ActivityIndicator, StyleSheet, View, Text, ScrollView } from 'react-native';
-import * as EmailValidator from 'email-validator';
-
-import theme from '../../theme';
 import useUserRegister from './useUserRegister';
-import FormInput from '../../components/FormInput';
 import FormErrors from '../../components/FormErrors';
+import FormInput from '../../components/FormInput';
+import theme from '../../theme';
 
 const { Toast } = Incubator;
 

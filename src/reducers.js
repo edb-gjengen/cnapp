@@ -13,7 +13,6 @@ import {
   MEMBERSHIP_CHARGE_FAILURE,
   MEMBERSHIP_CHARGE_SUCCESS,
 } from './actions';
-
 import { snakeToCamelCase } from './utils';
 
 const initialState = {

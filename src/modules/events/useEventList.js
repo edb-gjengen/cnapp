@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 import 'moment/locale/nb';
 
-import { useNavigation } from '@react-navigation/native';
 import { fetchWithTimeout } from '../../utils';
 
 moment.locale('nb');

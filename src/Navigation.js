@@ -1,17 +1,15 @@
-import React from 'react';
+import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SimpleLineIcons as Icon } from '@expo/vector-icons';
+import React from 'react';
 
-import EventList from './modules/events/EventList';
-import EventDetail from './modules/events/EventDetail';
-
-import Membership from './modules/membership/Membership';
-import Login from './modules/login/Login';
 import About from './modules/about/About';
+import EventDetail from './modules/events/EventDetail';
+import EventList from './modules/events/EventList';
+import Login from './modules/login/Login';
+import Membership from './modules/membership/Membership';
 import UserRegister from './modules/register/UserRegister';
-
 import theme from './theme';
 
 // This looks ugly, even though it's a recommended style from the branding profile.

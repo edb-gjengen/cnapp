@@ -10,13 +10,12 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { Button, Incubator } from 'react-native-ui-lib';
 import Confetti from 'react-native-confetti';
+import { Button, Incubator } from 'react-native-ui-lib';
 
-import theme from '../../theme';
 import useProof from './useProof';
-
 import logo from '../../../assets/DNS-logo-svart.png';
+import theme from '../../theme';
 
 const { Toast } = Incubator;
 
