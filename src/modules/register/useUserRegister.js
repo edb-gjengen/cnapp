@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Toast } from 'native-base';
 import { useForm } from 'react-hook-form';
 
 import { usePrevious } from '../../hooks';

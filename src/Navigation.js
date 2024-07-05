@@ -17,7 +17,7 @@ import theme from './theme';
 // This looks ugly, even though it's a recommended style from the branding profile.
 // TODO: Change this
 // also TODO: make sure battery indicator etc. is visible
-defaultNaviationStyle = {
+const defaultNavigationStyle = {
   headerTintColor: theme.colors.neufPurple,
   headerTitleAlign: 'center',
   headerStyle: {
@@ -27,7 +27,7 @@ defaultNaviationStyle = {
 
 const EventStack = createNativeStackNavigator();
 const EventStackScreen = () => (
-  <EventStack.Navigator initialRouteName="EventList" screenOptions={{ ...defaultNaviationStyle }}>
+  <EventStack.Navigator initialRouteName="EventList" screenOptions={{ ...defaultNavigationStyle }}>
     <EventStack.Screen
       name="EventList"
       component={EventList}
@@ -45,7 +45,7 @@ const EventStackScreen = () => (
 
 const UserStack = createNativeStackNavigator();
 const UserStackScreen = () => (
-  <UserStack.Navigator initialRouteName="Membership" screenOptions={{ ...defaultNaviationStyle }}>
+  <UserStack.Navigator initialRouteName="Membership" screenOptions={{ ...defaultNavigationStyle }}>
     <UserStack.Screen name="Membership" component={Membership} options={{ title: 'Medlemskap' }} />
     <UserStack.Screen name="Login" component={Login} options={{ title: 'Logg inn' }} />
     <UserStack.Screen
@@ -90,7 +90,7 @@ const Navigation = () => (
           title: 'Om oss',
           tabBarLabel: 'Om oss',
           tabBarIcon: AboutIcon,
-          ...defaultNaviationStyle
+          ...defaultNavigationStyle,
         }}
       />
     </HomeTabs.Navigator>
