@@ -150,3 +150,35 @@ export function requestMembershipCharge(authToken, stripeToken, membershipType) 
       );
   };
 }
+
+/** Create a stripe payment sheet. Note that this is not using redux */
+export async function requestStripePaymentSheet(authToken, membershipType) {
+  const body = JSON.stringify({
+    membership_type: membershipType,
+  });
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Token ${authToken}`,
+  };
+  return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/stripe/payment-sheet/`, {
+    method: 'POST',
+    headers,
+    body,
+  })
+    .then((response) => response.json().then((json) => ({ json, response })))
+    .then(({ json, response }) => {
+      if (response.ok === false) {
+        return Promise.reject(json);
+      }
+      return json;
+    })
+    .then(
+      (data) => {
+        return data;
+      },
+      (data) => {
+        return data.detail || 'Kunne ikke belaste bankkortet, prøv igjen';
+      },
+    );
+}

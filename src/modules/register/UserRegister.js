@@ -1,8 +1,7 @@
 import React from 'react';
-import { ScrollView } from 'native-base';
-import { Button } from 'react-native-ui-lib';
+import { Button, Incubator } from 'react-native-ui-lib';
 
-import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text, ScrollView } from 'react-native';
 import * as EmailValidator from 'email-validator';
 
 import theme from '../../theme';
@@ -10,73 +9,87 @@ import useUserRegister from './useUserRegister';
 import FormInput from '../../components/FormInput';
 import FormErrors from '../../components/FormErrors';
 
+const { Toast } = Incubator;
+
 const UserRegister = () => {
-  const { isRegisteringUser, onSubmit, control, isValid, errors, registerError, setFocus } = useUserRegister();
+  const { isRegisteringUser, onSubmit, control, isValid, errors, registerError, setFocus, toast, setToast } =
+    useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
   // TODO: validate on type
   // TODO: highlight errorfields
 
   return (
-    <ScrollView>
+    <>
       <View style={styles.card}>
-        <FormInput
-          name="firstName"
-          label="Fornavn"
-          control={control}
-          errors={errors}
-          autoFocus={true}
-          onSubmitEditing={() => setFocus('lastName')}
-        />
-        <FormInput
-          name="lastName"
-          label="Etternavn"
-          control={control}
-          errors={errors}
-          onSubmitEditing={() => setFocus('email')}
-        />
-        <FormInput
-          name="email"
-          label="E-post"
-          control={control}
-          errors={errors}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          rules={{
-            required: 'Kan ikke være tomt!',
-            validate: (v) => EmailValidator.validate(v) || 'er ikke en gyldig e-post',
-          }}
-          onSubmitEditing={() => setFocus('phoneNumber')}
-        />
-        <FormInput
-          name="phoneNumber"
-          label="Mobilnummer"
-          control={control}
-          errors={errors}
-          keyboardType="phone-pad"
-          onSubmitEditing={() => setFocus('password')}
-        />
-        <FormInput
-          name="password"
-          label="Passord"
-          control={control}
-          errors={errors}
-          secureTextEntry={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-          returnKeyType="send"
-          onSubmitEditing={onSubmit}
-        />
-        <View style={styles.errorBox}>
-          <FormErrors errors={errors} />
-          <FormErrors errors={registerError} />
-        </View>
-        <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
-          <Text>Registrer meg</Text>
-        </Button>
-        {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}
+        <ScrollView>
+          <FormInput
+            name="firstName"
+            label="Fornavn"
+            control={control}
+            errors={errors}
+            autoFocus={true}
+            onSubmitEditing={() => setFocus('lastName')}
+          />
+          <FormInput
+            name="lastName"
+            label="Etternavn"
+            control={control}
+            errors={errors}
+            onSubmitEditing={() => setFocus('email')}
+          />
+          <FormInput
+            name="email"
+            label="E-post"
+            control={control}
+            errors={errors}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            rules={{
+              required: 'Kan ikke være tomt!',
+              validate: (v) => EmailValidator.validate(v) || 'er ikke en gyldig e-post',
+            }}
+            onSubmitEditing={() => setFocus('phoneNumber')}
+          />
+          <FormInput
+            name="phoneNumber"
+            label="Mobilnummer"
+            control={control}
+            errors={errors}
+            keyboardType="phone-pad"
+            onSubmitEditing={() => setFocus('password')}
+          />
+          <FormInput
+            name="password"
+            label="Passord"
+            control={control}
+            errors={errors}
+            secureTextEntry={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+            returnKeyType="send"
+            onSubmitEditing={onSubmit}
+          />
+          <View style={styles.errorBox}>
+            <FormErrors errors={errors} />
+            <FormErrors errors={registerError} />
+          </View>
+          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
+            <Text>Registrer meg</Text>
+          </Button>
+          {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}
+        </ScrollView>
       </View>
-    </ScrollView>
+      <Toast
+        message={toast?.message}
+        visible={toast?.visible}
+        position="bottom"
+        autoDismiss={5 * 1000}
+        onDismiss={() => {
+          setToast(null);
+        }}
+      />
+    </>
   );
 };
 

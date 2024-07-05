@@ -10,13 +10,15 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { Button } from 'react-native-ui-lib';
+import { Button, Incubator } from 'react-native-ui-lib';
 import Confetti from 'react-native-confetti';
 
 import theme from '../../theme';
 import useProof from './useProof';
 
 import logo from '../../../assets/DNS-logo-svart.png';
+
+const { Toast } = Incubator;
 
 const MembershipValidTo = ({ user }) => {
   if (!user.last_membership) {
@@ -60,18 +62,18 @@ const MembershipStatus = ({ user, onMembershipPress }) => {
   );
 };
 
-const PurchaseButton = ({ user, isChargingMembership, isLoadingMembershipType, onChargePress, membershipPrice }) => {
+const PurchaseButton = ({ user, paymentLoading, isLoadingMembershipType, onChargePress, membershipPrice }) => {
   if (user.is_member) {
     return null;
   }
 
   return (
     <View>
-      {isChargingMembership && <ActivityIndicator color={theme.colors.neufOrange} />}
+      {paymentLoading && <ActivityIndicator color={theme.colors.neufOrange} />}
       <Button
         onPress={onChargePress}
         fullWidth
-        disabled={isChargingMembership || isLoadingMembershipType}
+        disabled={paymentLoading || isLoadingMembershipType}
         style={styles.purchaseButton}
       >
         <Text>{`Kjøp medlemskap (${membershipPrice} NOK)`}</Text>
@@ -130,10 +132,11 @@ const MembershipName = ({ user }) => {
 const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef(null);
-  const { chargeError, isChargingMembership, isLoadingMembershipType, onChargePress, membershipPrice } = useProof({
-    user,
-    fetchUser,
-  });
+  const { chargeError, paymentLoading, isLoadingMembershipType, onChargePress, membershipPrice, toast, setToast } =
+    useProof({
+      user,
+      fetchUser,
+    });
 
   useEffect(() => {
     const currentRef = confettiRef.current;
@@ -162,30 +165,41 @@ const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
   }
 
   return (
-    <View>
-      <UserConfetti user={user} confettiRef={confettiRef} />
-      <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
-        <View style={[styles.card, { paddingVertical: 16 }]}>
-          <MembershipName user={user} />
-          <Logo user={user} />
-          <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
-          <ChargeError chargeError={chargeError} />
-          <PurchaseButton
-            user={user}
-            isChargingMembership={isChargingMembership}
-            isLoadingMembershipType={isLoadingMembershipType}
-            membershipPrice={membershipPrice}
-            onChargePress={onChargePress}
-          />
-          <MembershipValidTo user={user} />
-        </View>
-        <View>
-          <Button onPress={onLogoutPress} style={styles.logoutButton} small>
-            <Text>Logg ut</Text>
-          </Button>
-        </View>
-      </ScrollView>
-    </View>
+    <>
+      <View>
+        <UserConfetti user={user} confettiRef={confettiRef} />
+        <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
+          <View style={[styles.card, { paddingVertical: 16 }]}>
+            <MembershipName user={user} />
+            <Logo user={user} />
+            <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
+            <ChargeError chargeError={chargeError} />
+            <PurchaseButton
+              user={user}
+              paymentLoading={paymentLoading}
+              isLoadingMembershipType={isLoadingMembershipType}
+              membershipPrice={membershipPrice}
+              onChargePress={onChargePress}
+            />
+            <MembershipValidTo user={user} />
+          </View>
+          <View>
+            <Button onPress={onLogoutPress} style={styles.logoutButton} small>
+              <Text>Logg ut</Text>
+            </Button>
+          </View>
+        </ScrollView>
+      </View>
+      <Toast
+        message={toast?.message}
+        visible={toast?.visible}
+        position="bottom"
+        autoDismiss={5 * 1000}
+        onDismiss={() => {
+          setToast(null);
+        }}
+      />
+    </>
   );
 };
 export default Proof;
