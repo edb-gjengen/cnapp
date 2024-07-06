@@ -1,6 +1,10 @@
 import { useStripe } from '@stripe/stripe-react-native';
 import { useCallback, useRef, useEffect } from 'react';
 import { Linking } from 'react-native';
+import type { TypedUseSelectorHook } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+
+import type { AppDispatch, AppStore, RootState } from './reduxStore';
 
 export function usePrevious(value) {
   const ref = useRef();
@@ -46,3 +50,8 @@ export const useDeepLinking = () => {
     return () => deepLinkListener.remove();
   }, [handleDeepLink]);
 };
+
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppStore: () => AppStore = useStore;

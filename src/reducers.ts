@@ -15,6 +15,7 @@ import {
 } from './actions';
 import { snakeToCamelCase } from './utils';
 
+// FIXME: type this
 const initialState = {
   isAuthenticated: false,
   isLoggingIn: false,
@@ -31,14 +32,14 @@ const initialState = {
 };
 
 function formatErrors(errs) {
-  const _errs = {};
+  const errors = {};
   Object.entries(errs).forEach(([key, value]) => {
-    _errs[snakeToCamelCase(key)] = Array.isArray(value) ? value.join('\n') : value;
+    errors[snakeToCamelCase(key)] = Array.isArray(value) ? value.join('\n') : value;
   });
-  return _errs;
+  return errors;
 }
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export default function duskenApp(state = initialState, action) {
   switch (action.type) {
     /* Login */

@@ -3,10 +3,13 @@ module.exports = {
   extends: [
     '@react-native',
     'airbnb-base',
+    'airbnb-typescript/base',
     'plugin:prettier/recommended',
     'plugin:react/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
+    'plugin:import/typescript',
+    'plugin:@typescript-eslint/recommended',
   ],
   rules: {
     'class-methods-use-this': 'error', // FIXME: refactor
@@ -16,11 +19,11 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
     'no-unused-vars': 'off',
-    'no-use-before-define': ['error', { functions: true, classes: true, variables: false }], // disable the rule for variables, but enable it for functions and classes
+    '@typescript-eslint/no-use-before-define': ['error', { functions: true, classes: true, variables: false }], // disable the rule for variables, but enable it for functions and classes
 
     'react/prefer-stateless-function': 1,
-    'react/prop-types': 'off', // FIXME: typescript
-    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
+    'react/prop-types': 'off',
+    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'react/sort-comp': 'off',
     'react-native/no-inline-styles': 'off', // FIXME: refactor
     'import/no-extraneous-dependencies': [
@@ -41,10 +44,24 @@ module.exports = {
     'unused-imports/no-unused-imports': 'error',
   },
   plugins: ['prettier', 'unused-imports'],
-  parser: '@babel/eslint-parser',
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: ['./tsconfig.json'],
+  },
   settings: {
     react: {
       version: 'detect',
     },
+    'import/resolver': {
+      typescript: {
+        project: ['./tsconfig.json'],
+      },
+    },
   },
+  overrides: [
+    {
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      files: ['./**/*.js'],
+    },
+  ],
 };

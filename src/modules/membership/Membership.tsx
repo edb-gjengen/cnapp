@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
+import theme from 'src/theme';
+
 import MembershipInfo from './MembershipInfo';
 import Proof from './Proof';
 import useMembership from './useMembership';
-import theme from '../../theme';
 
 const Membership = () => {
   const { isFetchingUserData, onRegisterPress, onLoginPress, onLogoutPress, user, isAuthenticated, fetchUser } =

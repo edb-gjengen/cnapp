@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 
-import theme from '../../theme';
+import theme from 'src/theme';
+import type { EventDetailProps } from 'src/types/navigation';
 
 moment.locale('nb');
 
@@ -157,7 +158,7 @@ const EventDetail = ({
   route: {
     params: { event },
   },
-}) => {
+}: EventDetailProps) => {
   const { width } = useWindowDimensions();
   return (
     <ScrollView>

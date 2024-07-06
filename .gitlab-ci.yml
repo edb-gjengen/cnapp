@@ -1,0 +1,17 @@
+default:
+  image: node:20-slim
+  cache:
+    paths:
+      - node_modules
+
+check_types:
+  stage: test
+  script:
+    - npm i
+    - npm run check-types
+
+lint:
+  stage: test
+  script:
+    - npm i
+    - npm run lint

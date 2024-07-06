@@ -4,7 +4,8 @@ import Constants from 'expo-constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { requestStripePaymentSheet } from '../../api';
+import { requestStripePaymentSheet } from 'src/api';
+import { RootState } from 'src/reduxStore';
 
 const PROOF_QUERY = gql`
   {
@@ -24,8 +25,8 @@ function getPrice(membershipTypes) {
 }
 
 const useProof = ({ user, fetchUser }) => {
-  const userToken = useSelector((state) => state.userToken);
-  const chargeError = useSelector((state) => state.chargeError);
+  const userToken = useSelector((state: RootState) => state.userToken);
+  const chargeError = useSelector((state: RootState) => state.chargeError);
   const { data, loading } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [paymentLoading, setPaymentLoading] = useState(false);

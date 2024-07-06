@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import 'moment/locale/nb';
 
-import { fetchWithTimeout } from '../../utils';
+import 'moment/locale/nb';
+import type { EventType } from 'src/types/data';
+import { fetchWithTimeout } from 'src/utils';
 
 moment.locale('nb');
 
@@ -81,8 +82,8 @@ const useEventList = () => {
   }, []);
 
   return {
-    showEvent: (event) => {
-      navigate('EventDetail', { event });
+    showEvent: (event: EventType) => {
+      navigate('EventStack', { screen: 'EventDetail', params: { event } });
     },
     handleRefresh,
     handleLoadMore,
