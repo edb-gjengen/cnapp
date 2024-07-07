@@ -1,10 +1,16 @@
-import { Input, Text, WarningOutlineIcon, FormControl } from 'native-base';
+import { Input, Text, WarningOutlineIcon, FormControl, IInputProps } from 'native-base';
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, UseControllerProps, useForm } from 'react-hook-form';
+import { ReturnKeyTypeOptions } from 'react-native';
+
+type FormInputProps = {
+  name: string;
+  label: string;
+  rules?: UseControllerProps['rules'];
+  returnKeyType?: ReturnKeyTypeOptions;
+} & IInputProps;
 
 const FormInput = ({
-  control,
-  errors,
   name,
   label,
   rules = {
@@ -12,13 +18,18 @@ const FormInput = ({
   },
   returnKeyType = 'next',
   ...rest
-}) => {
+}: FormInputProps) => {
+  const {
+    formState: { errors },
+    control,
+  } = useForm();
+  const fieldError = errors[name];
   return (
     <Controller
       control={control}
       rules={rules}
       render={({ field: { onChange, onBlur, value, ref } }) => (
-        <FormControl isInvalid={Boolean(errors[name])}>
+        <FormControl isInvalid={Boolean(fieldError)}>
           <FormControl.Label>{label}</FormControl.Label>
           <Input
             ref={ref}
@@ -28,9 +39,9 @@ const FormInput = ({
             value={value}
             {...rest}
           />
-          {errors[name] && (
+          {fieldError && (
             <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-              <Text>{errors[name].message}</Text>
+              <Text>{fieldError.message.toString()}</Text>
             </FormControl.ErrorMessage>
           )}
         </FormControl>

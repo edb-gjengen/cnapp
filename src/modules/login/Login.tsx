@@ -3,13 +3,14 @@ import React from 'react';
 import { ActivityIndicator, Linking, StyleSheet, View, Text } from 'react-native';
 import { Button } from 'react-native-ui-lib';
 
+import FormErrors from 'src/components/FormErrors';
+import FormInput from 'src/components/FormInput';
+import theme from 'src/theme';
+
 import useLogin from './useLogin';
-import FormErrors from '../../components/FormErrors';
-import FormInput from '../../components/FormInput';
-import theme from '../../theme';
 
 const Login = () => {
-  const { isLoggingIn, errors, control, setFocus, onSubmit } = useLogin();
+  const { isLoggingIn, errors, setFocus, onSubmit } = useLogin();
 
   return (
     <ScrollView>
@@ -19,8 +20,6 @@ const Login = () => {
           name="email"
           label="E-post / Brukernavn"
           keyboardType="email-address"
-          control={control}
-          errors={errors}
           autoFocus
           autoCapitalize="none"
           autoCorrect={false}
@@ -30,8 +29,6 @@ const Login = () => {
           name="password"
           label="Passord"
           secureTextEntry
-          control={control}
-          errors={errors}
           autoCapitalize="none"
           autoCorrect={false}
           onSubmitEditing={onSubmit}

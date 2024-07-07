@@ -11,6 +11,7 @@ import Login from './modules/login/Login';
 import Membership from './modules/membership/Membership';
 import UserRegister from './modules/register/UserRegister';
 import theme from './theme';
+import type { EventStackParamList, HomeTabParamList, UserStackParamList } from './types/navigation';
 
 // This looks ugly, even though it's a recommended style from the branding profile.
 // TODO: Change this
@@ -21,9 +22,9 @@ const defaultNavigationStyle = {
   headerStyle: {
     backgroundColor: theme.colors.neufPink,
   },
-};
+} as const;
 
-const EventStack = createNativeStackNavigator();
+const EventStack = createNativeStackNavigator<EventStackParamList>();
 const EventStackScreen = () => (
   <EventStack.Navigator initialRouteName="EventList" screenOptions={{ ...defaultNavigationStyle }}>
     <EventStack.Screen
@@ -41,7 +42,7 @@ const EventStackScreen = () => (
   </EventStack.Navigator>
 );
 
-const UserStack = createNativeStackNavigator();
+const UserStack = createNativeStackNavigator<UserStackParamList>();
 const UserStackScreen = () => (
   <UserStack.Navigator initialRouteName="Membership" screenOptions={{ ...defaultNavigationStyle }}>
     <UserStack.Screen name="Membership" component={Membership} options={{ title: 'Medlemskap' }} />
@@ -56,7 +57,7 @@ const UserStackScreen = () => (
   </UserStack.Navigator>
 );
 
-const HomeTabs = createBottomTabNavigator();
+const HomeTabs = createBottomTabNavigator<HomeTabParamList>();
 const EventIcon = ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />;
 const UserIcon = ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />;
 const AboutIcon = ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />;

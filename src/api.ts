@@ -12,6 +12,7 @@ import {
   membershipChargeRequest,
   membershipChargeSuccess,
 } from './actions';
+import type { UserRegisterFormValues } from './modules/register/useUserRegister';
 import { fetchWithTimeout } from './utils';
 
 export function requestLogin(username, password) {
@@ -80,7 +81,7 @@ export function requestUserData(authToken) {
   };
 }
 
-export function requestRegisterUser({ firstName, lastName, email, phoneNumber, password }) {
+export function requestRegisterUser({ firstName, lastName, email, phoneNumber, password }: UserRegisterFormValues) {
   return (dispatch) => {
     dispatch(registerUserRequest());
 

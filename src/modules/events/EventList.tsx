@@ -5,12 +5,13 @@ import { StyleSheet, View, Platform, SectionList, TouchableOpacity } from 'react
 import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
+import theme from 'src/theme';
+
 import useEventList from './useEventList';
-import theme from '../../theme';
 
 moment.locale('nb');
 
-const _formatTime = (time) => {
+const formatTime = (time: string) => {
   return moment(time).format('llll');
 };
 
@@ -36,7 +37,7 @@ const EventList = () => {
           <Text style={styles.listItemTitle} numberOfLines={1}>
             {item.title.decoded}
           </Text>
-          <Text style={styles.listItemTime}>{_formatTime(item.start_time)}</Text>
+          <Text style={styles.listItemTime}>{formatTime(item.start_time)}</Text>
         </View>
         <View style={styles.arrow}>
           <ArrowForwardIcon size={4} color={theme.colors.neufBlack} marginTop={3} />
@@ -80,7 +81,7 @@ const EventList = () => {
       refreshing={refreshing}
       onRefresh={handleRefresh}
       onEndReached={handleLoadMore}
-      onEndReachedThreshould={10}
+      onEndReachedThreshold={10}
       initialNumToRender={10}
       ListFooterComponent={Footer}
       style={[styles.card, styles.list]}

@@ -1,28 +1,34 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { requestRegisterUser } from '../../api';
-import { usePrevious } from '../../hooks';
+import { requestRegisterUser } from 'src/api';
+import { useAppDispatch, useAppSelector, usePrevious } from 'src/hooks';
+
+export interface UserRegisterFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+}
 
 const useUserRegister = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const isAuthenticated = useSelector((store) => store.isAuthenticated);
-  const isRegisteringUser = useSelector((store) => store.isRegisteringUser);
-  const registerError = useSelector((store) => store.registerError) || {};
+  const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
+  const isRegisteringUser = useAppSelector((store) => store.isRegisteringUser);
+  const registerError = useAppSelector((store) => store.registerError) || {};
   const [toast, setToast] = useState(null);
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
 
   const {
-    control,
     handleSubmit,
     formState: { errors, isValid },
     setFocus,
     setError,
-  } = useForm();
+  } = useForm<UserRegisterFormValues>();
   const onSubmit = handleSubmit((values) => {
     if (!isValid) {
       setToast({
@@ -38,7 +44,7 @@ const useUserRegister = () => {
 
     // Display error messages from API on form fields
     Object.keys(registerError).forEach((key) => {
-      setError(key, { type: 'manual', message: registerError[key] });
+      setError(key as keyof UserRegisterFormValues, { type: 'manual', message: registerError[key] });
     });
   });
 
@@ -48,6 +54,6 @@ const useUserRegister = () => {
     }
   }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
-  return { isRegisteringUser, onSubmit, control, isValid, registerError, errors, setFocus, toast, setToast };
+  return { isRegisteringUser, onSubmit, isValid, registerError, errors, setFocus, toast, setToast };
 };
 export default useUserRegister;

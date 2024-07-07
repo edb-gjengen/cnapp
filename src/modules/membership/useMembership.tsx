@@ -1,28 +1,27 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { logout } from '../../actions';
-import { requestUserData } from '../../api';
-import { usePrevious } from '../../hooks';
+import { logout } from 'src/actions';
+import { requestUserData } from 'src/api';
+import { useAppDispatch, useAppSelector, usePrevious } from 'src/hooks';
 
 const useMembership = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector((store) => store.isAuthenticated);
-  const isFetchingUserData = useSelector((store) => store.isFetchingUserData);
-  const lastOrder = useSelector((store) => store.lastOrder);
-  const user = useSelector((store) => store.user);
-  const userToken = useSelector((store) => store.userToken);
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
+  const isFetchingUserData = useAppSelector((store) => store.isFetchingUserData);
+  const lastOrder = useAppSelector((store) => store.lastOrder);
+  const user = useAppSelector((store) => store.user);
+  const userToken = useAppSelector((store) => store.userToken);
   const prevUserToken = usePrevious(userToken);
   const prevLastOrder = usePrevious(lastOrder);
 
   const onLogoutPress = () => {
     dispatch(logout());
-    navigation.navigate('Membership');
+    navigation.navigate('UserStack', { screen: 'Membership' });
   };
-  const onRegisterPress = () => navigation.navigate('UserRegister');
-  const onLoginPress = () => navigation.navigate('Login');
+  const onRegisterPress = () => navigation.navigate('UserStack', { screen: 'UserRegister' });
+  const onLoginPress = () => navigation.navigate('UserStack', { screen: 'Login' });
   const fetchUser = useCallback(() => {
     dispatch(requestUserData(userToken));
   }, [dispatch, userToken]);
