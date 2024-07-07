@@ -2,7 +2,8 @@ import { Alert, HStack } from 'native-base';
 import React from 'react';
 import { Text } from 'react-native';
 
-const FormErrors = ({ errors }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
   if (!Object.keys(errors).length || !['non_field_errors', 'detail'].some((errorField) => errorField in errors)) {
     return null;
   }

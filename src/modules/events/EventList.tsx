@@ -6,6 +6,7 @@ import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
 import theme from 'src/theme';
+import { EventType } from 'src/types/data';
 
 import useEventList from './useEventList';
 
@@ -15,7 +16,7 @@ const formatTime = (time: string) => {
   return moment(time).format('llll');
 };
 
-const renderSectionHeader = ({ section }) => (
+const renderSectionHeader = ({ section }: { section: { title: string } }) => (
   <View style={styles.sectionHeader}>
     <Text style={styles.sectionTitle}>{section.title}</Text>
   </View>
@@ -25,7 +26,7 @@ const Header = () => <View style={styles.listHeader} />;
 const EventList = () => {
   const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading } = useEventList();
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: EventType }) => (
     <TouchableOpacity
       onPress={() => {
         showEvent(item);
@@ -77,7 +78,7 @@ const EventList = () => {
       sections={eventsSectioned}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item: EventType) => item.id}
       refreshing={refreshing}
       onRefresh={handleRefresh}
       onEndReached={handleLoadMore}

@@ -1,3 +1,5 @@
+import { UserType } from './types/data';
+
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -8,9 +10,6 @@ const USER_DATA_FAILURE = 'USER_DATA_FAILURE';
 const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
-const MEMBERSHIP_CHARGE_REQUEST = 'MEMBERSHIP_CHARGE_REQUEST';
-const MEMBERSHIP_CHARGE_SUCCESS = 'MEMBERSHIP_CHARGE_SUCCESS';
-const MEMBERSHIP_CHARGE_FAILURE = 'MEMBERSHIP_CHARGE_FAILURE';
 
 function loginRequest() {
   return {
@@ -26,7 +25,7 @@ function loginSuccess(username: string, token: string) {
   };
 }
 
-function loginFailure(loginError) {
+function loginFailure(loginError: string) {
   return {
     type: LOGIN_FAILURE,
     loginError,
@@ -45,14 +44,14 @@ function userDataRequest() {
   };
 }
 
-function userDataSuccess(data) {
+function userDataSuccess(data: UserType) {
   return {
     type: USER_DATA_SUCCESS,
     data,
   };
 }
 
-function userDataFailure(userError) {
+function userDataFailure(userError: string) {
   return {
     type: USER_DATA_FAILURE,
     userError,
@@ -65,36 +64,17 @@ function registerUserRequest() {
   };
 }
 
-function registerUserSuccess(data) {
+function registerUserSuccess(data: UserType) {
   return {
     type: REGISTER_USER_SUCCESS,
     data,
   };
 }
 
-function registerUserFailure(registerError) {
+function registerUserFailure(registerError: Record<string, string>) {
   return {
     type: REGISTER_USER_FAILURE,
     registerError,
-  };
-}
-function membershipChargeRequest() {
-  return {
-    type: MEMBERSHIP_CHARGE_REQUEST,
-  };
-}
-
-function membershipChargeSuccess(data) {
-  return {
-    type: MEMBERSHIP_CHARGE_SUCCESS,
-    data,
-  };
-}
-
-function membershipChargeFailure(chargeError) {
-  return {
-    type: MEMBERSHIP_CHARGE_FAILURE,
-    chargeError,
   };
 }
 
@@ -123,11 +103,4 @@ export {
   registerUserSuccess,
   REGISTER_USER_FAILURE,
   registerUserFailure,
-  /* Charge */
-  MEMBERSHIP_CHARGE_REQUEST,
-  membershipChargeRequest,
-  MEMBERSHIP_CHARGE_SUCCESS,
-  membershipChargeSuccess,
-  MEMBERSHIP_CHARGE_FAILURE,
-  membershipChargeFailure,
 };

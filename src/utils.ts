@@ -1,4 +1,4 @@
-export function snakeToCamelCase(val: string) {
+export function snakeToCamelCase(val: string): string {
   return val.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
 }
 

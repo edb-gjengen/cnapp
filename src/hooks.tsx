@@ -6,8 +6,8 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import type { AppDispatch, AppStore, RootState } from './reduxStore';
 
-export function usePrevious(value) {
-  const ref = useRef();
+export function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
 
   // Store current value in ref
   useEffect(() => {
@@ -23,7 +23,7 @@ export const useDeepLinking = () => {
   const { handleURLCallback } = useStripe();
 
   const handleDeepLink = useCallback(
-    async (url) => {
+    async (url: string | null) => {
       if (!url) {
         return;
       }

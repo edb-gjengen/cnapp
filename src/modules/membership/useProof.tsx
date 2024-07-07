@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { requestStripePaymentSheet } from 'src/api';
 import { useAppSelector } from 'src/hooks';
+import { ToastProps } from 'src/types/toast';
 
 const PROOF_QUERY = gql`
   {
@@ -15,16 +16,13 @@ const PROOF_QUERY = gql`
   }
 `;
 
-interface ToastProps {
-  message: string;
-  visible: boolean;
-  preset: 'failure' | 'success';
+interface UseProofProps {
+  fetchUser: () => void;
 }
 
-const useProof = ({ fetchUser }) => {
+const useProof = ({ fetchUser }: UseProofProps) => {
   const user = useAppSelector((state) => state.user);
   const userToken = useAppSelector((state) => state.userToken);
-  const chargeError = useAppSelector((state) => state.chargeError);
   const { data, loading } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -81,10 +79,9 @@ const useProof = ({ fetchUser }) => {
 
   const membershipPrice = data?.membershipTypes?.[0]?.price;
   return {
-    chargeError: chargeError || '',
     isLoadingMembershipType: loading,
     membershipPrice: membershipPrice ? membershipPrice / 100 : 0,
-    onChargePress: openPaymentSheet,
+    onPurchasePress: openPaymentSheet,
     paymentLoading,
     toast,
     setToast,

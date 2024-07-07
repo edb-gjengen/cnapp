@@ -10,10 +10,8 @@ const useMembership = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
   const isFetchingUserData = useAppSelector((store) => store.isFetchingUserData);
-  const lastOrder = useAppSelector((store) => store.lastOrder);
   const userToken = useAppSelector((store) => store.userToken);
   const prevUserToken = usePrevious(userToken);
-  const prevLastOrder = usePrevious(lastOrder);
 
   const onLogoutPress = () => {
     dispatch(logout());
@@ -22,23 +20,19 @@ const useMembership = () => {
   const onRegisterPress = () => navigation.navigate('UserStack', { screen: 'UserRegister' });
   const onLoginPress = () => navigation.navigate('UserStack', { screen: 'Login' });
   const fetchUser = useCallback(() => {
-    dispatch(requestUserData(userToken));
+    dispatch(requestUserData(userToken || ''));
   }, [dispatch, userToken]);
 
   useEffect(() => {
     if (userToken !== prevUserToken && userToken) {
       fetchUser();
     }
-    if (prevLastOrder !== lastOrder && userToken) {
-      fetchUser();
-    }
-  }, [userToken, prevUserToken, lastOrder, prevLastOrder, fetchUser]);
+  }, [userToken, prevUserToken, fetchUser]);
 
   return {
     isAuthenticated,
     isFetchingUserData,
     userToken,
-    lastOrder,
     onLogoutPress,
     onRegisterPress,
     onLoginPress,

@@ -8,9 +8,6 @@ import {
   userDataFailure,
   userDataRequest,
   userDataSuccess,
-  membershipChargeFailure,
-  membershipChargeRequest,
-  membershipChargeSuccess,
 } from './actions';
 import type { UserRegisterFormValues } from './modules/register/useUserRegister';
 import { AppDispatch } from './reduxStore';
@@ -113,41 +110,6 @@ export function requestRegisterUser({ firstName, lastName, email, phoneNumber, p
         },
         (data) => {
           dispatch(registerUserFailure(data || { non_field_errors: ['Kunne ikke registrere bruker, prøv igjen'] }));
-        },
-      );
-  };
-}
-
-export function requestMembershipCharge(authToken: string, stripeToken: string, membershipType: string) {
-  return (dispatch: AppDispatch) => {
-    dispatch(membershipChargeRequest());
-
-    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/membership/charge/`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Token ${authToken}`,
-      },
-      body: JSON.stringify({
-        stripe_token: stripeToken,
-        membership_type: membershipType,
-        payment_method: 'app',
-      }),
-    })
-      .then((response) => response.json().then((json) => ({ json, response })))
-      .then(({ json, response }) => {
-        if (response.ok === false) {
-          return Promise.reject(json);
-        }
-        return json;
-      })
-      .then(
-        (data) => {
-          dispatch(membershipChargeSuccess(data));
-        },
-        (data) => {
-          dispatch(membershipChargeFailure(data.detail || 'Kunne ikke belaste bankkortet, prøv igjen'));
         },
       );
   };

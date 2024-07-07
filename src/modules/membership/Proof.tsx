@@ -75,14 +75,14 @@ interface PurchaseButtonProps {
   paymentLoading: boolean;
   isLoadingMembershipType: boolean;
   membershipPrice: number;
-  onChargePress: () => void;
+  onPurchasePress: () => void;
 }
 
 const PurchaseButton = ({
   user,
   paymentLoading,
   isLoadingMembershipType,
-  onChargePress,
+  onPurchasePress,
   membershipPrice,
 }: PurchaseButtonProps) => {
   if (user.is_member) {
@@ -93,7 +93,7 @@ const PurchaseButton = ({
     <View>
       {paymentLoading && <ActivityIndicator color={theme.colors.neufOrange} />}
       <Button
-        onPress={onChargePress}
+        onPress={onPurchasePress}
         fullWidth
         disabled={paymentLoading || isLoadingMembershipType}
         style={styles.purchaseButton}
@@ -128,18 +128,6 @@ const Logo = ({ user }: { user: UserType }) => {
   );
 };
 
-const ChargeError = ({ chargeError }) => {
-  if (!chargeError) {
-    return null;
-  }
-
-  return (
-    <View>
-      <Text style={styles.errorMessage}>{chargeError}</Text>
-    </View>
-  );
-};
-
 const MembershipName = ({ user }: { user: UserType }) => {
   let name = `${user.first_name} ${user.last_name}`;
   if (name === ' ') {
@@ -160,16 +148,7 @@ interface ProofProps {
 const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef<Confetti>(null);
-  const {
-    chargeError,
-    paymentLoading,
-    isLoadingMembershipType,
-    onChargePress,
-    membershipPrice,
-    toast,
-    setToast,
-    user,
-  } = useProof({
+  const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof({
     fetchUser,
   });
 
@@ -183,7 +162,7 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => 
   });
 
   const onMembershipPress = () => {
-    confettiRef.current.startConfetti();
+    confettiRef.current?.startConfetti();
     setTimeout(() => {
       if (confettiRef && confettiRef.current) {
         confettiRef.current.stopConfetti();
@@ -208,13 +187,12 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => 
             <MembershipName user={user} />
             <Logo user={user} />
             <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
-            <ChargeError chargeError={chargeError} />
             <PurchaseButton
               user={user}
               paymentLoading={paymentLoading}
               isLoadingMembershipType={isLoadingMembershipType}
               membershipPrice={membershipPrice}
-              onChargePress={onChargePress}
+              onPurchasePress={onPurchasePress}
             />
             <MembershipValidTo user={user} />
           </View>

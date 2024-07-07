@@ -21,10 +21,11 @@ const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 036
 
 const openFacebook = () => {
   /* Ref: https://stackoverflow.com/questions/4810803/open-facebook-page-from-android-app */
-  const url = Platform.select({
-    ios: 'fb://page/?id=23664032291',
-    android: 'fb://page/23664032291/',
-  });
+  const url =
+    Platform.select({
+      ios: 'fb://page/?id=23664032291',
+      android: 'fb://page/23664032291/',
+    }) || '';
   Linking.canOpenURL(url)
     .then((supported) => {
       if (!supported) {
@@ -36,10 +37,11 @@ const openFacebook = () => {
 };
 
 const openInstagram = () => {
-  const url = Platform.select({
-    ios: 'instagram://user?username=studentersamfundet',
-    android: 'https://instagram.com/_u/studentersamfundet',
-  });
+  const url =
+    Platform.select({
+      ios: 'instagram://user?username=studentersamfundet',
+      android: 'https://instagram.com/_u/studentersamfundet',
+    }) || '';
 
   Linking.canOpenURL(url)
     .then((supported) => {
@@ -52,10 +54,11 @@ const openInstagram = () => {
 };
 
 const openMap = () => {
-  const url = Platform.select({
-    ios: `comgooglemaps://?q=${CHATEAU_NEUF_ADDRESS}`,
-    android: `https://www.google.com/maps/search/?api=1&query=${CHATEAU_NEUF_ADDRESS}`,
-  });
+  const url =
+    Platform.select({
+      ios: `comgooglemaps://?q=${CHATEAU_NEUF_ADDRESS}`,
+      android: `https://www.google.com/maps/search/?api=1&query=${CHATEAU_NEUF_ADDRESS}`,
+    }) || '';
   Linking.canOpenURL(url)
     .then((supported) => {
       if (!supported) {

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 
 import { requestRegisterUser } from 'src/api';
 import { useAppDispatch, useAppSelector, usePrevious } from 'src/hooks';
+import { ToastProps } from 'src/types/toast';
 
 export interface UserRegisterFormValues {
   firstName: string;
@@ -19,7 +20,7 @@ const useUserRegister = () => {
   const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
   const isRegisteringUser = useAppSelector((store) => store.isRegisteringUser);
   const registerError = useAppSelector((store) => store.registerError) || {};
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState<ToastProps | null>(null);
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
 

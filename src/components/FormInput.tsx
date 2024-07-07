@@ -41,7 +41,7 @@ const FormInput = ({
           />
           {fieldError && (
             <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-              <Text>{fieldError.message.toString()}</Text>
+              <Text>{fieldError.message?.toString()}</Text>
             </FormControl.ErrorMessage>
           )}
         </FormControl>

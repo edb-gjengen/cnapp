@@ -69,10 +69,11 @@ const onFacebookUrlPress = (link: string) => {
   if (matches && matches.length) {
     iosURL = `fb://event/?id=${matches[1]}`;
   }
-  const url = Platform.select({
-    ios: iosURL,
-    android: link,
-  });
+  const url =
+    Platform.select({
+      ios: iosURL,
+      android: link,
+    }) || '';
   Linking.canOpenURL(url)
     .then((supported) => {
       if (!supported) {

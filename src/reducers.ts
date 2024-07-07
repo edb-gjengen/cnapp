@@ -9,9 +9,6 @@ import {
   REGISTER_USER_REQUEST,
   REGISTER_USER_FAILURE,
   REGISTER_USER_SUCCESS,
-  MEMBERSHIP_CHARGE_REQUEST,
-  MEMBERSHIP_CHARGE_FAILURE,
-  MEMBERSHIP_CHARGE_SUCCESS,
 } from './actions';
 import type { UserType } from './types/data';
 import { snakeToCamelCase } from './utils';
@@ -21,15 +18,11 @@ interface RootState {
   isLoggingIn: boolean;
   isFetchingUserData: boolean;
   isRegisteringUser: boolean;
-  isChargingMembership: boolean;
   userToken: string | null;
   user: UserType | null;
-  // FIXME: Type rest
-  loginError: unknown | null;
-  userError: unknown | null;
-  registerError: unknown | null;
-  chargeError: unknown | null;
-  lastOrder: unknown | null;
+  loginError: Record<string, string> | null;
+  userError: Record<string, string> | null;
+  registerError: Record<string, string> | null;
 }
 
 const initialState: RootState = {
@@ -37,26 +30,24 @@ const initialState: RootState = {
   isLoggingIn: false,
   isFetchingUserData: false,
   isRegisteringUser: false,
-  isChargingMembership: false,
   userToken: null,
   user: null,
   loginError: null,
   userError: null,
   registerError: null,
-  chargeError: null,
-  lastOrder: null,
 };
 
-function formatErrors(errs) {
-  const errors = {};
+function formatErrors(errs: Record<string, string | string[]>) {
+  const errors: Record<string, string> = {};
   Object.entries(errs).forEach(([key, value]) => {
     errors[snakeToCamelCase(key)] = Array.isArray(value) ? value.join('\n') : value;
   });
   return errors;
 }
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export default function duskenApp(state = initialState, action) {
+// FIXME: refactor using redux slices
+// eslint-disable-next-line @typescript-eslint/default-param-last, @typescript-eslint/no-explicit-any
+export default function duskenApp(state = initialState, action: any) {
   switch (action.type) {
     /* Login */
     case LOGIN_REQUEST:
@@ -96,16 +87,6 @@ export default function duskenApp(state = initialState, action) {
       delete userData.auth_token;
 
       return { ...state, isRegisteringUser: false, isAuthenticated: true, user: userData, userToken: token };
-
-    /* Membership charge */
-    case MEMBERSHIP_CHARGE_REQUEST:
-      return { ...state, isChargingMembership: true, chargeError: null };
-
-    case MEMBERSHIP_CHARGE_FAILURE:
-      return { ...state, isChargingMembership: false, chargeError: action.chargeError };
-
-    case MEMBERSHIP_CHARGE_SUCCESS:
-      return { ...state, isChargingMembership: false, lastOrder: action.data };
 
     default:
       return state;

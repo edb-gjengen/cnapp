@@ -8,25 +8,28 @@ import { fetchWithTimeout } from 'src/utils';
 
 moment.locale('nb');
 
-const formatDate = (time) => {
+const formatDate = (time: string) => {
   const m = moment(time);
   return moment().year() === m.year() ? m.format('dddd D. MMMM') : m.format('ll');
 };
-
+type SectionedEvents = {
+  data: EventType[];
+  title: string;
+};
 /* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
 const useEventList = () => {
   const { navigate } = useNavigation();
 
   const [loading, setLoading] = useState(false);
-  const [events, setEvents] = useState([]);
-  const [eventsSectioned, setEventsSectioned] = useState([]);
+  const [events, setEvents] = useState<EventType[]>([]);
+  const [eventsSectioned, setEventsSectioned] = useState<SectionedEvents[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<unknown>(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const toSectionFormat = (freshEvents) => {
-    const sectioned = {};
+  const toSectionFormat = (freshEvents: EventType[]) => {
+    const sectioned: Record<string, EventType[]> = {};
     freshEvents.forEach((event) => {
       const title = formatDate(event.start_time);
       if (title in sectioned) {
@@ -62,7 +65,7 @@ const useEventList = () => {
     let eventData;
     try {
       const res = await fetchWithTimeout(url);
-      setTotalPages(parseInt(res.headers.get('x-wp-totalpages'), 10));
+      setTotalPages(parseInt(res.headers.get('x-wp-totalpages') || '0', 10));
       eventData = await res.json();
     } catch (err) {
       setError(err);
