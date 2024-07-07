@@ -8,7 +8,7 @@ import Proof from './Proof';
 import useMembership from './useMembership';
 
 const Membership = () => {
-  const { isFetchingUserData, onRegisterPress, onLoginPress, onLogoutPress, user, isAuthenticated, fetchUser } =
+  const { isFetchingUserData, onRegisterPress, onLoginPress, onLogoutPress, isAuthenticated, fetchUser } =
     useMembership();
 
   if (isFetchingUserData) {
@@ -20,9 +20,7 @@ const Membership = () => {
   }
 
   if (isAuthenticated) {
-    return (
-      <Proof onLogoutPress={onLogoutPress} user={user} fetchUser={fetchUser} isFetchingUserData={isFetchingUserData} />
-    );
+    return <Proof onLogoutPress={onLogoutPress} fetchUser={fetchUser} isFetchingUserData={isFetchingUserData} />;
   }
 
   return <MembershipInfo onRegister={onRegisterPress} onLogin={onLoginPress} />;

@@ -2,10 +2,9 @@ import { gql, useQuery } from '@apollo/client';
 import { useStripe } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { requestStripePaymentSheet } from 'src/api';
-import { RootState } from 'src/reduxStore';
+import { useAppSelector } from 'src/hooks';
 
 const PROOF_QUERY = gql`
   {
@@ -16,22 +15,21 @@ const PROOF_QUERY = gql`
   }
 `;
 
-function getPrice(membershipTypes) {
-  if (!membershipTypes) {
-    return 0;
-  }
-
-  return membershipTypes[0].price / 100;
+interface ToastProps {
+  message: string;
+  visible: boolean;
+  preset: 'failure' | 'success';
 }
 
-const useProof = ({ user, fetchUser }) => {
-  const userToken = useSelector((state: RootState) => state.userToken);
-  const chargeError = useSelector((state: RootState) => state.chargeError);
+const useProof = ({ fetchUser }) => {
+  const user = useAppSelector((state) => state.user);
+  const userToken = useAppSelector((state) => state.userToken);
+  const chargeError = useAppSelector((state) => state.chargeError);
   const { data, loading } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [paymentLoading, setPaymentLoading] = useState(false);
   const membershipTypeSlug = data?.membershipTypes?.[0]?.slug ?? 'standard';
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState<ToastProps | null>(null);
 
   const openPaymentSheet = async () => {
     try {
@@ -48,7 +46,10 @@ const useProof = ({ user, fetchUser }) => {
 
   const initializePaymentSheet = async () => {
     setPaymentLoading(true);
-    const { paymentIntent, ephemeralKey, customer } = await requestStripePaymentSheet(userToken, membershipTypeSlug);
+    const { paymentIntent, ephemeralKey, customer } = await requestStripePaymentSheet(
+      userToken as string,
+      membershipTypeSlug,
+    );
 
     const { error } = await initPaymentSheet({
       merchantDisplayName: 'Det Norske Studentersamfund',
@@ -56,13 +57,13 @@ const useProof = ({ user, fetchUser }) => {
       customerEphemeralKeySecret: ephemeralKey,
       paymentIntentClientSecret: paymentIntent,
       defaultBillingDetails: {
-        email: user.email,
-        name: `${user.first_name} ${user.last_name}`,
+        email: user?.email,
+        name: `${user?.first_name} ${user?.last_name}`,
         address: {
           country: 'NO',
         },
       },
-      returnURL: `${Constants.expoConfig.scheme}://stripe-redirect`,
+      returnURL: `${Constants.expoConfig?.scheme}://stripe-redirect`,
     });
     if (!error) {
       setPaymentLoading(true);
@@ -78,14 +79,16 @@ const useProof = ({ user, fetchUser }) => {
     }
   }, [fetchUser, user?.last_membership]);
 
+  const membershipPrice = data?.membershipTypes?.[0]?.price;
   return {
     chargeError: chargeError || '',
     isLoadingMembershipType: loading,
-    membershipPrice: getPrice(data?.membershipTypes),
+    membershipPrice: membershipPrice ? membershipPrice / 100 : 0,
     onChargePress: openPaymentSheet,
     paymentLoading,
     toast,
     setToast,
+    user,
   };
 };
 

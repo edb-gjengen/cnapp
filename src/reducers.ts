@@ -13,10 +13,26 @@ import {
   MEMBERSHIP_CHARGE_FAILURE,
   MEMBERSHIP_CHARGE_SUCCESS,
 } from './actions';
+import type { UserType } from './types/data';
 import { snakeToCamelCase } from './utils';
 
-// FIXME: type this
-const initialState = {
+interface RootState {
+  isAuthenticated: boolean;
+  isLoggingIn: boolean;
+  isFetchingUserData: boolean;
+  isRegisteringUser: boolean;
+  isChargingMembership: boolean;
+  userToken: string | null;
+  user: UserType | null;
+  // FIXME: Type rest
+  loginError: unknown | null;
+  userError: unknown | null;
+  registerError: unknown | null;
+  chargeError: unknown | null;
+  lastOrder: unknown | null;
+}
+
+const initialState: RootState = {
   isAuthenticated: false,
   isLoggingIn: false,
   isFetchingUserData: false,

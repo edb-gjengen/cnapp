@@ -13,10 +13,11 @@ import {
   membershipChargeSuccess,
 } from './actions';
 import type { UserRegisterFormValues } from './modules/register/useUserRegister';
+import { AppDispatch } from './reduxStore';
 import { fetchWithTimeout } from './utils';
 
-export function requestLogin(username, password) {
-  return (dispatch) => {
+export function requestLogin(username: string, password: string) {
+  return (dispatch: AppDispatch) => {
     // We are now logging in
     dispatch(loginRequest());
 
@@ -50,8 +51,8 @@ export function requestLogin(username, password) {
   };
 }
 
-export function requestUserData(authToken) {
-  return (dispatch) => {
+export function requestUserData(authToken: string) {
+  return (dispatch: AppDispatch) => {
     // We are now fetching user data
     dispatch(userDataRequest());
 
@@ -82,7 +83,7 @@ export function requestUserData(authToken) {
 }
 
 export function requestRegisterUser({ firstName, lastName, email, phoneNumber, password }: UserRegisterFormValues) {
-  return (dispatch) => {
+  return (dispatch: AppDispatch) => {
     dispatch(registerUserRequest());
 
     return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/user/register/`, {
@@ -117,8 +118,8 @@ export function requestRegisterUser({ firstName, lastName, email, phoneNumber, p
   };
 }
 
-export function requestMembershipCharge(authToken, stripeToken, membershipType) {
-  return (dispatch) => {
+export function requestMembershipCharge(authToken: string, stripeToken: string, membershipType: string) {
+  return (dispatch: AppDispatch) => {
     dispatch(membershipChargeRequest());
 
     return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/membership/charge/`, {
@@ -153,7 +154,7 @@ export function requestMembershipCharge(authToken, stripeToken, membershipType) 
 }
 
 /** Create a stripe payment sheet. Note that this is not using redux */
-export async function requestStripePaymentSheet(authToken, membershipType) {
+export async function requestStripePaymentSheet(authToken: string, membershipType: string) {
   const body = JSON.stringify({
     membership_type: membershipType,
   });

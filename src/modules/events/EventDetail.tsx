@@ -15,6 +15,7 @@ import {
 import RenderHtml from 'react-native-render-html';
 
 import theme from 'src/theme';
+import type { EventType } from 'src/types/data';
 import type { EventDetailProps } from 'src/types/navigation';
 
 moment.locale('nb');
@@ -27,11 +28,11 @@ const FORMAT_DAY = 'DD.';
 const FORMAT_LOCAL_DAY = 'dddd';
 const FORMAT_YEAR = 'YYYY';
 
-const formatRelative = (time) => moment(time).fromNow();
+const formatRelative = (time: string) => moment(time).fromNow();
 
-const format = (time, formatString = FORMAT_TIME) => moment(time).format(formatString);
+const format = (time: string, formatString = FORMAT_TIME) => moment(time).format(formatString);
 
-const formatTicketText = (event) => {
+const formatTicketText = (event: EventType) => {
   /* FIXME: This should be handled by API */
   let regularPrice = '';
   let memberPrice = '';
@@ -61,7 +62,7 @@ const formatTicketText = (event) => {
   return text;
 };
 
-const onFacebookUrlPress = (link) => {
+const onFacebookUrlPress = (link: string) => {
   const fbEventPattern = /https?:\/\/www\.facebook\.com\/events\/(\d+)\/?/i;
   const matches = fbEventPattern.exec(link);
   let iosURL = link;
@@ -82,15 +83,16 @@ const onFacebookUrlPress = (link) => {
     .catch((err) => console.error('An error occurred', err));
 };
 
-const onLocationPress = (venue) => {
+const onLocationPress = (venue: string) => {
   if (venue !== 'Annetsteds') {
     Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${CHATEAU_NEUF_ADDRESS}`);
   }
 };
 
-const VenueLocation = ({ venue }) => (venue !== 'Annetsteds' ? CHATEAU_NEUF_ADDRESS : 'Ukjent adresse');
+const VenueLocation = ({ venue }: Pick<EventType, 'venue'>) =>
+  venue !== 'Annetsteds' ? CHATEAU_NEUF_ADDRESS : 'Ukjent adresse';
 
-const PriceAndTicket = ({ event }) => {
+const PriceAndTicket = ({ event }: { event: EventType }) => {
   const text = formatTicketText(event);
 
   if (text === '') {
@@ -124,7 +126,7 @@ const PriceAndTicket = ({ event }) => {
   );
 };
 
-const FaceButton = ({ event }) => {
+const FaceButton = ({ event }: { event: EventType }) => {
   if (!event.facebook_url) {
     return null;
   }
@@ -141,14 +143,14 @@ const FaceButton = ({ event }) => {
   );
 };
 
-const Year = ({ startTime }) => {
+const Year = ({ startTime }: { startTime: string }) => {
   if (moment().year() === moment(startTime).year()) {
     return null;
   }
   return <Text style={styles.year}>{format(startTime, FORMAT_YEAR)}</Text>;
 };
 
-const formatTimeFull = (event) => {
+const formatTimeFull = (event: EventType) => {
   const endTime = event.end_time ? ` - ${format(event.end_time, FORMAT_TIME)}` : '';
   const startTime = `${format(event.start_time, FORMAT_LOCAL_DAY)} kl. ${format(event.start_time, FORMAT_TIME)}`;
   return `${startTime}${endTime}`;

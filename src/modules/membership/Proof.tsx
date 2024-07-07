@@ -9,18 +9,20 @@ import {
   RefreshControl,
   ActivityIndicator,
   Dimensions,
+  GestureResponderEvent,
 } from 'react-native';
 import Confetti from 'react-native-confetti';
 import { Button, Incubator } from 'react-native-ui-lib';
 
 import theme from 'src/theme';
+import type { UserType } from 'src/types/data';
 
 import useProof from './useProof';
 import logo from '../../../assets/DNS-logo-svart.png';
 
 const { Toast } = Incubator;
 
-const MembershipValidTo = ({ user }) => {
+const MembershipValidTo = ({ user }: { user: UserType }) => {
   if (!user.last_membership) {
     return null;
   }
@@ -38,7 +40,13 @@ const MembershipValidTo = ({ user }) => {
   );
 };
 
-const MembershipStatus = ({ user, onMembershipPress }) => {
+const MembershipStatus = ({
+  user,
+  onMembershipPress,
+}: {
+  user: UserType;
+  onMembershipPress: (event: GestureResponderEvent) => void | undefined;
+}) => {
   if (!user.is_member) {
     if (!user.last_membership) {
       return null;
@@ -62,7 +70,21 @@ const MembershipStatus = ({ user, onMembershipPress }) => {
   );
 };
 
-const PurchaseButton = ({ user, paymentLoading, isLoadingMembershipType, onChargePress, membershipPrice }) => {
+interface PurchaseButtonProps {
+  user: UserType;
+  paymentLoading: boolean;
+  isLoadingMembershipType: boolean;
+  membershipPrice: number;
+  onChargePress: () => void;
+}
+
+const PurchaseButton = ({
+  user,
+  paymentLoading,
+  isLoadingMembershipType,
+  onChargePress,
+  membershipPrice,
+}: PurchaseButtonProps) => {
   if (user.is_member) {
     return null;
   }
@@ -85,7 +107,8 @@ const PurchaseButton = ({ user, paymentLoading, isLoadingMembershipType, onCharg
   );
 };
 
-const UserConfetti = ({ user, confettiRef }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const UserConfetti = ({ user, confettiRef }: { user: UserType; confettiRef: any }) => {
   if (!user.is_member) {
     return null;
   }
@@ -93,7 +116,7 @@ const UserConfetti = ({ user, confettiRef }) => {
   // Confetti!!!!
   return <Confetti ref={confettiRef} confettiCount={Number.MAX_SAFE_INTEGER} />;
 };
-const Logo = ({ user }) => {
+const Logo = ({ user }: { user: UserType }) => {
   if (!user.is_member) {
     return null;
   }
@@ -117,7 +140,7 @@ const ChargeError = ({ chargeError }) => {
   );
 };
 
-const MembershipName = ({ user }) => {
+const MembershipName = ({ user }: { user: UserType }) => {
   let name = `${user.first_name} ${user.last_name}`;
   if (name === ' ') {
     name = user.email;
@@ -129,14 +152,26 @@ const MembershipName = ({ user }) => {
   );
 };
 
-const Proof = ({ onLogoutPress, user, fetchUser, isFetchingUserData }) => {
+interface ProofProps {
+  onLogoutPress: () => void;
+  fetchUser: () => void;
+  isFetchingUserData: boolean;
+}
+const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => {
   const CONFETTI_TIMEOUT = 15000;
-  const confettiRef = useRef(null);
-  const { chargeError, paymentLoading, isLoadingMembershipType, onChargePress, membershipPrice, toast, setToast } =
-    useProof({
-      user,
-      fetchUser,
-    });
+  const confettiRef = useRef<Confetti>(null);
+  const {
+    chargeError,
+    paymentLoading,
+    isLoadingMembershipType,
+    onChargePress,
+    membershipPrice,
+    toast,
+    setToast,
+    user,
+  } = useProof({
+    fetchUser,
+  });
 
   useEffect(() => {
     const currentRef = confettiRef.current;

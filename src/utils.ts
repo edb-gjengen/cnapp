@@ -1,6 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export function snakeToCamelCase(val) {
+export function snakeToCamelCase(val: string) {
   return val.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
 }
 
@@ -15,31 +13,4 @@ export function fetchWithTimeout(url: string, options?: RequestInit, timeout = 1
       }, timeout);
     }),
   ]);
-}
-
-export async function migrateReduxPersistFourToFive(registerUserSuccess) {
-  const authedKey = 'reduxPersist:isAuthenticated';
-  const userKey = 'reduxPersist:user';
-  const userTokenKey = 'reduxPersist:userToken';
-  const v4Keys = [authedKey, userKey, userTokenKey];
-
-  const asyncStorageKeys = await AsyncStorage.getAllKeys();
-  if (v4Keys.some((key) => !asyncStorageKeys.includes(key))) {
-    return;
-  }
-
-  const isAuthenticated = await AsyncStorage.getItem(authedKey);
-  console.log(authedKey, isAuthenticated);
-  if (isAuthenticated !== 'true') {
-    await AsyncStorage.multiRemove(v4Keys);
-    return;
-  }
-
-  const userToken = await AsyncStorage.getItem(userTokenKey);
-  console.log(userTokenKey, userToken);
-  const user = await AsyncStorage.getItem(userKey);
-  console.log(userKey, user, JSON.parse(user));
-  registerUserSuccess({ auth_token: JSON.parse(userToken), ...JSON.parse(user) });
-  await AsyncStorage.multiRemove(v4Keys);
-  console.log('successfully migrated to new redux-persist');
 }

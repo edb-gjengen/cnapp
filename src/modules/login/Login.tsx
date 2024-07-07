@@ -41,7 +41,7 @@ const Login = () => {
           small
           light
           onPress={() => {
-            Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL);
+            Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL || '');
           }}
           style={styles.forgotPasswordButton}
         >

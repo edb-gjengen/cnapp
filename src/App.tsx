@@ -31,7 +31,7 @@ export default function App() {
             {/* FIXME: Read urlScheme and merchantIdentifier from .Config */}
             <StripeProvider
               publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''}
-              urlScheme={Constants.expoConfig.scheme as string}
+              urlScheme={Constants.expoConfig?.scheme as string}
               merchantIdentifier="merchant.no.neuf.chateau" // https://developer.apple.com/account/resources/identifiers/list/merchant
             >
               <Dusken />

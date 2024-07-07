@@ -1,5 +1,5 @@
 import { SimpleLineIcons as Icon } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
@@ -57,10 +57,18 @@ const UserStackScreen = () => (
   </UserStack.Navigator>
 );
 
+type TabBarIconType = BottomTabNavigationOptions['tabBarIcon'];
+
 const HomeTabs = createBottomTabNavigator<HomeTabParamList>();
-const EventIcon = ({ color, size }) => <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />;
-const UserIcon = ({ color, size }) => <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />;
-const AboutIcon = ({ color, size }) => <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />;
+const EventIcon: TabBarIconType = ({ color, size }) => (
+  <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />
+);
+const UserIcon: TabBarIconType = ({ color, size }) => (
+  <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />
+);
+const AboutIcon: TabBarIconType = ({ color, size }) => (
+  <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />
+);
 const Navigation = () => (
   <NavigationContainer>
     <HomeTabs.Navigator initialRouteName="EventStack">

@@ -4,7 +4,11 @@ import { Button } from 'react-native-ui-lib';
 
 import theme from 'src/theme';
 
-const MembershipInfo = ({ onRegister, onLogin }) => (
+interface MembershipInfoProps {
+  onRegister: () => void;
+  onLogin: () => void;
+}
+const MembershipInfo = ({ onRegister, onLogin }: MembershipInfoProps) => (
   <ScrollView>
     <View style={styles.card}>
       <Text style={styles.headerTitle}>Hei 👋</Text>

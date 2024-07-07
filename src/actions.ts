@@ -18,7 +18,7 @@ function loginRequest() {
   };
 }
 
-function loginSuccess(username, token) {
+function loginSuccess(username: string, token: string) {
   return {
     type: LOGIN_SUCCESS,
     username,

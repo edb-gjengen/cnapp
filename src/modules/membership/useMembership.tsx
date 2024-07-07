@@ -11,7 +11,6 @@ const useMembership = () => {
   const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
   const isFetchingUserData = useAppSelector((store) => store.isFetchingUserData);
   const lastOrder = useAppSelector((store) => store.lastOrder);
-  const user = useAppSelector((store) => store.user);
   const userToken = useAppSelector((store) => store.userToken);
   const prevUserToken = usePrevious(userToken);
   const prevLastOrder = usePrevious(lastOrder);
@@ -39,7 +38,6 @@ const useMembership = () => {
     isAuthenticated,
     isFetchingUserData,
     userToken,
-    user,
     lastOrder,
     onLogoutPress,
     onRegisterPress,

@@ -1,22 +1,20 @@
 import { NativeBaseProvider } from 'native-base';
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 
 import Navigation from './Navigation';
-import { logout as logoutAction, registerUserSuccess as registerUserSuccessAction } from './actions';
-import { migrateReduxPersistFourToFive } from './utils';
+import { logout } from './actions';
+import { useAppDispatch, useAppSelector } from './hooks';
 
-const DuskenContainer = ({ registerUserSuccess, userToken, user, logout }) => {
+const Dusken = () => {
+  const user = useAppSelector((store) => store.user);
+  const userToken = useAppSelector((store) => store.userToken);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    async function inner() {
-      await migrateReduxPersistFourToFive(registerUserSuccess);
-
-      // logout authenticated users without token
-      if (user && !userToken) {
-        logout();
-      }
+    // logout authenticated users without token
+    if (user && !userToken) {
+      dispatch(logout());
     }
-    inner();
   });
 
   return (
@@ -26,13 +24,4 @@ const DuskenContainer = ({ registerUserSuccess, userToken, user, logout }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  userToken: state.userToken,
-  user: state.user,
-});
-const mapDispatchToProps = {
-  registerUserSuccess: registerUserSuccessAction,
-  logout: logoutAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DuskenContainer);
+export default Dusken;
