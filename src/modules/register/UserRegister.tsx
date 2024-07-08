@@ -5,6 +5,7 @@ import { Button, Incubator } from 'react-native-ui-lib';
 
 import FormErrors from 'src/components/FormErrors';
 import FormInput from 'src/components/FormInput';
+import PrivacyButton from 'src/components/PrivacyButton';
 import theme from 'src/theme';
 
 import useUserRegister from './useUserRegister';
@@ -58,6 +59,7 @@ const UserRegister = () => {
             <Text>Registrer meg</Text>
           </Button>
           {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}
+          <PrivacyButton />
         </ScrollView>
       </View>
       <Toast

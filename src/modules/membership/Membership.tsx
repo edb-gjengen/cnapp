@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
+import PrivacyButton from 'src/components/PrivacyButton';
 import theme from 'src/theme';
 
 import MembershipInfo from './MembershipInfo';
@@ -20,10 +21,20 @@ const Membership = () => {
   }
 
   if (isAuthenticated) {
-    return <Proof onLogoutPress={onLogoutPress} fetchUser={fetchUser} isFetchingUserData={isFetchingUserData} />;
+    return (
+      <>
+        <Proof onLogoutPress={onLogoutPress} fetchUser={fetchUser} isFetchingUserData={isFetchingUserData} />
+        <PrivacyButton />
+      </>
+    );
   }
 
-  return <MembershipInfo onRegister={onRegisterPress} onLogin={onLoginPress} />;
+  return (
+    <>
+      <MembershipInfo onRegister={onRegisterPress} onLogin={onLoginPress} />
+      <PrivacyButton />
+    </>
+  );
 };
 export default Membership;
 
