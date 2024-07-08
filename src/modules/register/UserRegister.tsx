@@ -13,7 +13,8 @@ import useUserRegister from './useUserRegister';
 const { Toast } = Incubator;
 
 const UserRegister = () => {
-  const { isRegisteringUser, onSubmit, isValid, errors, registerError, setFocus, toast, setToast } = useUserRegister();
+  const { isRegisteringUser, onSubmit, isValid, control, errors, registerError, setFocus, toast, setToast } =
+    useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
   // TODO: validate on type
   // TODO: highlight errorfields
@@ -22,12 +23,27 @@ const UserRegister = () => {
     <>
       <View style={styles.card}>
         <ScrollView>
-          <FormInput name="firstName" label="Fornavn" autoFocus onSubmitEditing={() => setFocus('lastName')} />
-          <FormInput name="lastName" label="Etternavn" onSubmitEditing={() => setFocus('email')} />
+          <FormInput
+            name="firstName"
+            label="Fornavn"
+            control={control}
+            errors={errors}
+            autoFocus
+            onSubmitEditing={() => setFocus('lastName')}
+          />
+          <FormInput
+            name="lastName"
+            label="Etternavn"
+            control={control}
+            errors={errors}
+            onSubmitEditing={() => setFocus('email')}
+          />
           <FormInput
             name="email"
             label="E-post"
             keyboardType="email-address"
+            control={control}
+            errors={errors}
             autoCapitalize="none"
             autoCorrect={false}
             rules={{
@@ -39,12 +55,16 @@ const UserRegister = () => {
           <FormInput
             name="phoneNumber"
             label="Mobilnummer"
+            control={control}
+            errors={errors}
             keyboardType="phone-pad"
             onSubmitEditing={() => setFocus('password')}
           />
           <FormInput
             name="password"
             label="Passord"
+            control={control}
+            errors={errors}
             secureTextEntry
             autoCapitalize="none"
             autoCorrect={false}

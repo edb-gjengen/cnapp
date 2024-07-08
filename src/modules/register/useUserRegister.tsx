@@ -25,6 +25,7 @@ const useUserRegister = () => {
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
 
   const {
+    control,
     handleSubmit,
     formState: { errors, isValid },
     setFocus,
@@ -55,6 +56,6 @@ const useUserRegister = () => {
     }
   }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
-  return { isRegisteringUser, onSubmit, isValid, registerError, errors, setFocus, toast, setToast };
+  return { isRegisteringUser, onSubmit, isValid, registerError, control, errors, setFocus, toast, setToast };
 };
 export default useUserRegister;

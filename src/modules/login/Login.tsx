@@ -10,7 +10,7 @@ import theme from 'src/theme';
 import useLogin from './useLogin';
 
 const Login = () => {
-  const { isLoggingIn, errors, setFocus, onSubmit } = useLogin();
+  const { isLoggingIn, errors, control, setFocus, onSubmit } = useLogin();
 
   return (
     <ScrollView>
@@ -20,6 +20,8 @@ const Login = () => {
           name="email"
           label="E-post / Brukernavn"
           keyboardType="email-address"
+          control={control}
+          errors={errors}
           autoFocus
           autoCapitalize="none"
           autoCorrect={false}
@@ -28,6 +30,8 @@ const Login = () => {
         <FormInput
           name="password"
           label="Passord"
+          control={control}
+          errors={errors}
           secureTextEntry
           autoCapitalize="none"
           autoCorrect={false}

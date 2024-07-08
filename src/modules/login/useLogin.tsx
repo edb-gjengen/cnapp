@@ -20,6 +20,7 @@ const useLogin = () => {
   const loginError = useAppSelector((store) => store.loginError);
 
   const {
+    control,
     handleSubmit,
     formState: { errors },
     setFocus,
@@ -36,7 +37,7 @@ const useLogin = () => {
     }
   }, [isAuthenticated, navigation]);
 
-  return { onSubmit, isLoggingIn, setFocus, errors: { ...errors, ...loginError } };
+  return { onSubmit, isLoggingIn, setFocus, control, errors: { ...errors, ...loginError } };
 };
 
 export default useLogin;

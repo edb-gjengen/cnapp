@@ -1,9 +1,11 @@
 import { Input, Text, WarningOutlineIcon, FormControl, IInputProps } from 'native-base';
 import React from 'react';
-import { Controller, UseControllerProps, useForm } from 'react-hook-form';
+import { Control, Controller, UseControllerProps } from 'react-hook-form';
 import { ReturnKeyTypeOptions } from 'react-native';
 
 type FormInputProps = {
+  errors: any; // TODO: Figure out how to handle typing this
+  control: Control<any, any>;
   name: string;
   label: string;
   rules?: UseControllerProps['rules'];
@@ -11,6 +13,8 @@ type FormInputProps = {
 } & IInputProps;
 
 const FormInput = ({
+  errors,
+  control,
   name,
   label,
   rules = {
@@ -19,10 +23,6 @@ const FormInput = ({
   returnKeyType = 'next',
   ...rest
 }: FormInputProps) => {
-  const {
-    formState: { errors },
-    control,
-  } = useForm();
   const fieldError = errors[name];
   return (
     <Controller
