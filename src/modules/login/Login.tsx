@@ -10,12 +10,11 @@ import theme from 'src/theme';
 import useLogin from './useLogin';
 
 const Login = () => {
-  const { isLoggingIn, errors, control, setFocus, onSubmit } = useLogin();
+  const { isLoggingIn, isSubmitted, errors, loginError, control, setFocus, onSubmit } = useLogin();
 
   return (
     <ScrollView>
       <View style={styles.card}>
-        <FormErrors errors={errors} />
         <FormInput
           name="email"
           label="E-post / Brukernavn"
@@ -51,6 +50,7 @@ const Login = () => {
         >
           <Text>Glemt passord?</Text>
         </Button>
+        {loginError && isSubmitted && <FormErrors errors={loginError} />}
         {isLoggingIn && <ActivityIndicator color={theme.colors.neufOrange} />}
       </View>
     </ScrollView>
