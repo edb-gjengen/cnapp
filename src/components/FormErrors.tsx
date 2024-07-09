@@ -4,10 +4,6 @@ import { Text, StyleSheet, View } from 'react-native';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
-  if (!Object.keys(errors).length || !['non_field_errors', 'detail'].some((errorField) => errorField in errors)) {
-    return null;
-  }
-
   let errorFormatted;
   if ('non_field_errors' in errors) {
     errorFormatted = errors.non_field_errors?.[0];
