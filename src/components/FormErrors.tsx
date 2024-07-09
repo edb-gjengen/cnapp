@@ -10,7 +10,7 @@ const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
   } else if ('detail' in errors) {
     errorFormatted = errors.detail;
   }
-  if (!errorFormatted) errorFormatted = 'Kunne ikke sende inn skjemaet, prøv igjen...';
+  if (!errorFormatted) errorFormatted = 'Kunne ikke sende inn skjemaet! Prøv igjen senere...';
 
   return (
     <View style={styles.container}>
