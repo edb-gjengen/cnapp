@@ -1,11 +1,13 @@
 import { Input, Text, WarningOutlineIcon, FormControl, IInputProps } from 'native-base';
 import React from 'react';
-import { Control, Controller, UseControllerProps } from 'react-hook-form';
+import { Controller, UseControllerProps } from 'react-hook-form';
 import { ReturnKeyTypeOptions } from 'react-native';
 
 type FormInputProps = {
-  errors: any; // TODO: Figure out how to handle typing this
-  control: Control<any, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  errors: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any;
   name: string;
   label: string;
   rules?: UseControllerProps['rules'];
