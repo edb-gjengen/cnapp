@@ -2,7 +2,6 @@ import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/c
 import { StripeProvider } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
 import React from 'react';
-import { LogBox } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -16,8 +15,6 @@ const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/` }),
   cache: new InMemoryCache(),
 });
-// FIXME: Replace unmaintained native-base with https://wix.github.io/react-native-ui-lib/ which produces this warning
-LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
 
 loadTheme();
 

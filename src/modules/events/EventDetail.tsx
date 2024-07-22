@@ -166,11 +166,11 @@ const EventDetail = ({
   return (
     <ScrollView>
       {event.thumbnail.medium_large && <Image source={{ uri: event.thumbnail.medium_large }} style={styles.image} />}
-      <View style={styles.card}>
+      <View style={theme.card}>
         {/* Date and title */}
         <View style={styles.dateAndTitle}>
           <View style={styles.dateContainer}>
-            <View style={[styles.card, styles.dateCard]}>
+            <View style={[theme.card, styles.dateCard]}>
               <Text style={styles.day}>{format(event.start_time, FORMAT_DAY)}</Text>
               <Text style={styles.month}>{format(event.start_time, FORMAT_MONTH)}</Text>
               <Year startTime={event.start_time} />
@@ -229,7 +229,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.neufBlack,
   },
-  card: theme.card,
   image: {
     height: 260,
     width: null,

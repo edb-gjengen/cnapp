@@ -1,6 +1,5 @@
-import { ScrollView } from 'native-base';
 import React from 'react';
-import { ActivityIndicator, Linking, StyleSheet, View, Text } from 'react-native';
+import { ActivityIndicator, Linking, StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-ui-lib';
 
 import FormErrors from 'src/components/FormErrors';
@@ -14,7 +13,7 @@ const Login = () => {
 
   return (
     <ScrollView>
-      <View style={styles.card}>
+      <View style={theme.card}>
         <FormErrors errors={errors} />
         <FormInput
           name="email"
@@ -67,5 +66,4 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 16,
   },
-  card: theme.card,
 });

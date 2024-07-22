@@ -1,4 +1,3 @@
-import { NativeBaseProvider } from 'native-base';
 import React, { useEffect } from 'react';
 
 import Navigation from './Navigation';
@@ -17,11 +16,7 @@ const Dusken = () => {
     }
   });
 
-  return (
-    <NativeBaseProvider>
-      <Navigation />
-    </NativeBaseProvider>
-  );
+  return <Navigation />;
 };
 
 export default Dusken;

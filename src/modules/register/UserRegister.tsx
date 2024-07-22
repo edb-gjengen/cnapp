@@ -21,7 +21,7 @@ const UserRegister = () => {
 
   return (
     <>
-      <View style={styles.card}>
+      <View style={theme.card}>
         <ScrollView>
           <FormInput
             name="firstName"
@@ -113,5 +113,4 @@ const styles = StyleSheet.create({
   errorBox: {
     marginVertical: 10,
   },
-  card: theme.card,
 });

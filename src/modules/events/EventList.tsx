@@ -1,7 +1,7 @@
+import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 import moment from 'moment';
-import { Card, Text, Spinner, ArrowForwardIcon, HStack } from 'native-base';
 import React from 'react';
-import { StyleSheet, View, Platform, SectionList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Platform, SectionList, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
 import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
@@ -33,7 +33,7 @@ const EventList = () => {
       }}
       style={styles.listItem}
     >
-      <HStack>
+      <View style={styles.row}>
         <View style={{ flex: 5 }}>
           <Text style={styles.listItemTitle} numberOfLines={1}>
             {item.title.decoded}
@@ -41,9 +41,9 @@ const EventList = () => {
           <Text style={styles.listItemTime}>{formatTime(item.start_time)}</Text>
         </View>
         <View style={styles.arrow}>
-          <ArrowForwardIcon size={4} color={theme.colors.neufBlack} marginTop={3} />
+          <Icon name="arrow-right" style={{ color: theme.colors.neufBlack, marginTop: 3 }} />
         </View>
-      </HStack>
+      </View>
     </TouchableOpacity>
   );
 
@@ -52,23 +52,21 @@ const EventList = () => {
   const Footer = () =>
     !loading && (
       <View style={{ paddingVertical: 20 }}>
-        <Spinner color={theme.colors.neufOrange} />
+        <ActivityIndicator color={theme.colors.neufOrange} />
       </View>
     );
 
   if (error) {
     return (
-      <View>
-        <Card style={{ margin: 4 }}>
-          <View>
-            <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
-          </View>
-          <View>
-            <Button onPress={handleRefresh}>
-              <Text>Prøv igjen</Text>
-            </Button>
-          </View>
-        </Card>
+      <View style={theme.card}>
+        <View>
+          <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
+        </View>
+        <View>
+          <Button onPress={handleRefresh}>
+            <Text>Prøv igjen</Text>
+          </Button>
+        </View>
       </View>
     );
   }
@@ -85,7 +83,7 @@ const EventList = () => {
       onEndReachedThreshold={10}
       initialNumToRender={10}
       ListFooterComponent={Footer}
-      style={[styles.card, styles.list]}
+      style={[theme.card, styles.list]}
       ListHeaderComponent={Header}
     />
   );
@@ -125,7 +123,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingBottom: 8,
   },
-  card: theme.card,
   list: {
     padding: 0,
     marginTop: 0,
@@ -139,4 +136,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-end',
   },
+  row: { flex: 1, flexDirection: 'row' },
 });
