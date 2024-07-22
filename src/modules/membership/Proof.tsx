@@ -148,9 +148,11 @@ interface ProofProps {
 const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef<Confetti>(null);
-  const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof({
-    fetchUser,
-  });
+  const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof(
+    {
+      fetchUser,
+    },
+  );
 
   useEffect(() => {
     const currentRef = confettiRef.current;
