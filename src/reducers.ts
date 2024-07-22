@@ -47,7 +47,7 @@ function formatErrors(errs: Record<string, string | string[]>) {
 
 // FIXME: refactor using redux slices
 // eslint-disable-next-line @typescript-eslint/default-param-last, @typescript-eslint/no-explicit-any
-export default function duskenApp(state = initialState, action: any) {
+export default function appReducers(state = initialState, action: any) {
   switch (action.type) {
     /* Login */
     case LOGIN_REQUEST:

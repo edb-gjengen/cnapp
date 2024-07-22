@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import Dusken from './Dusken';
+import AppInner from './AppInner';
 import { useDeepLinking } from './hooks';
 import { store, persistor } from './reduxStore';
 import { loadTheme } from './theme';
@@ -31,7 +31,7 @@ export default function App() {
               urlScheme={Constants.expoConfig?.scheme as string}
               merchantIdentifier="merchant.no.neuf.chateau" // https://developer.apple.com/account/resources/identifiers/list/merchant
             >
-              <Dusken />
+              <AppInner />
             </StripeProvider>
           </ApolloProvider>
         </PersistGate>
