@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Chateau Neuf",
-    "slug": "neuf.chateau",
+    "slug": "cnapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,6 +30,12 @@
     },
     "plugins": [
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "908b7664-3796-4d49-b075-2847b0804c02"
+      }
+    },
+    "owner": "neuf"
   }
 }
