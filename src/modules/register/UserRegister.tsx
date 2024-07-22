@@ -16,8 +16,6 @@ const UserRegister = () => {
   const { isRegisteringUser, onSubmit, isValid, control, errors, registerError, setFocus, toast, setToast } =
     useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
-  // TODO: validate on type
-  // TODO: highlight errorfields
 
   return (
     <>
