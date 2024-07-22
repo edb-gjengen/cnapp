@@ -19,9 +19,9 @@ const Login = () => {
         <FormInput
           name="email"
           label="E-post / Brukernavn"
-          keyboardType="email-address"
           control={control}
           errors={errors}
+          keyboardType="email-address"
           autoFocus
           autoCapitalize="none"
           autoCorrect={false}
