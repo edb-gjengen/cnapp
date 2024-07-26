@@ -46,7 +46,7 @@ const useUserRegister = () => {
 
     // Display error messages from API on form fields
     Object.keys(registerError).forEach((key) => {
-      setError(key as keyof UserRegisterFormValues, { type: 'manual', message: registerError[key] });
+      setError(key as keyof UserRegisterFormValues, { type: 'server', message: registerError[key].join('\n') });
     });
   });
 
