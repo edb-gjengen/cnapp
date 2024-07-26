@@ -24,15 +24,15 @@ const UserRegister = () => {
       <View style={styles.card}>
         <ScrollView>
           <FormInput
-            name="firstName"
+            name="first_name"
             label="Fornavn"
             control={control}
             errors={errors}
             autoFocus
-            onSubmitEditing={() => setFocus('lastName')}
+            onSubmitEditing={() => setFocus('last_name')}
           />
           <FormInput
-            name="lastName"
+            name="last_name"
             label="Etternavn"
             control={control}
             errors={errors}
@@ -50,10 +50,10 @@ const UserRegister = () => {
               required: 'Kan ikke være tomt!',
               validate: (v) => EmailValidator.validate(v) || 'er ikke en gyldig e-post',
             }}
-            onSubmitEditing={() => setFocus('phoneNumber')}
+            onSubmitEditing={() => setFocus('phone_number')}
           />
           <FormInput
-            name="phoneNumber"
+            name="phone_number"
             label="Mobilnummer"
             control={control}
             errors={errors}

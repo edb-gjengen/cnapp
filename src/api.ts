@@ -79,7 +79,8 @@ export function requestUserData(authToken: string) {
   };
 }
 
-export function requestRegisterUser({ firstName, lastName, email, phoneNumber, password }: UserRegisterFormValues) {
+// We use snake_case in order to fetch and display field errors from the API without any additional formatting
+export function requestRegisterUser({ first_name, last_name, email, phone_number, password }: UserRegisterFormValues) {
   return (dispatch: AppDispatch) => {
     dispatch(registerUserRequest());
 
@@ -90,10 +91,10 @@ export function requestRegisterUser({ firstName, lastName, email, phoneNumber, p
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        first_name: firstName,
-        last_name: lastName,
+        first_name: first_name,
+        last_name: last_name,
         email,
-        phone_number: phoneNumber,
+        phone_number: phone_number,
         password,
       }),
     })
