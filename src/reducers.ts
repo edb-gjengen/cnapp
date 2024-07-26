@@ -77,7 +77,7 @@ export default function duskenApp(state = initialState, action: any) {
       return { ...state, isRegisteringUser: true, registerError: null };
 
     case REGISTER_USER_FAILURE:
-      return { ...state, isRegisteringUser: false, registerError: formatErrors(action.registerError) };
+      return { ...state, isRegisteringUser: false, registerError: action.registerError };
 
     case REGISTER_USER_SUCCESS:
       // eslint-disable-next-line no-case-declarations
