@@ -26,12 +26,10 @@ const UserRegister = () => {
     setToast,
   } = useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
-  // TODO: validate on type
-  // TODO: highlight errorfields
 
   return (
     <>
-      <View style={styles.card}>
+      <View style={theme.card}>
         <ScrollView>
           <FormInput
             name="first_name"
@@ -122,5 +120,4 @@ const styles = StyleSheet.create({
   errorBox: {
     marginVertical: 10,
   },
-  card: theme.card,
 });

@@ -6,7 +6,7 @@ import theme from 'src/theme';
 const PrivacyButton = () => (
   <TouchableOpacity
     style={styles.button}
-    onPress={() => Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL)}
+    onPress={() => Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL || '')}
   >
     <Text style={styles.linkText}>Personvern</Text>
   </TouchableOpacity>

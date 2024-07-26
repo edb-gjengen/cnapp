@@ -10,7 +10,7 @@ interface MembershipInfoProps {
 }
 const MembershipInfo = ({ onRegister, onLogin }: MembershipInfoProps) => (
   <ScrollView>
-    <View style={styles.card}>
+    <View style={theme.card}>
       <Text style={styles.headerTitle}>Hei 👋</Text>
       <Text style={styles.paragraph}>
         Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen
@@ -38,7 +38,6 @@ const MembershipInfo = ({ onRegister, onLogin }: MembershipInfoProps) => (
 export default MembershipInfo;
 
 const styles = StyleSheet.create({
-  card: theme.card,
   paragraph: {
     textAlign: 'center',
     fontSize: 16,

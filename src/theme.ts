@@ -13,6 +13,7 @@ const colors = {
   neufBlue: '#0A0F6D',
   neufWhite: '#FFFFFF',
   neufBlack: '#161516',
+  gray1: '#dddddd',
 };
 
 const card = {

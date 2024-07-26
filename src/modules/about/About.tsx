@@ -72,7 +72,7 @@ const openMap = () => {
 /** FIXME: Values here are pretty hardcoded. Should fetch config from a JSON-file or API */
 const About = () => (
   <ScrollView>
-    <View style={styles.card}>
+    <View style={theme.card}>
       <Text style={[styles.header, { marginTop: 8 }]}>Det Norske Studentersamfund</Text>
       <TouchableOpacity onPress={() => Linking.openURL('https://www.studentersamfundet.no/')}>
         <Image style={styles.logo} source={logo} />
@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     lineHeight: 25,
   },
-  card: theme.card,
   featuredImage: {
     height: 230,
     width: null,

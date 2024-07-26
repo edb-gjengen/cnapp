@@ -148,9 +148,11 @@ interface ProofProps {
 const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef<Confetti>(null);
-  const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof({
-    fetchUser,
-  });
+  const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof(
+    {
+      fetchUser,
+    },
+  );
 
   useEffect(() => {
     const currentRef = confettiRef.current;
@@ -183,7 +185,7 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => 
       <View>
         <UserConfetti user={user} confettiRef={confettiRef} />
         <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
-          <View style={[styles.card, { paddingVertical: 16 }]}>
+          <View style={[theme.card, { paddingVertical: 16 }]}>
             <MembershipName user={user} />
             <Logo user={user} />
             <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
@@ -218,7 +220,6 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => 
 export default Proof;
 
 const styles = StyleSheet.create({
-  card: theme.card,
   membershipStatus: {
     marginVertical: 16,
   },

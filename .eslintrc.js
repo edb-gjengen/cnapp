@@ -41,9 +41,8 @@ module.exports = {
         alphabetize: { order: 'asc' },
       },
     ],
-    'unused-imports/no-unused-imports': 'error',
   },
-  plugins: ['prettier', 'unused-imports'],
+  plugins: ['prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: ['./tsconfig.json'],

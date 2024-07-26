@@ -4,14 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import About from './modules/about/About';
-import EventDetail from './modules/events/EventDetail';
-import EventList from './modules/events/EventList';
-import Login from './modules/login/Login';
-import Membership from './modules/membership/Membership';
-import UserRegister from './modules/register/UserRegister';
-import theme from './theme';
-import type { EventStackParamList, HomeTabParamList, UserStackParamList } from './types/navigation';
+import About from 'src/modules/about/About';
+import EventDetail from 'src/modules/events/EventDetail';
+import EventList from 'src/modules/events/EventList';
+import Login from 'src/modules/login/Login';
+import Membership from 'src/modules/membership/Membership';
+import UserRegister from 'src/modules/register/UserRegister';
+import theme from 'src/theme';
+import type { EventStackParamList, HomeTabParamList, UserStackParamList } from 'src/types/navigation';
 
 // This looks ugly, even though it's a recommended style from the branding profile.
 // TODO: Change this

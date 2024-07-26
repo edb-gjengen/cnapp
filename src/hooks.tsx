@@ -4,6 +4,7 @@ import { Linking } from 'react-native';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
+import { logout } from './actions';
 import type { AppDispatch, AppStore, RootState } from './reduxStore';
 
 export function usePrevious<T>(value: T): T | undefined {
@@ -55,3 +56,16 @@ export const useDeepLinking = () => {
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppStore: () => AppStore = useStore;
+
+/** Logout authenticated users without token */
+export function useLogoutUsersWithNoToken() {
+  const user = useAppSelector((store) => store.user);
+  const userToken = useAppSelector((store) => store.userToken);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (user && !userToken) {
+      dispatch(logout());
+    }
+  });
+}
