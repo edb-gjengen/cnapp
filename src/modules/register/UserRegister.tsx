@@ -13,8 +13,18 @@ import useUserRegister from './useUserRegister';
 const { Toast } = Incubator;
 
 const UserRegister = () => {
-  const { isRegisteringUser, onSubmit, isValid, control, errors, registerError, setFocus, toast, setToast } =
-    useUserRegister();
+  const {
+    isRegisteringUser,
+    onSubmit,
+    isValid,
+    isSubmitted,
+    control,
+    errors,
+    registerError,
+    setFocus,
+    toast,
+    setToast,
+  } = useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
   // TODO: validate on type
   // TODO: highlight errorfields
@@ -72,10 +82,9 @@ const UserRegister = () => {
             onSubmitEditing={onSubmit}
           />
           <View style={styles.errorBox}>
-            <FormErrors errors={errors} />
-            <FormErrors errors={registerError} />
+            {registerError && isSubmitted && <FormErrors errors={registerError} />}
           </View>
-          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
+          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton} type="submit">
             <Text>Registrer meg</Text>
           </Button>
           {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}

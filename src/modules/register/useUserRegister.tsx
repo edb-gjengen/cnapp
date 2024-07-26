@@ -19,7 +19,7 @@ const useUserRegister = () => {
   const navigation = useNavigation();
   const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
   const isRegisteringUser = useAppSelector((store) => store.isRegisteringUser);
-  const registerError = useAppSelector((store) => store.registerError) || {};
+  const registerError = useAppSelector((store) => store.registerError);
   const [toast, setToast] = useState<ToastProps | null>(null);
 
   const isAuthenticatedPrev = usePrevious(isAuthenticated);
@@ -27,11 +27,13 @@ const useUserRegister = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitted },
     setFocus,
     setError,
+    clearErrors,
   } = useForm<UserRegisterFormValues>();
   const onSubmit = handleSubmit((values) => {
+    clearErrors();
     if (!isValid) {
       setToast({
         message: 'Noen av feltene er ikke fylt ut riktig',
@@ -56,6 +58,25 @@ const useUserRegister = () => {
     }
   }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
-  return { isRegisteringUser, onSubmit, isValid, registerError, control, errors, setFocus, toast, setToast };
+  useEffect(() => {
+    clearErrors();
+    if (!isSubmitted || !registerError) return;
+    Object.keys(registerError).forEach((key) => {
+      setError(key as keyof UserRegisterFormValues, { type: 'server', message: registerError[key].join('\n') });
+    });
+  }, [registerError]);
+
+  return {
+    isRegisteringUser,
+    onSubmit,
+    isValid,
+    isSubmitted,
+    registerError,
+    control,
+    errors,
+    setFocus,
+    toast,
+    setToast,
+  };
 };
 export default useUserRegister;
