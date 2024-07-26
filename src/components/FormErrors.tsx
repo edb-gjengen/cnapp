@@ -4,17 +4,24 @@ import { Text, StyleSheet, View } from 'react-native';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
-  if (!Object.keys(errors).length || !['non_field_errors', 'detail'].some((errorField) => errorField in errors)) {
-    return null;
+  if (!errors) {
+    return;
   }
 
   let errorFormatted;
-  if ('non_field_errors' in errors) {
+  if (errors instanceof Error) {
+    // This check might backfire on us as it's too general. We do not wish to display the error message to the user
+    // Hence we display this generic one
+    errorFormatted = 'Kunne ikke sende inn skjemaet! Prøv igjen senere...';
+  } else if ('non_field_errors' in errors) {
     errorFormatted = errors.non_field_errors?.[0];
   } else if ('detail' in errors) {
     errorFormatted = errors.detail;
   }
-  if (!errorFormatted) errorFormatted = 'Kunne ikke sende inn skjemaet, prøv igjen...';
+
+  if (!errorFormatted) {
+    return;
+  }
 
   return (
     <View style={styles.container}>

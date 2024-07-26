@@ -13,8 +13,18 @@ import useUserRegister from './useUserRegister';
 const { Toast } = Incubator;
 
 const UserRegister = () => {
-  const { isRegisteringUser, onSubmit, isValid, control, errors, registerError, setFocus, toast, setToast } =
-    useUserRegister();
+  const {
+    isRegisteringUser,
+    onSubmit,
+    isValid,
+    isSubmitted,
+    control,
+    errors,
+    registerError,
+    setFocus,
+    toast,
+    setToast,
+  } = useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
 
   return (
@@ -22,15 +32,15 @@ const UserRegister = () => {
       <View style={theme.card}>
         <ScrollView>
           <FormInput
-            name="firstName"
+            name="first_name"
             label="Fornavn"
             control={control}
             errors={errors}
             autoFocus
-            onSubmitEditing={() => setFocus('lastName')}
+            onSubmitEditing={() => setFocus('last_name')}
           />
           <FormInput
-            name="lastName"
+            name="last_name"
             label="Etternavn"
             control={control}
             errors={errors}
@@ -48,10 +58,10 @@ const UserRegister = () => {
               required: 'Kan ikke være tomt!',
               validate: (v) => EmailValidator.validate(v) || 'er ikke en gyldig e-post',
             }}
-            onSubmitEditing={() => setFocus('phoneNumber')}
+            onSubmitEditing={() => setFocus('phone_number')}
           />
           <FormInput
-            name="phoneNumber"
+            name="phone_number"
             label="Mobilnummer"
             control={control}
             errors={errors}
@@ -70,10 +80,9 @@ const UserRegister = () => {
             onSubmitEditing={onSubmit}
           />
           <View style={styles.errorBox}>
-            <FormErrors errors={errors} />
-            <FormErrors errors={registerError} />
+            {registerError && isSubmitted && <FormErrors errors={registerError} />}
           </View>
-          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
+          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton} type="submit">
             <Text>Registrer meg</Text>
           </Button>
           {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}

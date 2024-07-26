@@ -22,7 +22,7 @@ const useLogin = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitted },
     setFocus,
   } = useForm<LoginFormValues>();
 
@@ -37,7 +37,7 @@ const useLogin = () => {
     }
   }, [isAuthenticated, navigation]);
 
-  return { onSubmit, isLoggingIn, setFocus, control, errors: { ...errors, ...loginError } };
+  return { onSubmit, isLoggingIn, isSubmitted, setFocus, control, errors: { ...errors }, loginError };
 };
 
 export default useLogin;
