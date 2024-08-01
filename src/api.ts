@@ -91,10 +91,10 @@ export function requestRegisterUser({ first_name, last_name, email, phone_number
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        first_name: first_name,
-        last_name: last_name,
+        first_name,
+        last_name,
         email,
-        phone_number: phone_number,
+        phone_number,
         password,
       }),
     })

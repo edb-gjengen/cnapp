@@ -11,7 +11,6 @@ import {
   REGISTER_USER_SUCCESS,
 } from './actions';
 import type { UserType } from './types/data';
-import { snakeToCamelCase } from './utils';
 
 interface RootState {
   isAuthenticated: boolean;

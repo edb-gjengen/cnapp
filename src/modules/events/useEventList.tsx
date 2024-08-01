@@ -65,7 +65,7 @@ const useEventList = () => {
     let eventData;
     try {
       const res = await fetchWithTimeout(url);
-      if (res.status == 418) {
+      if (res.status === 418) {
         // TODO: temporary. Remove once new website is up and running
         throw new Error('I am a teapot');
       }

@@ -79,9 +79,7 @@ const UserRegister = () => {
             returnKeyType="send"
             onSubmitEditing={onSubmit}
           />
-          <View style={styles.errorBox}>
-            {registerError && isSubmitted && <FormErrors errors={registerError} />}
-          </View>
+          <View style={styles.errorBox}>{registerError && isSubmitted && <FormErrors errors={registerError} />}</View>
           <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton} type="submit">
             <Text>Registrer meg</Text>
           </Button>

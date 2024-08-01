@@ -64,7 +64,7 @@ const useUserRegister = () => {
     Object.keys(registerError).forEach((key) => {
       setError(key as keyof UserRegisterFormValues, { type: 'server', message: registerError[key].join('\n') });
     });
-  }, [registerError]);
+  }, [registerError, isSubmitted, clearErrors, setError]);
 
   return {
     isRegisteringUser,

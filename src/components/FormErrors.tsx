@@ -5,7 +5,7 @@ import { Text, StyleSheet, View } from 'react-native';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
   if (!errors) {
-    return;
+    return [];
   }
 
   let errorFormatted;
@@ -20,7 +20,7 @@ const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
   }
 
   if (!errorFormatted) {
-    return;
+    return [];
   }
 
   return (
