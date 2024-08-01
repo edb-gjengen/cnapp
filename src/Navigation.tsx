@@ -17,10 +17,10 @@ import type { EventStackParamList, HomeTabParamList, UserStackParamList } from '
 // TODO: Change this
 // also TODO: make sure battery indicator etc. is visible
 const defaultNavigationStyle = {
-  headerTintColor: theme.colors.neufPurple,
+  headerTintColor: theme.colors.neufWhite,
   headerTitleAlign: 'center',
   headerStyle: {
-    backgroundColor: theme.colors.neufPink,
+    backgroundColor: theme.colors.neufOrange,
   },
 } as const;
 
