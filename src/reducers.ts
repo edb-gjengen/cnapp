@@ -37,14 +37,6 @@ const initialState: RootState = {
   registerError: null,
 };
 
-function formatErrors(errs: Record<string, string | string[]>) {
-  const errors: Record<string, string> = {};
-  Object.entries(errs).forEach(([key, value]) => {
-    errors[snakeToCamelCase(key)] = Array.isArray(value) ? value.join('\n') : value;
-  });
-  return errors;
-}
-
 // FIXME: refactor using redux slices
 // eslint-disable-next-line @typescript-eslint/default-param-last, @typescript-eslint/no-explicit-any
 export default function appReducers(state = initialState, action: any) {
