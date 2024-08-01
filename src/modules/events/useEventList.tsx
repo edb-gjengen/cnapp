@@ -25,7 +25,7 @@ const useEventList = () => {
   const [eventsSectioned, setEventsSectioned] = useState<SectionedEvents[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [error, setError] = useState<unknown>(null);
+  const [error, setError] = useState<Error | unknown | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const toSectionFormat = (freshEvents: EventType[]) => {

@@ -57,6 +57,7 @@ const EventList = () => {
     );
 
   // TODO: temporary. Remove this once the new website is up
+  // @ts-ignore
   if (error && error.message === 'I am a teapot') {
     return (
       <View style={theme.card}>

@@ -80,7 +80,7 @@ const UserRegister = () => {
             onSubmitEditing={onSubmit}
           />
           <View style={styles.errorBox}>{registerError && isSubmitted && <FormErrors errors={registerError} />}</View>
-          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton} type="submit">
+          <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
             <Text>Registrer meg</Text>
           </Button>
           {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}

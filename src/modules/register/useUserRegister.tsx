@@ -47,8 +47,13 @@ const useUserRegister = () => {
     dispatch(requestRegisterUser(values));
 
     // Display error messages from API on form fields
+    if (!registerError) return;
     Object.keys(registerError).forEach((key) => {
-      setError(key as keyof UserRegisterFormValues, { type: 'server', message: registerError[key].join('\n') });
+      const errorMessages = registerError[key];
+      if (!errorMessages || !Array.isArray(errorMessages)) {
+        return;
+      }
+      setError(key as keyof UserRegisterFormValues, { type: 'server', message: errorMessages.join('\n') });
     });
   });
 
@@ -62,7 +67,11 @@ const useUserRegister = () => {
     clearErrors();
     if (!isSubmitted || !registerError) return;
     Object.keys(registerError).forEach((key) => {
-      setError(key as keyof UserRegisterFormValues, { type: 'server', message: registerError[key].join('\n') });
+      const errorMessages = registerError[key];
+      if (!errorMessages || !Array.isArray(errorMessages)) {
+        return;
+      }
+      setError(key as keyof UserRegisterFormValues, { type: 'server', message: errorMessages.join('\n') });
     });
   }, [registerError, isSubmitted, clearErrors, setError]);
 

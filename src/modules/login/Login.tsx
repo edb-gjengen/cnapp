@@ -14,7 +14,7 @@ const Login = () => {
   return (
     <ScrollView>
       <View style={theme.card}>
-        <FormErrors errors={errors} />
+        {errors && <FormErrors errors={errors} />}
         <FormInput
           name="email"
           label="E-post / Brukernavn"
