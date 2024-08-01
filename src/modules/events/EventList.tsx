@@ -56,6 +56,17 @@ const EventList = () => {
       </View>
     );
 
+  // TODO: temporary. Remove this once the new website is up
+  if (error && error.message === 'I am a teapot') {
+    return (
+      <View style={theme.card}>
+        <Text style={styles.loadingText}>
+          Vi lager ny nettside! Programmet vil derfor være utilgjengelig inntil alt er på plass!
+        </Text>
+      </View>
+    );
+  }
+
   if (error) {
     return (
       <View style={theme.card}>
