@@ -57,7 +57,7 @@ const EventList = () => {
     );
 
   // TODO: temporary. Remove this once the new website is up
-  // @ts-ignore
+  // @ts-expect-error message is not a property of type. we don't care because this block of code is temporary
   if (error && error.message === 'I am a teapot') {
     return (
       <View style={theme.card}>
