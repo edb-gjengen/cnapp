@@ -105,7 +105,7 @@ export default EventList;
 const styles = StyleSheet.create({
   listItem: {
     backgroundColor: theme.colors.neufWhite,
-    paddingTop: 8,
+    paddingTop: 10,
     paddingBottom: 12,
     paddingLeft: 12,
     paddingRight: 12,
