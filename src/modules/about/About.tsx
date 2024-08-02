@@ -168,6 +168,8 @@ const styles = StyleSheet.create({
     lineHeight: 25,
   },
   featuredImage: {
+    marginTop: 10,
+    marginBottom: 10,
     height: 230,
     width: null,
     display: 'flex',
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   section: {
-    marginTop: 8,
+    marginTop: 10,
     marginBottom: 20,
     alignSelf: 'center',
   },
