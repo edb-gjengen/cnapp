@@ -19,6 +19,7 @@ const useMembership = () => {
   };
   const onRegisterPress = () => navigation.navigate('UserStack', { screen: 'UserRegister' });
   const onLoginPress = () => navigation.navigate('UserStack', { screen: 'Login' });
+  const onDeletePress = () => navigation.navigate('UserStack', { screen: 'UserDelete' });
   const fetchUser = useCallback(() => {
     dispatch(requestUserData(userToken || ''));
   }, [dispatch, userToken]);
@@ -35,6 +36,7 @@ const useMembership = () => {
     userToken,
     onLogoutPress,
     onRegisterPress,
+    onDeletePress,
     onLoginPress,
     fetchUser,
   };

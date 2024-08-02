@@ -144,8 +144,9 @@ interface ProofProps {
   onLogoutPress: () => void;
   fetchUser: () => void;
   isFetchingUserData: boolean;
+  onDeletePress: () => void;
 }
-const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => {
+const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: ProofProps) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef<Confetti>(null);
   const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof(
@@ -203,6 +204,9 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData }: ProofProps) => 
               <Text>Logg ut</Text>
             </Button>
           </View>
+          <Button onPress={onDeletePress} style={styles.deleteButton} small>
+            <Text style={styles.whiteText}>Slett bruker</Text>
+          </Button>
         </ScrollView>
       </View>
       <Toast
@@ -274,6 +278,14 @@ const styles = StyleSheet.create({
   logoutButton: {
     alignSelf: 'center',
     marginVertical: 20,
+  },
+  deleteButton: {
+    alignSelf: 'center',
+    marginVertical: 20,
+    backgroundColor: theme.colors.danger,
+  },
+  whiteText: {
+    color: theme.colors.neufWhite,
   },
   purchaseText: {
     alignItems: 'center',

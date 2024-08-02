@@ -10,6 +10,9 @@ const USER_DATA_FAILURE = 'USER_DATA_FAILURE';
 const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
 const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE';
+const DELETE_USER_REQUEST = 'DELETE_USER_REQUEST';
+const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+const DELETE_USER_FAILURE = 'DELETE_USER_FAILURE';
 
 function loginRequest() {
   return {
@@ -78,6 +81,25 @@ function registerUserFailure(registerError: Record<string, string>) {
   };
 }
 
+function deleteUserRequest() {
+  return {
+    type: DELETE_USER_REQUEST,
+  };
+}
+
+function deleteUserSuccess() {
+  return {
+    type: DELETE_USER_SUCCESS,
+  };
+}
+
+function deleteUserFailure(deleteUserError: Record<string, string>) {
+  return {
+    type: DELETE_USER_FAILURE,
+    deleteUserError,
+  };
+}
+
 export {
   /* Login */
   LOGIN_REQUEST,
@@ -103,4 +125,11 @@ export {
   registerUserSuccess,
   REGISTER_USER_FAILURE,
   registerUserFailure,
+  /* Delete */
+  DELETE_USER_REQUEST,
+  deleteUserRequest,
+  DELETE_USER_SUCCESS,
+  deleteUserSuccess,
+  DELETE_USER_FAILURE,
+  deleteUserFailure,
 };

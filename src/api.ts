@@ -8,6 +8,9 @@ import {
   userDataFailure,
   userDataRequest,
   userDataSuccess,
+  deleteUserFailure,
+  deleteUserSuccess,
+  deleteUserRequest,
 } from './actions';
 import type { UserRegisterFormValues } from './modules/register/useUserRegister';
 import { AppDispatch } from './reduxStore';
@@ -113,6 +116,29 @@ export function requestRegisterUser({ first_name, last_name, email, phone_number
           dispatch(registerUserFailure(data || { non_field_errors: ['Kunne ikke registrere bruker, prøv igjen'] }));
         },
       );
+  };
+}
+
+export function requestDeleteUser(authToken: string) {
+  return (dispatch: AppDispatch) => {
+    dispatch(deleteUserRequest());
+
+    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/me/delete/`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Token ${authToken}`,
+      },
+    }).then((response) => {
+      if (!response.ok) {
+        return response.json().then((json) => {
+          dispatch(deleteUserFailure(json || { non_field_errors: ['Kunne ikke slette bruker, prøv igjen'] }));
+        });
+      }
+      dispatch(deleteUserSuccess());
+      return {};
+    });
   };
 }
 

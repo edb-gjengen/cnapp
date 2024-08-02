@@ -30,4 +30,5 @@ export interface UserType {
   last_membership: MembershipType | null;
   is_volunteer: boolean;
   is_member: boolean;
+  username: string | null;
 }

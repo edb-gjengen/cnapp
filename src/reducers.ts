@@ -9,6 +9,9 @@ import {
   REGISTER_USER_REQUEST,
   REGISTER_USER_FAILURE,
   REGISTER_USER_SUCCESS,
+  DELETE_USER_REQUEST,
+  DELETE_USER_FAILURE,
+  DELETE_USER_SUCCESS,
 } from './actions';
 import type { UserType } from './types/data';
 
@@ -17,11 +20,13 @@ interface RootState {
   isLoggingIn: boolean;
   isFetchingUserData: boolean;
   isRegisteringUser: boolean;
+  isDeletingUser: boolean;
   userToken: string | null;
   user: UserType | null;
   loginError: Record<string, string> | null;
   userError: Record<string, string> | null;
   registerError: Record<string, string> | null;
+  deleteUserError: Record<string, string> | null;
 }
 
 const initialState: RootState = {
@@ -29,11 +34,13 @@ const initialState: RootState = {
   isLoggingIn: false,
   isFetchingUserData: false,
   isRegisteringUser: false,
+  isDeletingUser: false,
   userToken: null,
   user: null,
   loginError: null,
   userError: null,
   registerError: null,
+  deleteUserError: null,
 };
 
 // FIXME: refactor using redux slices
@@ -78,6 +85,16 @@ export default function appReducers(state = initialState, action: any) {
       delete userData.auth_token;
 
       return { ...state, isRegisteringUser: false, isAuthenticated: true, user: userData, userToken: token };
+
+    /* Delete user */
+    case DELETE_USER_REQUEST:
+      return { ...state, isDeletingUser: true, deleteUserError: null };
+
+    case DELETE_USER_FAILURE:
+      return { ...state, isDeletingUser: false, deleteUserError: action.deleteUserError };
+
+    case DELETE_USER_SUCCESS:
+      return initialState;
 
     default:
       return state;

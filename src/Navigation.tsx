@@ -9,6 +9,7 @@ import EventDetail from 'src/modules/events/EventDetail';
 import EventList from 'src/modules/events/EventList';
 import Login from 'src/modules/login/Login';
 import Membership from 'src/modules/membership/Membership';
+import UserDelete from 'src/modules/membership/UserDelete';
 import UserRegister from 'src/modules/register/UserRegister';
 import theme from 'src/theme';
 import type { EventStackParamList, HomeTabParamList, UserStackParamList } from 'src/types/navigation';
@@ -52,6 +53,13 @@ const UserStackScreen = () => (
       component={UserRegister}
       options={{
         title: 'Bli medlem',
+      }}
+    />
+    <UserStack.Screen
+      name="UserDelete"
+      component={UserDelete}
+      options={{
+        title: 'Slett bruker',
       }}
     />
   </UserStack.Navigator>

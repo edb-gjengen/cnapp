@@ -14,6 +14,7 @@ export type UserStackParamList = {
   Membership: undefined;
   Login: undefined;
   UserRegister: undefined;
+  UserDelete: undefined;
 };
 
 export type HomeTabParamList = {
