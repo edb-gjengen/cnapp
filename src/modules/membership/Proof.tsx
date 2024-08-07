@@ -12,6 +12,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import Confetti from 'react-native-confetti';
+import RadioForm from 'react-native-simple-radio-button';
 import { Button, Incubator } from 'react-native-ui-lib';
 
 import theme from 'src/theme';
@@ -76,6 +77,7 @@ interface PurchaseButtonProps {
   isLoadingMembershipType: boolean;
   membershipPrice: number;
   onPurchasePress: () => void;
+  setMembershipTypeSlug: (value: string) => void;
 }
 
 const PurchaseButton = ({
@@ -84,13 +86,36 @@ const PurchaseButton = ({
   isLoadingMembershipType,
   onPurchasePress,
   membershipPrice,
+  setMembershipTypeSlug,
 }: PurchaseButtonProps) => {
   if (user.is_member) {
     return null;
   }
 
+  const options = [
+    { label: 'Student', value: 'student' },
+    { label: 'Ordinær', value: 'standard' },
+    { label: 'Støtte', value: 'support' },
+  ];
+
+  const onSelect = (value: string) => {
+    setMembershipTypeSlug(value);
+  };
+
   return (
     <View>
+      <RadioForm
+        radio_props={options}
+        initial={1}
+        formHorizontal={true}
+        labelHorizontal={false}
+        buttonColor={theme.colors.neufOrange}
+        // @ts-expect-error No overload matches this call. We ignore since we need to style the button
+        selectedButtonColor={theme.colors.neufOrange}
+        animation={false}
+        onPress={onSelect}
+        style={styles.radioForm}
+      />
       {paymentLoading && <ActivityIndicator color={theme.colors.neufOrange} />}
       <Button
         onPress={onPurchasePress}
@@ -149,11 +174,18 @@ interface ProofProps {
 const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: ProofProps) => {
   const CONFETTI_TIMEOUT = 15000;
   const confettiRef = useRef<Confetti>(null);
-  const { paymentLoading, isLoadingMembershipType, onPurchasePress, membershipPrice, toast, setToast, user } = useProof(
-    {
-      fetchUser,
-    },
-  );
+  const {
+    paymentLoading,
+    isLoadingMembershipType,
+    onPurchasePress,
+    membershipPrice,
+    toast,
+    setToast,
+    user,
+    setMembershipTypeSlug,
+  } = useProof({
+    fetchUser,
+  });
 
   useEffect(() => {
     const currentRef = confettiRef.current;
@@ -196,6 +228,7 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
               isLoadingMembershipType={isLoadingMembershipType}
               membershipPrice={membershipPrice}
               onPurchasePress={onPurchasePress}
+              setMembershipTypeSlug={setMembershipTypeSlug}
             />
             <MembershipValidTo user={user} />
           </View>
@@ -273,7 +306,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   purchaseButton: {
-    marginTop: 16,
+    marginTop: 8,
   },
   logoutButton: {
     alignSelf: 'center',
@@ -307,5 +340,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: Dimensions.get('window').width * 0.8, // 80% of screen width
     alignSelf: 'center',
+  },
+  radioForm: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginTop: 20,
+    gap: 12,
   },
 });

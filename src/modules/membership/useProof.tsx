@@ -9,7 +9,7 @@ import { ToastProps } from 'src/types/toast';
 
 const PROOF_QUERY = gql`
   {
-    membershipTypes(isDefault: true) {
+    membershipTypes {
       slug
       price
     }
@@ -26,7 +26,8 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   const { data, loading } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const membershipTypeSlug = data?.membershipTypes?.[0]?.slug ?? 'standard';
+  const [membershipTypeSlug, setMembershipTypeSlug] = useState('standard');
+  const [membershipPrice, setMembershipPrice] = useState(25000); // WARNING: Hardcoded due to state not being loaded initially. Should probably be fixed.
   const [toast, setToast] = useState<ToastProps | null>(null);
 
   const openPaymentSheet = async () => {
@@ -77,7 +78,15 @@ const useProof = ({ fetchUser }: UseProofProps) => {
     }
   }, [fetchUser, user?.last_membership]);
 
-  const membershipPrice = data?.membershipTypes?.[0]?.price;
+  useEffect(() => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const membershipType of data?.membershipTypes ?? []) {
+      if (membershipType.slug === membershipTypeSlug) {
+        setMembershipPrice(membershipType.price);
+      }
+    }
+  }, [membershipTypeSlug, data?.membershipTypes]);
+
   return {
     isLoadingMembershipType: loading,
     membershipPrice: membershipPrice ? membershipPrice / 100 : 0,
@@ -86,6 +95,7 @@ const useProof = ({ fetchUser }: UseProofProps) => {
     toast,
     setToast,
     user,
+    setMembershipTypeSlug,
   };
 };
 
