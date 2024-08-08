@@ -38,7 +38,13 @@ const EventStackScreen = () => (
     <EventStack.Screen
       name="EventDetail"
       component={EventDetail}
-      options={({ route }) => ({ title: route.params.event.title.decoded })}
+      options={({ route }) => ({
+        // TODO: make this not suck
+        title:
+          route.params.event.title.decoded.length < 40
+            ? route.params.event.title.decoded
+            : route.params.event.title.decoded.substring(0, 30) + '...',
+      })}
     />
   </EventStack.Navigator>
 );
