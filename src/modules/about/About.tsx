@@ -15,7 +15,7 @@ import { Button } from 'react-native-ui-lib';
 
 import theme from 'src/theme';
 
-import logo from '../../../assets/DNS-logo-svart.png';
+import logo from 'assets/DNS-logo-svart.png';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
 
