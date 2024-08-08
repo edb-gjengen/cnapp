@@ -94,7 +94,7 @@ const PurchaseButton = ({
 
   const options = [
     { label: 'Student', value: 'student' },
-    { label: 'Ordinær', value: 'standard' },
+    { label: 'Ordinær', value: 'regular' },
     { label: 'Støtte', value: 'support' },
   ];
 
