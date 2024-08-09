@@ -32,6 +32,7 @@ const UserDelete = () => {
           editable
           numberOfLines={1}
           maxLength={40}
+          autoCapitalize="none"
           onChangeText={(text) => onChangeText(text)}
           value={value}
           style={styles.input}
