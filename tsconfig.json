@@ -3,5 +3,6 @@
     "baseUrl": "./",
     "strict": true
   },
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base",
+  "include": ["src", "src/types/svg.ts", "App.ts", "index.ts"]
 }

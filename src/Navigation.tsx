@@ -1,9 +1,11 @@
-import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
+import IconEvent from 'assets/icons/event.svg';
+import IconInfo from 'assets/icons/information-circle.svg';
+import IconPerson from 'assets/icons/person.svg';
 import About from 'src/modules/about/About';
 import EventDetail from 'src/modules/events/EventDetail';
 import EventList from 'src/modules/events/EventList';
@@ -43,7 +45,7 @@ const EventStackScreen = () => (
         title:
           route.params.event.title.decoded.length < 40
             ? route.params.event.title.decoded
-            : route.params.event.title.decoded.substring(0, 30) + '...',
+            : `${route.params.event.title.decoded.substring(0, 30)}...`,
       })}
     />
   </EventStack.Navigator>
@@ -74,15 +76,9 @@ const UserStackScreen = () => (
 type TabBarIconType = BottomTabNavigationOptions['tabBarIcon'];
 
 const HomeTabs = createBottomTabNavigator<HomeTabParamList>();
-const EventIcon: TabBarIconType = ({ color, size }) => (
-  <Icon name="event" size={size} color={color} style={{ marginTop: 5 }} />
-);
-const UserIcon: TabBarIconType = ({ color, size }) => (
-  <Icon name="user" size={size} color={color} style={{ marginTop: 5 }} />
-);
-const AboutIcon: TabBarIconType = ({ color, size }) => (
-  <Icon name="info" size={size} color={color} style={{ marginTop: 5 }} />
-);
+const EventIcon: TabBarIconType = ({ color, size }) => <IconEvent width={size} height={size} fill={color} />;
+const UserIcon: TabBarIconType = ({ color, size }) => <IconPerson width={size + 8} height={size + 8} fill={color} />;
+const AboutIcon: TabBarIconType = ({ color, size }) => <IconInfo width={size} height={size} fill={color} />;
 const Navigation = () => (
   <NavigationContainer>
     <HomeTabs.Navigator initialRouteName="EventStack">

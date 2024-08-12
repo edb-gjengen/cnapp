@@ -1,6 +1,7 @@
-import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+
+import IconExclamationTriangle from 'assets/icons/exclamation-triangle.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
@@ -25,7 +26,7 @@ const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
 
   return (
     <View style={styles.container}>
-      <Icon name="exclamation-triangle" size={16} color="#b91c1c" style={styles.icon} />
+      <IconExclamationTriangle width={20} height={20} style={styles.icon} />
       <View>
         <Text>{errorFormatted}</Text>
       </View>
@@ -42,7 +43,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   icon: {
-    marginTop: 2,
     marginRight: 8,
   },
 });

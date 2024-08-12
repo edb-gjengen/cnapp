@@ -1,4 +1,3 @@
-import { SimpleLineIcons as SimpleIcon, FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import React from 'react';
 import {
   Text,
@@ -13,9 +12,14 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-ui-lib';
 
-import theme from 'src/theme';
-
 import logo from 'assets/DNS-logo-svart.png';
+import IconClock from 'assets/icons/clock.svg';
+import IconFacebook from 'assets/icons/facebook.svg';
+import IconInstagram from 'assets/icons/instagram.svg';
+import IconMail from 'assets/icons/mail.svg';
+import IconMap from 'assets/icons/map.svg';
+import IconPhone from 'assets/icons/phone.svg';
+import theme from 'src/theme';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
 
@@ -80,11 +84,11 @@ const About = () => (
       <Text style={styles.header}>Følg oss på</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <TouchableOpacity style={styles.someBtn} onPress={openFacebook}>
-          <FAIcon name="facebook" size={40} color={theme.colors.neufBlack} />
+          <IconFacebook width={55} height={55} />
           <Text>Facebook</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.someBtn} onPress={openInstagram}>
-          <FAIcon name="instagram" size={40} color={theme.colors.neufBlack} />
+          <IconInstagram width={60} height={60} style={{ marginBottom: -6 }} />
           <Text>Instagram</Text>
         </TouchableOpacity>
       </View>
@@ -95,14 +99,14 @@ const About = () => (
       </Text>
       <View style={styles.section}>
         <Button onPress={openMap}>
-          <SimpleIcon name="map" style={styles.icon} />
+          <IconMap width={20} height={20} />
           <Text> Vis i kart</Text>
         </Button>
       </View>
       <Text style={styles.header}>Åpningstider</Text>
       <View style={styles.section}>
         <Button onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}>
-          <SimpleIcon name="clock" style={styles.icon} />
+          <IconClock width={20} height={20} style={styles.icon} />
           <Text>Vis åpningstider</Text>
         </Button>
       </View>
@@ -110,7 +114,7 @@ const About = () => (
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <View>
           <Button onPress={() => Linking.openURL('tel:+4794430002')} style={{ marginHorizontal: 10 }}>
-            <SimpleIcon name="phone" style={styles.icon} />
+            <IconPhone width={20} height={20} style={styles.icon} />
             <Text>Ring</Text>
           </Button>
         </View>
@@ -119,7 +123,7 @@ const About = () => (
             onPress={() => Linking.openURL('mailto:ledelsen@studentersamfundet.no')}
             style={{ marginHorizontal: 10 }}
           >
-            <SimpleIcon name="envelope" style={styles.icon} />
+            <IconMail width={20} height={20} style={styles.icon} />
             <Text>Send e-post</Text>
           </Button>
         </View>
