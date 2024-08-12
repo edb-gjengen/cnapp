@@ -132,7 +132,7 @@ const About = () => (
       <Text style={styles.header}>Chateau Neuf</Text>
       <Image
         source={{
-          uri: 'https://studentersamfundet.no/wp/wp-content/uploads/2015/04/26_KUL_Chateauneuf-1280x720.jpg',
+          uri: 'https://neuf.no/media/original_images/26_KUL_Chateauneuf.jpg',
         }}
         style={styles.featuredImage}
         resizeMode="contain"
