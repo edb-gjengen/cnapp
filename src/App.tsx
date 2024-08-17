@@ -10,6 +10,7 @@ import AppInner from './AppInner';
 import { useDeepLinking } from './hooks';
 import { store, persistor } from './reduxStore';
 import { loadTheme } from './theme';
+import { StatusBar } from 'expo-status-bar';
 
 const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/` }),
@@ -22,6 +23,7 @@ export default function App() {
   useDeepLinking();
   return (
     <GestureHandlerRootView>
+      <StatusBar style="light" />
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ApolloProvider client={apolloClient}>
