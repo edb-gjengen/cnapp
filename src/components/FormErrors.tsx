@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 
 import IconExclamationTriangle from 'assets/icons/exclamation-triangle.svg';
+import theme from 'src/theme';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
@@ -41,6 +42,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fecaca',
     padding: 12,
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: theme.colors.danger
   },
   icon: {
     marginRight: 8,
