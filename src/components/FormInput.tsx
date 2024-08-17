@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   },
   fieldWithError: {
     borderColor: theme.colors.danger,
+    borderWidth: 2,
   },
   errorMessage: {
     color: theme.colors.danger,
