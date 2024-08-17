@@ -5,7 +5,7 @@ import theme from 'src/theme';
 
 const PrivacyButton = () => (
   <TouchableOpacity
-    style={styles.button}
+    style={[theme.background, styles.button]}
     onPress={() => Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL || '')}
   >
     <Text style={styles.linkText}>Personvern</Text>
@@ -14,10 +14,10 @@ const PrivacyButton = () => (
 
 const styles = StyleSheet.create({
   button: {
-    margin: 16,
+    padding: 16,
   },
   linkText: {
-    color: theme.colors.neufBlue,
+    color: theme.colors.neufPurple,
     fontSize: 16,
     textAlign: 'center',
     textDecorationLine: 'underline',

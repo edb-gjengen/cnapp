@@ -75,13 +75,13 @@ const openMap = () => {
 
 /** FIXME: Values here are pretty hardcoded. Should fetch config from a JSON-file or API */
 const About = () => (
-  <ScrollView>
+  <ScrollView style={theme.background}>
     <View style={theme.card}>
-      <Text style={[styles.header, { marginTop: 8 }]}>Det Norske Studentersamfund</Text>
+      <Text style={[theme.text, styles.header, { marginTop: 8 }]}>Det Norske Studentersamfund</Text>
       <TouchableOpacity onPress={() => Linking.openURL('https://www.studentersamfundet.no/')}>
         <Image style={styles.logo} source={logo} />
       </TouchableOpacity>
-      <Text style={styles.header}>Følg oss på</Text>
+      <Text style={[theme.text, styles.header]}>Følg oss på</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <TouchableOpacity style={styles.someBtn} onPress={openFacebook}>
           <IconFacebook width={55} height={55} />
@@ -93,43 +93,43 @@ const About = () => (
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.header}>Adresse</Text>
+      <Text style={[theme.text, styles.header]}>Adresse</Text>
       <Text style={[styles.paragraph, { textAlign: 'center' }]}>
         Det Norske Studentersamfund{'\n'}Slemdalsveien 15, 0369 Oslo
       </Text>
       <View style={styles.section}>
-        <Button onPress={openMap}>
+        <Button onPress={openMap} style={theme.button}>
           <IconMap width={20} height={20} />
-          <Text> Vis i kart</Text>
+          <Text style={theme.buttonText}> Vis i kart</Text>
         </Button>
       </View>
-      <Text style={styles.header}>Åpningstider</Text>
+      <Text style={[theme.text, styles.header]}>Åpningstider</Text>
       <View style={styles.section}>
-        <Button onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')}>
+        <Button onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')} style={theme.button}>
           <IconClock width={20} height={20} style={styles.icon} />
-          <Text>Vis åpningstider</Text>
+          <Text style={theme.buttonText}>Vis åpningstider</Text>
         </Button>
       </View>
-      <Text style={styles.header}>Ta kontakt</Text>
+      <Text style={[theme.text, styles.header]}>Ta kontakt</Text>
       <View style={[styles.section, { flex: 1, flexDirection: 'row' }]}>
         <View>
-          <Button onPress={() => Linking.openURL('tel:+4794430002')} style={{ marginHorizontal: 10 }}>
+          <Button onPress={() => Linking.openURL('tel:+4794430002')} style={[theme.button, { marginHorizontal: 10 }]}>
             <IconPhone width={20} height={20} style={styles.icon} />
-            <Text>Ring</Text>
+            <Text style={theme.buttonText}>Ring</Text>
           </Button>
         </View>
         <View>
           <Button
             onPress={() => Linking.openURL('mailto:ledelsen@studentersamfundet.no')}
-            style={{ marginHorizontal: 10 }}
+            style={[theme.button, { marginHorizontal: 10 }]}
           >
             <IconMail width={20} height={20} style={styles.icon} />
-            <Text>Send e-post</Text>
+            <Text style={theme.buttonText}>Send e-post</Text>
           </Button>
         </View>
       </View>
 
-      <Text style={styles.header}>Chateau Neuf</Text>
+      <Text style={[theme.text, styles.header]}>Chateau Neuf</Text>
       <Image
         source={{
           uri: 'https://neuf.no/media/original_images/26_KUL_Chateauneuf.jpg',
@@ -162,12 +162,11 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: theme.colors.neufBlack,
     textAlign: 'center',
   },
   paragraph: {
     fontSize: 16,
-    color: theme.colors.neufBlack,
+    color: theme.colors.neufBlue,
     paddingBottom: 10,
     lineHeight: 25,
   },

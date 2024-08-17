@@ -20,7 +20,7 @@ const UserDelete = () => {
   const isDisabled = !isDeletingUser && value !== user.username;
 
   return (
-    <ScrollView>
+    <ScrollView style={theme.background}>
       <View style={theme.card}>
         <Text style={styles.headerTitle}>Slett meg</Text>
         <Text style={styles.paragraph}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   deleteButtonDisabled: {
     marginTop: 16,
     marginBottom: 16,
-    backgroundColor: theme.colors.neufGray,
+    backgroundColor: theme.colors.gray1,
   },
   whiteText: {
     color: theme.colors.neufWhite,
@@ -90,9 +90,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: theme.colors.neufPurple,
     borderWidth: 1,
     margin: 10,
     padding: 10,
+    textAlign: 'center',
   },
 });

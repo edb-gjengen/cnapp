@@ -35,8 +35,8 @@ const MembershipValidTo = ({ user }: { user: UserType }) => {
 
   return (
     <View style={{ alignItems: 'center', flex: 1 }}>
-      <Text>Gyldig til: </Text>
-      <Text style={styles.validToValue}>{validTo}</Text>
+      <Text style={theme.text}>Gyldig til: </Text>
+      <Text style={[theme.text, styles.validToValue]}>{validTo}</Text>
     </View>
   );
 };
@@ -55,7 +55,7 @@ const MembershipStatus = ({
 
     return (
       <View style={styles.expired}>
-        <Text style={styles.expiredText}>Utløpt</Text>
+        <Text style={[theme.text, styles.expiredText]}>Utløpt</Text>
       </View>
     );
   }
@@ -65,7 +65,7 @@ const MembershipStatus = ({
   return (
     <View style={styles.membershipStatus}>
       <TouchableOpacity onPress={onMembershipPress} style={styles.valid}>
-        <Text style={styles.validText}>{statusText}</Text>
+        <Text style={[theme.text, styles.validText]}>{statusText}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -121,12 +121,12 @@ const PurchaseButton = ({
         onPress={onPurchasePress}
         fullWidth
         disabled={paymentLoading || isLoadingMembershipType}
-        style={styles.purchaseButton}
+        style={[theme.button, styles.purchaseButton]}
       >
-        <Text>{`Kjøp medlemskap (${membershipPrice} NOK)`}</Text>
+        <Text style={theme.buttonText}>{`Kjøp medlemskap (${membershipPrice} NOK)`}</Text>
       </Button>
       <View style={styles.purchaseText}>
-        <Text style={styles.purchaseTextInner}>Medlemskapet er gyldig i ett år</Text>
+        <Text style={[theme.text, styles.purchaseTextInner]}>Medlemskapet er gyldig i ett år</Text>
       </View>
     </View>
   );
@@ -160,7 +160,7 @@ const MembershipName = ({ user }: { user: UserType }) => {
   }
   return (
     <View>
-      <Text style={styles.nameText}>{name}</Text>
+      <Text style={[theme.text, styles.nameText]}>{name}</Text>
     </View>
   );
 };
@@ -208,40 +208,38 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
   if (!user) {
     return (
       <View>
-        <Text>No user!</Text>
+        <Text style={theme.text}>No user!</Text>
       </View>
     );
   }
 
   return (
     <>
-      <View>
-        <UserConfetti user={user} confettiRef={confettiRef} />
-        <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
-          <View style={[theme.card, { paddingVertical: 16 }]}>
-            <MembershipName user={user} />
-            <Logo user={user} />
-            <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
-            <PurchaseButton
-              user={user}
-              paymentLoading={paymentLoading}
-              isLoadingMembershipType={isLoadingMembershipType}
-              membershipPrice={membershipPrice}
-              onPurchasePress={onPurchasePress}
-              setMembershipTypeSlug={setMembershipTypeSlug}
-            />
-            <MembershipValidTo user={user} />
-          </View>
-          <View>
-            <Button onPress={onLogoutPress} style={styles.logoutButton} small>
-              <Text>Logg ut</Text>
-            </Button>
-          </View>
-          <Button onPress={onDeletePress} style={styles.deleteButton} small>
-            <Text style={styles.whiteText}>Slett bruker</Text>
+      <UserConfetti user={user} confettiRef={confettiRef} />
+      <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
+        <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
+          <MembershipName user={user} />
+          <Logo user={user} />
+          <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
+          <PurchaseButton
+            user={user}
+            paymentLoading={paymentLoading}
+            isLoadingMembershipType={isLoadingMembershipType}
+            membershipPrice={membershipPrice}
+            onPurchasePress={onPurchasePress}
+            setMembershipTypeSlug={setMembershipTypeSlug}
+          />
+          <MembershipValidTo user={user} />
+        </View>
+        <View>
+          <Button onPress={onLogoutPress} style={[theme.button, styles.logoutButton]} small>
+            <Text style={theme.buttonText}>Logg ut</Text>
           </Button>
-        </ScrollView>
-      </View>
+        </View>
+        <Button onPress={onDeletePress} style={[theme.button, styles.deleteButton]} small>
+          <Text style={styles.whiteText}>Slett bruker</Text>
+        </Button>
+      </ScrollView>
       <Toast
         message={toast?.message}
         visible={toast?.visible}

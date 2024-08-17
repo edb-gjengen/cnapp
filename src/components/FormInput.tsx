@@ -36,7 +36,7 @@ const FormInput = ({
         <>
           <TextField
             ref={ref}
-            label={label}
+            label={<Text style={theme.text}>{label}</Text>}
             returnKeyType={returnKeyType}
             onChangeText={onChange}
             onBlur={onBlur}

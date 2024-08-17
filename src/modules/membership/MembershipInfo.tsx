@@ -9,26 +9,26 @@ interface MembershipInfoProps {
   onLogin: () => void;
 }
 const MembershipInfo = ({ onRegister, onLogin }: MembershipInfoProps) => (
-  <ScrollView>
+  <ScrollView style={theme.background}>
     <View style={theme.card}>
-      <Text style={styles.headerTitle}>Hei 👋</Text>
-      <Text style={styles.paragraph}>
+      <Text style={[theme.text, styles.headerTitle]}>Hei 👋</Text>
+      <Text style={[theme.text, styles.paragraph]}>
         Her kan du bli medlem i Det Norske Studentersamfund - Chateau Neuf og ha medlemsbeviset ditt på telefonen
       </Text>
       <View style={styles.button}>
-        <Button onPress={onRegister} fullWidth>
-          <Text>Bli medlem</Text>
+        <Button onPress={onRegister} fullWidth style={theme.button}>
+          <Text style={theme.buttonText}>Bli medlem</Text>
         </Button>
       </View>
-      <Text style={styles.header}>Hva får jeg?</Text>
-      <Text style={[styles.paragraph, { textAlign: 'left', paddingLeft: 4 }]}>
+      <Text style={[theme.text, styles.header]}>Hva får jeg?</Text>
+      <Text style={[theme.text, styles.paragraph, { textAlign: 'left', paddingLeft: 4 }]}>
         - Minst 25% rabatt på de fleste arrangement{'\n'}- Gratis inngang på enkelte arrangement{'\n'}- Store rabatter i
         barene{'\n'}- Egne medlemsarrangement og -tilbud{'\n'}- Mulighet til å delta i landets eldste studentdemokrati
       </Text>
-      <Text style={styles.em}>Allerede medlem?</Text>
+      <Text style={[theme.text, styles.em]}>Allerede medlem?</Text>
       <View style={styles.button}>
-        <Button onPress={onLogin} fullWidth>
-          <Text>Logg inn</Text>
+        <Button onPress={onLogin} fullWidth style={theme.button}>
+          <Text style={theme.buttonText}>Logg inn</Text>
         </Button>
       </View>
     </View>
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
   paragraph: {
     textAlign: 'center',
     fontSize: 16,
-    color: theme.colors.neufBlack,
     paddingBottom: 10,
     lineHeight: 25,
   },
@@ -51,7 +50,6 @@ const styles = StyleSheet.create({
   },
   em: {
     fontSize: 16,
-    color: theme.colors.neufBlack,
     fontStyle: 'italic',
     textAlign: 'center',
     marginVertical: 10,
@@ -60,14 +58,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 20,
-    color: theme.colors.neufBlack,
     paddingVertical: 10,
     lineHeight: 25,
   },
   header: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: theme.colors.neufBlack,
     lineHeight: 25,
     paddingLeft: 2,
   },

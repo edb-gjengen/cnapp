@@ -12,7 +12,7 @@ const Login = () => {
   const { isLoggingIn, isSubmitted, errors, loginError, control, setFocus, onSubmit } = useLogin();
 
   return (
-    <ScrollView>
+    <ScrollView style={theme.background}>
       <View style={theme.card}>
         {errors && <FormErrors errors={errors} />}
         <FormInput
@@ -37,21 +37,21 @@ const Login = () => {
           onSubmitEditing={onSubmit}
           returnKeyType="send"
         />
-        <Button fullWidth onPress={onSubmit} style={styles.loginButton}>
-          <Text>Logg inn</Text>
+        <Button fullWidth onPress={onSubmit} style={[theme.button, styles.loginButton]}>
+          <Text style={theme.buttonText}>Logg inn</Text>
         </Button>
+        {loginError && isSubmitted && <FormErrors errors={loginError} />}
+        {isLoggingIn && <ActivityIndicator color={theme.colors.neufOrange} />}
         <Button
           small
           light
           onPress={() => {
             Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL || '');
           }}
-          style={styles.forgotPasswordButton}
+          style={[theme.button, styles.forgotPasswordButton]}
         >
-          <Text>Glemt passord?</Text>
+          <Text style={theme.buttonText}>Glemt passord?</Text>
         </Button>
-        {loginError && isSubmitted && <FormErrors errors={loginError} />}
-        {isLoggingIn && <ActivityIndicator color={theme.colors.neufOrange} />}
       </View>
     </ScrollView>
   );
@@ -60,7 +60,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   loginButton: {
-    marginTop: 16,
+    marginVertical: 16,
   },
   forgotPasswordButton: {
     alignSelf: 'center',
