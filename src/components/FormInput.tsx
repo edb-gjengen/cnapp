@@ -55,7 +55,7 @@ const FormInput = ({
 
 const styles = StyleSheet.create({
   field: {
-    borderColor: theme.colors.gray1,
+    borderColor: theme.colors.neufPurple,
     borderWidth: 1,
     borderRadius: 4,
     padding: 4,
