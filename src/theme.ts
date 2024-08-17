@@ -41,8 +41,8 @@ const text = {
 };
 
 const button = {
-  backgroundColor: colors.neufBeige
-}
+  backgroundColor: colors.neufBeige,
+};
 
 const buttonText = {
   color: colors.neufPurple,

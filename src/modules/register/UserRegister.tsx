@@ -1,6 +1,6 @@
 import * as EmailValidator from 'email-validator';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View, Text, ScrollView } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, ScrollView } from 'react-native';
 import { Button, Incubator } from 'react-native-ui-lib';
 
 import FormErrors from 'src/components/FormErrors';

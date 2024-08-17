@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: theme.colors.danger
+    borderColor: theme.colors.danger,
   },
   icon: {
     marginRight: 8,

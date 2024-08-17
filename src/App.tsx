@@ -1,6 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
@@ -10,7 +11,6 @@ import AppInner from './AppInner';
 import { useDeepLinking } from './hooks';
 import { store, persistor } from './reduxStore';
 import { loadTheme } from './theme';
-import { StatusBar } from 'expo-status-bar';
 
 const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/` }),
