@@ -23,7 +23,7 @@ const defaultNavigationStyle = {
   headerTintColor: theme.colors.neufWhite,
   headerTitleAlign: 'center',
   headerStyle: {
-    backgroundColor: theme.colors.neufOrange,
+    backgroundColor: theme.colors.neufBlue,
   },
 } as const;
 
