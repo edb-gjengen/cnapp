@@ -32,8 +32,25 @@ const card = {
   backgroundColor: colors.neufGray,
 };
 
-export function loadTheme() {
-  Colors.loadDesignTokens({ primaryColor: colors.neufOrange });
+const background = {
+  backgroundColor: colors.neufGray,
+};
+
+const text = {
+  color: colors.neufBlue,
+};
+
+const button = {
+  backgroundColor: colors.neufBeige
 }
 
-export default { card, colors };
+const buttonText = {
+  color: colors.neufPurple,
+  fontWeight: 500,
+};
+
+export function loadTheme() {
+  Colors.loadDesignTokens({ primaryColor: colors.neufBeige });
+}
+
+export default { card, colors, background, text, button, buttonText };
