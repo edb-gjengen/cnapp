@@ -31,7 +31,7 @@ const UserDelete = () => {
         <TextInput
           editable
           numberOfLines={1}
-          maxLength={40}
+          maxLength={32}
           autoCapitalize="none"
           onChangeText={(text) => onChangeText(text)}
           value={value}
