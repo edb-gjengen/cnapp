@@ -28,9 +28,8 @@ const card = {
       elevation: 1,
     },
   }),
-  padding: 8,
-  margin: 8,
-  backgroundColor: colors.neufWhite,
+  padding: 16,
+  backgroundColor: colors.neufGray,
 };
 
 export function loadTheme() {
