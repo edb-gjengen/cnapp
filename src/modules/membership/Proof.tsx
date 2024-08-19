@@ -12,9 +12,9 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import Confetti from 'react-native-confetti';
-import RadioForm from 'react-native-simple-radio-button';
 import { Button, Incubator } from 'react-native-ui-lib';
 
+import RadioButton from 'src/components/RadioButton';
 import theme from 'src/theme';
 import type { UserType } from 'src/types/data';
 
@@ -88,34 +88,30 @@ const PurchaseButton = ({
   membershipPrice,
   setMembershipTypeSlug,
 }: PurchaseButtonProps) => {
-  if (user.is_member) {
-    return null;
-  }
-
   const options = [
     { label: 'Student', value: 'student' },
     { label: 'Ordinær', value: 'regular' },
     { label: 'Støtte', value: 'support' },
   ];
 
+  const defaultValue = options[1];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => onSelect(defaultValue.value), []);
+
   const onSelect = (value: string) => {
     setMembershipTypeSlug(value);
   };
 
+  if (user.is_member) {
+    return null;
+  }
+
   return (
     <View>
-      <RadioForm
-        radio_props={options}
-        initial={1}
-        formHorizontal={true}
-        labelHorizontal={false}
-        buttonColor={theme.colors.neufOrange}
-        // @ts-expect-error No overload matches this call. We ignore since we need to style the button
-        selectedButtonColor={theme.colors.neufOrange}
-        animation={false}
-        onPress={onSelect}
-        style={styles.radioForm}
-      />
+      <Text style={[theme.text, styles.selectText]}>Velg medlemskapstype</Text>
+      <View style={styles.radioForm}>
+        <RadioButton data={options} onSelect={onSelect} defaultValue={defaultValue} style={styles.radioForm} />
+      </View>
       {paymentLoading && <ActivityIndicator color={theme.colors.neufOrange} />}
       <Button
         onPress={onPurchasePress}
@@ -321,6 +317,7 @@ const styles = StyleSheet.create({
   },
   purchaseText: {
     alignItems: 'center',
+    marginBottom: 20,
   },
   purchaseTextInner: {
     fontStyle: 'italic',
@@ -341,9 +338,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   radioForm: {
-    alignSelf: 'center',
+    marginTop: 4,
+    marginBottom: 20,
+  },
+  selectText: {
     textAlign: 'center',
-    marginTop: 20,
-    gap: 12,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 30,
   },
 });
