@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     color: theme.colors.neufWhite,
+    fontWeight: '900',
   },
   disabledText: {
     opacity: 0.5,

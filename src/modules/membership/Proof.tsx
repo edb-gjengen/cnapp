@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     color: theme.colors.neufWhite,
+    fontWeight: '500',
   },
   purchaseText: {
     alignItems: 'center',
