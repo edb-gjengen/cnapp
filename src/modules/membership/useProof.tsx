@@ -72,11 +72,14 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   /* Refetech user data if memberships has expired */
   useEffect(() => {
     const todaysDate = new Date().toISOString().substring(0, 10);
-    const lastMembership = user?.last_membership;
-    if (lastMembership && lastMembership.membership_type !== 'lifelong' && lastMembership.end_date < todaysDate) {
+    if (
+      user?.lastMembership &&
+      user.lastMembership.membership_type !== 'lifelong' &&
+      user.lastMembership.end_date < todaysDate
+    ) {
       fetchUser();
     }
-  }, [fetchUser, user?.last_membership]);
+  }, [user?.last_membership]);
 
   useEffect(() => {
     // eslint-disable-next-line no-restricted-syntax
