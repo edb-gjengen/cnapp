@@ -19,6 +19,7 @@ import IconInstagram from 'assets/icons/instagram.svg';
 import IconMail from 'assets/icons/mail.svg';
 import IconMap from 'assets/icons/map.svg';
 import IconPhone from 'assets/icons/phone.svg';
+import IconTiktok from 'assets/icons/tiktok.svg';
 import theme from 'src/theme';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
@@ -51,6 +52,22 @@ const openInstagram = () => {
     .then((supported) => {
       if (!supported) {
         return Linking.openURL('https://www.instagram.com/studentersamfundet/');
+      }
+      return Linking.openURL(url);
+    })
+    .catch((err) => console.error('An error occurred', err));
+};
+
+const openTiktok = () => {
+  const url =
+    Platform.select({
+      ios: 'tiktok://user?username=studentersamfund',
+      android: 'https://www.tiktok.com/@studentersamfund',
+    }) || '';
+  Linking.canOpenURL(url)
+    .then((supported) => {
+      if (!supported) {
+        return Linking.openURL('https://www.tiktok.com/@studentersamfund');
       }
       return Linking.openURL(url);
     })
@@ -90,6 +107,10 @@ const About = () => (
         <TouchableOpacity style={styles.someBtn} onPress={openInstagram}>
           <IconInstagram width={60} height={60} style={{ marginBottom: -6 }} />
           <Text>Instagram</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.someBtn} onPress={openTiktok}>
+          <IconTiktok width={50} height={50} />
+          <Text>TikTok</Text>
         </TouchableOpacity>
       </View>
 
