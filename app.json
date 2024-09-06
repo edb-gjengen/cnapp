@@ -17,6 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true
+      "bundleIdentifier": "no.neuf.chateau"
     },
     "android": {
       "package": "no.neuf.chateau",
