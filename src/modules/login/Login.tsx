@@ -23,6 +23,7 @@ const Login = () => {
           keyboardType="email-address"
           autoFocus
           autoCapitalize="none"
+          autoComplete="email"
           autoCorrect={false}
           onSubmitEditing={() => setFocus('password')}
         />
@@ -34,6 +35,7 @@ const Login = () => {
           secureTextEntry
           autoCapitalize="none"
           autoCorrect={false}
+          autoComplete="current-password"
           onSubmitEditing={onSubmit}
           returnKeyType="send"
         />
