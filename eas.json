@@ -3,8 +3,8 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_EVENT_API_URL": "https://studentersamfundet.no",
         "EXPO_PUBLIC_DUSKEN_API_URL": "https://galtinn.neuf.no",
+        "EXPO_PUBLIC_EVENT_API_URL": "https://neuf.no/api/v1/events/",
         "EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL": "https://galtinn.neuf.no/auth/password_reset/",
         "EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL": "https://galtinn.neuf.no/nb/personvern/",
         "EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_test_4SNAIZZczSJKZ0y2wrZI4Ngb"
@@ -12,8 +12,8 @@
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_EVENT_API_URL": "https://studentersamfundet.no",
         "EXPO_PUBLIC_DUSKEN_API_URL": "https://galtinn.neuf.no",
+        "EXPO_PUBLIC_EVENT_API_URL": "https://neuf.no/api/v1/events/",
         "EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL": "https://galtinn.neuf.no/auth/password_reset/",
         "EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL": "https://galtinn.neuf.no/nb/personvern/",
         "EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_live_4SNAG73lw9kqFGb5u1s0yHhA",
