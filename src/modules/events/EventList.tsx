@@ -1,7 +1,16 @@
 import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 import moment from 'moment';
 import React from 'react';
-import { StyleSheet, View, Platform, SectionList, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Platform,
+  SectionList,
+  TouchableOpacity,
+  ActivityIndicator,
+  Text,
+  Linking,
+} from 'react-native';
 import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
@@ -24,21 +33,21 @@ const renderSectionHeader = ({ section }: { section: { title: string } }) => (
 const Header = () => <View style={styles.listHeader} />;
 
 const EventList = () => {
-  const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, showEvent, error, loading } = useEventList();
+  const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, error, loading } = useEventList();
 
   const renderItem = ({ item }: { item: EventType }) => (
     <TouchableOpacity
       onPress={() => {
-        showEvent(item);
+        return Linking.openURL(items.url);
       }}
       style={styles.listItem}
     >
       <View style={styles.row}>
         <View style={{ flex: 5 }}>
           <Text style={styles.listItemTitle} numberOfLines={1}>
-            {item.title.decoded}
+            {item.title}
           </Text>
-          <Text style={styles.listItemTime}>{formatTime(item.start_time)}</Text>
+          <Text style={styles.listItemTime}>{formatTime(item.nextOccurence.start)}</Text>
         </View>
         <View style={styles.arrow}>
           <Icon name="arrow-right" style={{ color: theme.colors.neufBlack, marginTop: 3 }} />
@@ -55,18 +64,6 @@ const EventList = () => {
         <ActivityIndicator color={theme.colors.neufOrange} />
       </View>
     );
-
-  // TODO: temporary. Remove this once the new website is up
-  // @ts-expect-error message is not a property of type. we don't care because this block of code is temporary
-  if (error && error.message === 'I am a teapot') {
-    return (
-      <View style={theme.card}>
-        <Text style={styles.loadingText}>
-          Vi lager ny nettside! Programmet vil derfor være utilgjengelig inntil alt er på plass!
-        </Text>
-      </View>
-    );
-  }
 
   if (error) {
     return (

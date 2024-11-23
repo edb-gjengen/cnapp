@@ -59,23 +59,19 @@ const useEventList = () => {
   };
 
   const fetchEvents = async () => {
-    const url = `${process.env.EXPO_PUBLIC_EVENT_API_URL}/wp-json/wp/v2/events?page=${page}&future=1`;
+    const url = `${process.env.EXPO_PUBLIC_EVENT_API_URL}?view=compact-app`;
     setLoading(true);
 
     let eventData;
     try {
       const res = await fetchWithTimeout(url);
-      if (res.status === 418) {
-        // TODO: temporary. Remove once new website is up and running
-        throw new Error('I am a teapot');
-      }
-      setTotalPages(parseInt(res.headers.get('x-wp-totalpages') || '0', 10));
-      eventData = await res.json();
+      eventData = await res.json().events;
     } catch (err) {
       setError(err);
       setLoading(false);
       return;
     }
+    setTotalPages(Math.floor(eventData.total / 10));
     setEvents(page === 1 ? eventData : [...events, ...eventData]);
     setEventsSectioned(page === 1 ? toSectionFormat(eventData) : toSectionFormat([...events, ...eventData]));
     setError(eventData.error || null);
@@ -89,9 +85,6 @@ const useEventList = () => {
   }, []);
 
   return {
-    showEvent: (event: EventType) => {
-      navigate('EventStack', { screen: 'EventDetail', params: { event } });
-    },
     handleRefresh,
     handleLoadMore,
     error,
