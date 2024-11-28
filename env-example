@@ -1,5 +1,5 @@
-EXPO_PUBLIC_EVENT_API_URL=https://neuf.no/api/v1/events/
-EXPO_PUBLIC_DUSKEN_API_URL=https://galtinn.neuf.no/
+EXPO_PUBLIC_EVENT_API_URL=https://neuf.no/api/v1/events
+EXPO_PUBLIC_DUSKEN_API_URL=https://galtinn.neuf.no
 EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL=https://galtinn.neuf.no/auth/password_reset/
 EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL=https://galtinn.neuf.no/nb/personvern/
 EXPO_PUBLIC_SENTRY_DSN=

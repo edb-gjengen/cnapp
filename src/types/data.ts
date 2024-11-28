@@ -1,21 +1,25 @@
+export interface Venue {
+  id: string;
+  slug: string;
+  title: string;
+  preposition: string;
+  url: string;
+}
+
+export interface EventOccurrence {
+  id: string;
+  start: string;
+  end?: string;
+  venue: Venue;
+}
+
 export interface EventType {
   id: string;
-  start_time: string;
-  end_time: string;
-  content: {
-    rendered: string;
-  };
-  venue: string;
-  title: {
-    decoded: string;
-  };
-  thumbnail: {
-    medium_large: string;
-  };
-  price_regular: string;
-  price_member: string;
-  ticket_url: string;
-  facebook_url: string;
+  title: string;
+  subtitle?: string;
+  url: string;
+  nextOccurrence: EventOccurrence;
+  futureOccurrencesCount: number;
 }
 
 export interface MembershipType {

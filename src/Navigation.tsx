@@ -7,7 +7,6 @@ import IconEvent from 'assets/icons/event.svg';
 import IconInfo from 'assets/icons/information-circle.svg';
 import IconPerson from 'assets/icons/person.svg';
 import About from 'src/modules/about/About';
-import EventDetail from 'src/modules/events/EventDetail';
 import EventList from 'src/modules/events/EventList';
 import Login from 'src/modules/login/Login';
 import Membership from 'src/modules/membership/Membership';
@@ -36,17 +35,6 @@ const EventStackScreen = () => (
       options={{
         title: 'Program',
       }}
-    />
-    <EventStack.Screen
-      name="EventDetail"
-      component={EventDetail}
-      options={({ route }) => ({
-        // TODO: make this not suck
-        title:
-          route.params.event.title.decoded.length < 40
-            ? route.params.event.title.decoded
-            : `${route.params.event.title.decoded.substring(0, 30)}...`,
-      })}
     />
   </EventStack.Navigator>
 );

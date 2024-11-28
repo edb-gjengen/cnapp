@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: theme.colors.neufPurple,
+    backgroundColor: 'white',
     borderWidth: 1,
     margin: 10,
     padding: 10,

@@ -6,7 +6,6 @@ const colors = {
   success: '#5cb85c',
   lightText: '#666',
   neufPurple: '#720328',
-  neufPink: '#CD96AB',
   neufGray: '#E5E2D7',
   neufOrange: '#f58220',
   neufBeige: '#F8BC90',
@@ -14,6 +13,13 @@ const colors = {
   neufWhite: '#FFFFFF',
   neufBlack: '#161516',
   gray1: '#dddddd',
+  // 2024 colors
+  deepBrick: '#720328',
+  neufPink: '#cd96ab',
+  betongGray: '#e5e2d7',
+  goldenOrange: '#ff6915',
+  goldenBeige: '#f8bc90',
+  chateauBlue: '#0a0f6d',
 };
 
 const card = {

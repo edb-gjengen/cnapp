@@ -8,8 +8,6 @@ export type EventStackParamList = {
   EventDetail: { event: EventType };
 };
 
-export type EventDetailProps = NativeStackScreenProps<EventStackParamList, 'EventDetail'>;
-
 export type UserStackParamList = {
   Membership: undefined;
   Login: undefined;

@@ -22,39 +22,11 @@ const useEventList = () => {
 
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<EventType[]>([]);
-  const [eventsSectioned, setEventsSectioned] = useState<SectionedEvents[]>([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
   const [error, setError] = useState<Error | unknown | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const toSectionFormat = (freshEvents: EventType[]) => {
-    const sectioned: Record<string, EventType[]> = {};
-    freshEvents.forEach((event) => {
-      const title = formatDate(event.start_time);
-      if (title in sectioned) {
-        sectioned[title].push(event);
-      } else {
-        sectioned[title] = [event];
-      }
-    });
-
-    return Object.entries(sectioned).map(([title, section]) => ({ data: section, title }));
-  };
-
   const handleRefresh = () => {
-    setPage(1);
     setRefreshing(true);
-    setTotalPages(1);
-    fetchEvents();
-  };
-
-  const handleLoadMore = () => {
-    if (page >= totalPages || loading) {
-      return;
-    }
-
-    setPage(page + 1);
     fetchEvents();
   };
 
@@ -62,19 +34,19 @@ const useEventList = () => {
     const url = `${process.env.EXPO_PUBLIC_EVENT_API_URL}?view=compact-app`;
     setLoading(true);
 
-    let eventData;
+    let response;
+    let events;
     try {
       const res = await fetchWithTimeout(url);
-      eventData = await res.json().events;
+      response = await res.json();
+      events = response.events;
     } catch (err) {
       setError(err);
       setLoading(false);
       return;
     }
-    setTotalPages(Math.floor(eventData.total / 10));
-    setEvents(page === 1 ? eventData : [...events, ...eventData]);
-    setEventsSectioned(page === 1 ? toSectionFormat(eventData) : toSectionFormat([...events, ...eventData]));
-    setError(eventData.error || null);
+    setEvents(events);
+    setError(response.error || null);
     setLoading(false);
     setRefreshing(false);
   };
@@ -86,10 +58,8 @@ const useEventList = () => {
 
   return {
     handleRefresh,
-    handleLoadMore,
     error,
     events,
-    eventsSectioned,
     refreshing,
     loading,
   };

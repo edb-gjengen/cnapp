@@ -1,16 +1,7 @@
 import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 import moment from 'moment';
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Platform,
-  SectionList,
-  TouchableOpacity,
-  ActivityIndicator,
-  Text,
-  Linking,
-} from 'react-native';
+import { StyleSheet, View, Platform, FlatList, TouchableOpacity, Text, Linking } from 'react-native';
 import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
@@ -25,29 +16,37 @@ const formatTime = (time: string) => {
   return moment(time).format('llll');
 };
 
-const renderSectionHeader = ({ section }: { section: { title: string } }) => (
-  <View style={styles.sectionHeader}>
-    <Text style={styles.sectionTitle}>{section.title}</Text>
-  </View>
-);
 const Header = () => <View style={styles.listHeader} />;
 
 const EventList = () => {
-  const { eventsSectioned, refreshing, handleRefresh, handleLoadMore, error, loading } = useEventList();
+  const { events, refreshing, handleRefresh, error } = useEventList();
 
-  const renderItem = ({ item }: { item: EventType }) => (
+  const renderItem = ({ item, index }: { item: EventType; index: number }) => (
     <TouchableOpacity
       onPress={() => {
-        return Linking.openURL(items.url);
+        return Linking.openURL(item.url);
       }}
-      style={styles.listItem}
+      style={[styles.listItem, ...(index === (events.length -1) ? [styles.lastListItem] : [])]}
     >
       <View style={styles.row}>
         <View style={{ flex: 5 }}>
           <Text style={styles.listItemTitle} numberOfLines={1}>
             {item.title}
           </Text>
-          <Text style={styles.listItemTime}>{formatTime(item.nextOccurence.start)}</Text>
+          {item.subtitle && (
+            <Text style={styles.listItemSubtitle} numberOfLines={1}>
+              {item.subtitle}
+            </Text>
+          )}
+          <Text style={styles.listItemTime}>
+            {item.futureOccurrencesCount > 1 && 'Neste: '}
+            {formatTime(item.nextOccurrence.start)}
+            {item.nextOccurrence.venue &&
+              ` ${item.nextOccurrence.venue.preposition} ${item.nextOccurrence.venue.title}`}
+          </Text>
+          {item.futureOccurrencesCount > 1 && (
+            <Text style={styles.listItemTime}>{`Se flere tider (${item.futureOccurrencesCount - 1})`}</Text>
+          )}
         </View>
         <View style={styles.arrow}>
           <Icon name="arrow-right" style={{ color: theme.colors.neufBlack, marginTop: 3 }} />
@@ -55,15 +54,6 @@ const EventList = () => {
       </View>
     </TouchableOpacity>
   );
-
-  // FIXME: Hoist component definition
-  // eslint-disable-next-line react/no-unstable-nested-components
-  const Footer = () =>
-    !loading && (
-      <View style={{ paddingVertical: 20 }}>
-        <ActivityIndicator color={theme.colors.neufOrange} />
-      </View>
-    );
 
   if (error) {
     return (
@@ -81,17 +71,12 @@ const EventList = () => {
   }
 
   return (
-    <SectionList
-      sections={eventsSectioned}
+    <FlatList
+      data={events}
       renderItem={renderItem}
-      renderSectionHeader={renderSectionHeader}
       keyExtractor={(item: EventType) => item.id}
       refreshing={refreshing}
       onRefresh={handleRefresh}
-      onEndReached={handleLoadMore}
-      onEndReachedThreshold={10}
-      initialNumToRender={10}
-      ListFooterComponent={Footer}
       style={[theme.card, styles.list]}
       ListHeaderComponent={Header}
     />
@@ -101,15 +86,22 @@ export default EventList;
 
 const styles = StyleSheet.create({
   listItem: {
-    backgroundColor: theme.colors.neufWhite,
+    backgroundColor: theme.colors.betongGray,
     paddingTop: 10,
     paddingBottom: 12,
     paddingLeft: 12,
     paddingRight: 12,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.neufGray,
+    borderBottomColor: theme.colors.neufPink,
+  },
+  lastListItem: {
+    borderBottomWidth: 0,
   },
   listItemTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  listItemSubtitle: {
     fontSize: 16,
   },
   listItemTime: {
@@ -140,6 +132,7 @@ const styles = StyleSheet.create({
   },
   listHeader: {
     paddingTop: 8,
+    backgroundColor: theme.colors.neufGray,
   },
   arrow: {
     flex: 1,

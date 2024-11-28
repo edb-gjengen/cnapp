@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.neufPurple,
     borderWidth: 1,
     borderRadius: 4,
+    backgroundColor: 'white',
     padding: 4,
     marginVertical: 4,
   },
