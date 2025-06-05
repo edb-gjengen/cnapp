@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import * as Notifications from 'expo-notifications';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -10,11 +11,13 @@ import {
   ActivityIndicator,
   Dimensions,
   GestureResponderEvent,
+  Switch,
 } from 'react-native';
 import Confetti from 'react-native-confetti';
 import { Button, Incubator } from 'react-native-ui-lib';
 
 import RadioButton from 'src/components/RadioButton';
+import { useNotifications } from 'src/hooks/useNotifications';
 import theme from 'src/theme';
 import type { UserType } from 'src/types/data';
 
@@ -161,6 +164,52 @@ const MembershipName = ({ user }: { user: UserType }) => {
   );
 };
 
+const NotificationToggle = ({ user }: { user: UserType }) => {
+  const { hasPermission, toggleNotifications, scheduleMembershipExpiryNotification } = useNotifications();
+  const [toast, setToast] = useState<{ message: string; visible: boolean } | null>(null);
+
+  const handleToggle = async (enabled: boolean) => {
+    const { success, needsPermission } = await toggleNotifications(enabled);
+    if (needsPermission) {
+      await Notifications.requestPermissionsAsync();
+      setToast({
+        message: 'Du må godta varsler i innstillinger for å motta påminnelser',
+        visible: true,
+      });
+      setTimeout(() => setToast(null), 3000);
+      return;
+    }
+    if (success && enabled && user.last_membership?.end_date) {
+      await scheduleMembershipExpiryNotification(user.last_membership.end_date);
+    }
+  };
+
+  if (!user.is_member || !user.last_membership) {
+    return null;
+  }
+
+  return (
+    <View style={styles.notificationToggle}>
+      <Text style={[theme.text, styles.notificationText]}>Varsle meg når medlemskapet utløper</Text>
+      <Switch
+        value={hasPermission || false}
+        onValueChange={handleToggle}
+        trackColor={{ false: '#E0E0E0', true: theme.colors.neufOrange }}
+        thumbColor={hasPermission ? '#FFFFFF' : '#FFFFFF'}
+        ios_backgroundColor="#E0E0E0"
+        style={styles.switch}
+      />
+      <Toast
+        message={toast?.message}
+        visible={toast?.visible || false}
+        position="bottom"
+        autoDismiss={3000}
+        onDismiss={() => setToast(null)}
+      />
+    </View>
+  );
+};
+
 interface ProofProps {
   onLogoutPress: () => void;
   fetchUser: () => void;
@@ -212,30 +261,33 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
   return (
     <>
       <UserConfetti user={user} confettiRef={confettiRef} />
-      <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
-        <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
-          <MembershipName user={user} />
-          <Logo user={user} />
-          <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
-          <PurchaseButton
-            user={user}
-            paymentLoading={paymentLoading}
-            isLoadingMembershipType={isLoadingMembershipType}
-            membershipPrice={membershipPrice}
-            onPurchasePress={onPurchasePress}
-            setMembershipTypeSlug={setMembershipTypeSlug}
-          />
-          <MembershipValidTo user={user} />
-        </View>
-        <View>
+      <View style={styles.container}>
+        <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
+          <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
+            <MembershipName user={user} />
+            <Logo user={user} />
+            <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
+            <PurchaseButton
+              user={user}
+              paymentLoading={paymentLoading}
+              isLoadingMembershipType={isLoadingMembershipType}
+              membershipPrice={membershipPrice}
+              onPurchasePress={onPurchasePress}
+              setMembershipTypeSlug={setMembershipTypeSlug}
+            />
+            <MembershipValidTo user={user} />
+            <NotificationToggle user={user} />
+          </View>
+        </ScrollView>
+        <View style={styles.buttonContainer}>
           <Button onPress={onLogoutPress} style={[theme.button, styles.logoutButton]} small>
             <Text style={theme.buttonText}>Logg ut</Text>
           </Button>
+          <Button onPress={onDeletePress} style={[theme.button, styles.deleteButton]} small>
+            <Text style={styles.whiteText}>Slett bruker</Text>
+          </Button>
         </View>
-        <Button onPress={onDeletePress} style={[theme.button, styles.deleteButton]} small>
-          <Text style={styles.whiteText}>Slett bruker</Text>
-        </Button>
-      </ScrollView>
+      </View>
       <Toast
         message={toast?.message}
         visible={toast?.visible}
@@ -303,12 +355,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   logoutButton: {
-    alignSelf: 'center',
-    marginVertical: 20,
+    marginBottom: 8,
   },
   deleteButton: {
-    alignSelf: 'center',
-    marginVertical: 20,
     backgroundColor: theme.colors.danger,
   },
   whiteText: {
@@ -346,5 +395,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 30,
+  },
+  notificationToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 32,
+  },
+  notificationText: {
+    fontSize: 18,
+  },
+  switch: {
+    transform: [{ scale: 1.25 }],
+  },
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  buttonContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    backgroundColor: 'transparent',
   },
 });

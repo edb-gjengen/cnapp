@@ -48,7 +48,8 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "styled-system": "^5.1.5",
-    "expo-dev-client": "~5.0.20"
+    "expo-dev-client": "~5.0.20",
+    "expo-notifications": "~0.29.14"
   },
   "devDependencies": {
     "@babel/core": "^7.24.9",

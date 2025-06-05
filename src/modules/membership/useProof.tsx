@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { requestStripePaymentSheet } from 'src/api';
 import { useAppSelector } from 'src/hooks';
+import { useNotifications } from 'src/hooks/useNotifications';
 import { ToastProps } from 'src/types/toast';
 
 const PROOF_QUERY = gql`
@@ -25,6 +26,7 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   const userToken = useAppSelector((state) => state.userToken);
   const { data, loading } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const { scheduleMembershipExpiryNotification, hasPermission } = useNotifications();
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [membershipTypeSlug, setMembershipTypeSlug] = useState('standard');
   const [membershipPrice, setMembershipPrice] = useState(25000); // WARNING: Hardcoded due to state not being loaded initially. Should probably be fixed.
@@ -78,6 +80,10 @@ const useProof = ({ fetchUser }: UseProofProps) => {
       user.lastMembership.end_date < todaysDate
     ) {
       fetchUser();
+      // If payment was successful and notifications are enabled, schedule the notification
+      if (!error && user?.last_membership?.end_date && hasPermission) {
+        await scheduleMembershipExpiryNotification(user.last_membership.end_date);
+      }
     }
   }, [user?.last_membership]);
 
