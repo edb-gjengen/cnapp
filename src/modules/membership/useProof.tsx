@@ -81,8 +81,8 @@ const useProof = ({ fetchUser }: UseProofProps) => {
     ) {
       fetchUser();
       // If payment was successful and notifications are enabled, schedule the notification
-      if (!error && user?.last_membership?.end_date && hasPermission) {
-        await scheduleMembershipExpiryNotification(user.last_membership.end_date);
+      if (user?.last_membership?.end_date && hasPermission) {
+        scheduleMembershipExpiryNotification(user.last_membership.end_date);
       }
     }
   }, [user?.last_membership]);
