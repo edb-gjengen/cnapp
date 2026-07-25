@@ -9,6 +9,7 @@ dist/
 web-build/
 android/
 ios/
+credentials.json
 
 # Native
 *.orig.*
@@ -35,3 +36,4 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+coverage/

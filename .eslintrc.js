@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ['coverage/'],
   extends: [
     '@react-native',
     'airbnb-base',
@@ -29,7 +30,15 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: ['**/*.test.js', '**/*.spec.js', '**/__tests__/**'],
+        devDependencies: [
+          '**/*.test.{js,jsx,ts,tsx}',
+          '**/*.spec.{js,jsx,ts,tsx}',
+          '**/__tests__/**',
+          'src/testUtils.tsx',
+          'jest.config.js',
+          'jest.setup.js',
+          '__mocks__/**',
+        ],
       },
     ],
     'import/prefer-default-export': 'off',
@@ -61,6 +70,16 @@ module.exports = {
     {
       extends: ['plugin:@typescript-eslint/disable-type-checked'],
       files: ['./**/*.js'],
+    },
+    {
+      // Jest infrastructure is CommonJS by nature
+      files: ['jest.config.js', 'jest.setup.js', '__mocks__/**'],
+      rules: {
+        'global-require': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+        'import/extensions': 'off',
+        'class-methods-use-this': 'off',
+      },
     },
   ],
 };

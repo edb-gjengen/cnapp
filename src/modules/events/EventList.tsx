@@ -26,7 +26,7 @@ const EventList = () => {
       onPress={() => {
         return Linking.openURL(item.url);
       }}
-      style={[styles.listItem, ...(index === (events.length -1) ? [styles.lastListItem] : [])]}
+      style={[styles.listItem, ...(index === events.length - 1 ? [styles.lastListItem] : [])]}
     >
       <View style={styles.row}>
         <View style={{ flex: 5 }}>

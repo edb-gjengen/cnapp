@@ -28,6 +28,8 @@ Install [Expo Go](https://expo.dev/client) to run the app on your phone.
 - `npm run lint` - Check code with ESLint
 - `npm run format` - Fix code formatting with ESLint
 - `npm run check-types` - Run TypeScript type checking
+- `npm test` - Run the test suite
+- `npm run test:watch` - Run the test suite in watch mode
 
 ## History
 
@@ -41,7 +43,20 @@ history, code and binary blobs related to React Native functionality filtered ou
   - privacy policy
   - delete my account
   - ???
-- add some basic unit tests
 - test in android emulator? (`npm run android`)
 - test in ios emulator? (`npm run ios`, requires macOS)
 - use [Expo Application Services](https://expo.dev/eas) to build and submit app to stores
+- replace redux (`redux` v5 + `redux-thunk`, hand-written actions and the deprecated
+  `createStore`): nearly everything in the store is server state (user data) plus one auth
+  token, so drop redux for [TanStack Query](https://tanstack.com/query/latest) for
+  fetching/caching, with the token in React context + AsyncStorage — replaces
+  `src/reducers.ts`, the fetch thunks in `src/api.ts` and the `isFetching*`/error flags
+- replace [moment](https://momentjs.com/docs/#/-project-status/) (maintenance mode) with
+  `date-fns`
+- replace unmaintained UI packages:
+  - `react-native-confetti` (last release 2017, mocked out in tests)
+  - `react-native-simple-radio-button` (react-native-ui-lib already ships RadioButton/RadioGroup)
+- remove unused dependencies: `styled-system`, `react-native-render-html`,
+  `metro-react-native-babel-preset`
+- migrate ESLint 8 + airbnb config (both EOL) to ESLint 9 flat config or
+  [eslint-config-expo](https://docs.expo.dev/guides/using-eslint/)

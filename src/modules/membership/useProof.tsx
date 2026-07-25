@@ -71,27 +71,25 @@ const useProof = ({ fetchUser }: UseProofProps) => {
     }
   };
 
-  /* Refetech user data if memberships has expired */
+  /* Refetch user data if membership has expired */
+  const membershipType = user?.last_membership?.membership_type;
+  const membershipEndDate = user?.last_membership?.end_date;
   useEffect(() => {
     const todaysDate = new Date().toISOString().substring(0, 10);
-    if (
-      user?.lastMembership &&
-      user.lastMembership.membership_type !== 'lifelong' &&
-      user.lastMembership.end_date < todaysDate
-    ) {
+    if (membershipEndDate && membershipType !== 'lifelong' && membershipEndDate < todaysDate) {
       fetchUser();
       // If payment was successful and notifications are enabled, schedule the notification
-      if (user?.last_membership?.end_date && hasPermission) {
-        scheduleMembershipExpiryNotification(user.last_membership.end_date);
+      if (hasPermission) {
+        scheduleMembershipExpiryNotification(membershipEndDate);
       }
     }
-  }, [user?.last_membership]);
+  }, [membershipType, membershipEndDate, fetchUser, hasPermission, scheduleMembershipExpiryNotification]);
 
   useEffect(() => {
     // eslint-disable-next-line no-restricted-syntax
-    for (const membershipType of data?.membershipTypes ?? []) {
-      if (membershipType.slug === membershipTypeSlug) {
-        setMembershipPrice(membershipType.price);
+    for (const membershipTypeOption of data?.membershipTypes ?? []) {
+      if (membershipTypeOption.slug === membershipTypeSlug) {
+        setMembershipPrice(membershipTypeOption.price);
       }
     }
   }, [membershipTypeSlug, data?.membershipTypes]);
