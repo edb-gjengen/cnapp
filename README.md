@@ -15,9 +15,29 @@ Use [mise](https://mise.jdx.dev/) to install Node.
 
 ## Development
 
-Install [Expo Go](https://expo.dev/client) to run the app on your phone.
+This app uses native functionality that isn't supported by [Expo Go](https://expo.dev/client),
+so you need a [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+compiled from source. Follow Expo's
+[local development setup](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local)
+guide for your platform, then build and run once (see below). After that, just start the dev
+server and open the app on your device or simulator:
 
     npm run start
+
+### Android
+
+Install the [Android SDK](https://docs.expo.dev/get-started/set-up-your-environment/?platform=android&device=physical&mode=development-build&buildEnv=local),
+then either enable [USB debugging](https://developer.android.com/studio/debug/dev-options)
+on a connected device or start an [emulator](https://docs.expo.dev/workflow/android-studio-emulator/):
+
+    npm run android
+
+### iOS (requires macOS)
+
+Install [Xcode](https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=physical&mode=development-build&buildEnv=local),
+then run on the Simulator or a connected device:
+
+    npm run ios
 
 ## Scripts
 
