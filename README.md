@@ -56,7 +56,5 @@ history, code and binary blobs related to React Native functionality filtered ou
 - replace unmaintained UI packages:
   - `react-native-confetti` (last release 2017, mocked out in tests)
   - `react-native-simple-radio-button` (react-native-ui-lib already ships RadioButton/RadioGroup)
-- remove unused dependencies: `styled-system`, `react-native-render-html`,
-  `metro-react-native-babel-preset`
 - migrate ESLint 8 + airbnb config (both EOL) to ESLint 9 flat config or
   [eslint-config-expo](https://docs.expo.dev/guides/using-eslint/)
