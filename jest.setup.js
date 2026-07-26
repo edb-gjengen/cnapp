@@ -30,6 +30,10 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 jest.mock('@stripe/stripe-react-native', () => require('@stripe/stripe-react-native/jest/mock.js'));
 
+// Reanimated (even its mock) initializes the native side of worklets at import
+// time; substitute the mock that ships with react-native-worklets.
+jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));
+
 jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
 
 // jest-expo stubs the native side of expo-notifications with functions that
