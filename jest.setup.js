@@ -14,16 +14,6 @@ global.fetch = jest.fn(async () => ({
   json: async () => ({ events: [] }),
 }));
 
-// react-native-ui-lib calls StatusBarManager.getHeight at import time,
-// which the react-native jest mock does not provide.
-const { NativeModules } = require('react-native');
-
-NativeModules.StatusBarManager = {
-  HEIGHT: 42,
-  ...NativeModules.StatusBarManager,
-  getHeight: (callback) => callback({ height: 42 }),
-};
-
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );

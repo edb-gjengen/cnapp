@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, Linking, StyleSheet, View, Text, ScrollView } from 'react-native';
-import { Button } from 'react-native-ui-lib';
 
+import Button from 'src/components/Button';
 import FormErrors from 'src/components/FormErrors';
 import FormInput from 'src/components/FormInput';
 import theme from 'src/theme';
@@ -46,7 +46,6 @@ const Login = () => {
         {isLoggingIn && <ActivityIndicator color={theme.colors.neufOrange} />}
         <Button
           small
-          light
           onPress={() => {
             Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL || '');
           }}

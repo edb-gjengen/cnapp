@@ -1,8 +1,8 @@
 import React from 'react';
 import { Controller, UseControllerProps } from 'react-hook-form';
 import { ReturnKeyTypeOptions, Text, StyleSheet } from 'react-native';
-import { TextField, TextFieldProps } from 'react-native-ui-lib';
 
+import TextField, { TextFieldProps } from 'src/components/TextField';
 import theme from 'src/theme';
 
 type FormInputProps = {

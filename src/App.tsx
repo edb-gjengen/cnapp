@@ -12,7 +12,6 @@ import 'expo-dev-client';
 import AppInner from './AppInner';
 import { useDeepLinking } from './hooks';
 import { store, persistor } from './reduxStore';
-import { loadTheme } from './theme';
 
 // Configure notifications
 Notifications.setNotificationHandler({
@@ -27,8 +26,6 @@ const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/` }),
   cache: new InMemoryCache(),
 });
-
-loadTheme();
 
 export default function App() {
   useDeepLinking();

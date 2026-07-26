@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import { Colors } from 'react-native-ui-lib';
 
 const colors = {
   danger: '#d9534f',
@@ -52,11 +51,7 @@ const button = {
 
 const buttonText = {
   color: colors.neufPurple,
-  fontWeight: 500,
-};
-
-export function loadTheme() {
-  Colors.loadDesignTokens({ primaryColor: colors.neufBeige });
-}
+  fontWeight: '500',
+} as const;
 
 export default { card, colors, background, text, button, buttonText };

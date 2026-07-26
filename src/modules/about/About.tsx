@@ -10,7 +10,6 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { Button } from 'react-native-ui-lib';
 
 import logo from 'assets/DNS-logo-svart.png';
 import IconClock from 'assets/icons/clock.svg';
@@ -20,6 +19,7 @@ import IconMail from 'assets/icons/mail.svg';
 import IconMap from 'assets/icons/map.svg';
 import IconPhone from 'assets/icons/phone.svg';
 import IconTiktok from 'assets/icons/tiktok.svg';
+import Button from 'src/components/Button';
 import theme from 'src/theme';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';

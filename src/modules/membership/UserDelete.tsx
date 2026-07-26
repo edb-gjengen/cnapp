@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-ui-lib';
 
+import Button from 'src/components/Button';
 import FormErrors from 'src/components/FormErrors';
 import { useAppSelector } from 'src/hooks';
 import theme from 'src/theme';

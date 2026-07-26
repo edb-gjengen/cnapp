@@ -14,17 +14,16 @@ import {
   Switch,
 } from 'react-native';
 import Confetti from 'react-native-confetti';
-import { Button, Incubator } from 'react-native-ui-lib';
 
+import Button from 'src/components/Button';
 import RadioButton from 'src/components/RadioButton';
+import Toast from 'src/components/Toast';
 import { useNotifications } from 'src/hooks/useNotifications';
 import theme from 'src/theme';
 import type { UserType } from 'src/types/data';
 
 import useProof from './useProof';
 import logo from '../../../assets/DNS-logo-svart.png';
-
-const { Toast } = Incubator;
 
 const MembershipValidTo = ({ user }: { user: UserType }) => {
   if (!user.last_membership) {

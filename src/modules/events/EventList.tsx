@@ -2,9 +2,9 @@ import { SimpleLineIcons as Icon } from '@expo/vector-icons';
 import moment from 'moment';
 import React from 'react';
 import { StyleSheet, View, Platform, FlatList, TouchableOpacity, Text, Linking } from 'react-native';
-import { Button } from 'react-native-ui-lib';
 import 'moment/locale/nb';
 
+import Button from 'src/components/Button';
 import theme from 'src/theme';
 import { EventType } from 'src/types/data';
 
