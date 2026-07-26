@@ -58,3 +58,30 @@ history, code and binary blobs related to React Native functionality filtered ou
   - `react-native-simple-radio-button` (react-native-ui-lib already ships RadioButton/RadioGroup)
 - migrate ESLint 8 + airbnb config (both EOL) to ESLint 9 flat config or
   [eslint-config-expo](https://docs.expo.dev/guides/using-eslint/)
+- follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
+  - decide on Sentry: `@sentry/react-native` is installed but never initialized (see the
+    commented-out init in `index.ts`), and its config plugin (now applied via `app.json`)
+    warns about missing `organization`/`project` at every build — either finish the setup
+    or drop the dependency
+  - verify Android UI on a device/emulator: edge-to-edge is now always enabled and can no
+    longer be disabled
+  - try the [React Compiler](https://docs.expo.dev/guides/react-compiler/) (enabled by
+    default in new SDK 54 projects, opt-in for existing ones via
+    `"experiments": { "reactCompiler": true }` in `app.json`)
+  - add an iOS 26 liquid glass icon: a `.icon` file made with Apple's Icon Composer,
+    referenced from `ios.icon` (old icon remains as fallback for older iOS); optionally
+    play with [`expo-glass-effect`](https://docs.expo.dev/versions/latest/sdk/glass-effect/)
+  - consider [remote build caching](https://docs.expo.dev/guides/cache-builds-remotely/)
+    (now stable) so `npm run android`/`ios` can download a cached build instead of
+    compiling locally when the native fingerprint is unchanged
+- add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership
+  payments: either natively in the payment sheet (register the merchant ID
+  `merchant.no.neuf.chateau` + Apple Pay certificate, set `merchantIdentifier` in the
+  `@stripe/stripe-react-native` plugin config, pass `applePay` to `initPaymentSheet`,
+  new iOS build), or for free by moving payment to a Stripe-hosted Checkout page in the
+  browser (needs a backend Checkout Session endpoint and a return deep link)
+- add [Google Pay](https://docs.stripe.com/google-pay?platform=react-native) for
+  membership payments: either natively in the payment sheet (`enableGooglePay: true` in
+  the plugin config, pass `googlePay` to `initPaymentSheet`, request production access in
+  the Google Pay & Wallet Console, new Android build), or for free via the same
+  Stripe-hosted Checkout page as for Apple Pay

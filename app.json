@@ -12,12 +12,16 @@
       "backgroundColor": "#E5E2D7"
     },
     "scheme": "no-neuf-chateau",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "no.neuf.chateau",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -26,19 +30,27 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#CD96AB"
       },
-      "permissions": ["NOTIFICATIONS"]
+      "permissions": [
+        "NOTIFICATIONS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-asset",
+      "expo-font",
       [
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
           "color": "#E5E2D7"
         }
+      ],
+      "@sentry/react-native",
+      [
+        "@stripe/stripe-react-native",
+        {}
       ]
     ],
     "extra": {
