@@ -6,11 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#E5E2D7"
-    },
     "scheme": "no-neuf-chateau",
     "assetBundlePatterns": [
       "**/*"
@@ -51,6 +46,15 @@
       [
         "@stripe/stripe-react-native",
         {}
+      ],
+      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#E5E2D7"
+        }
       ]
     ],
     "extra": {

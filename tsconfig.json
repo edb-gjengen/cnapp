@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "@assets/*": ["assets/*"]
+      "@/*": ["./src/*"],
+      "@assets/*": ["./assets/*"]
     },
-    "strict": true
+    "strict": true,
+    "types": ["jest", "node"]
   },
   "extends": "expo/tsconfig.base",
   "include": ["src", "src/types/svg.ts", "App.ts", "index.ts"]

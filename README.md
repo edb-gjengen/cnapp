@@ -81,7 +81,9 @@ history, code and binary blobs related to React Native functionality filtered ou
 - replace [moment](https://momentjs.com/docs/#/-project-status/) (maintenance mode) with
   `date-fns`
 - replace unmaintained UI packages:
-  - `react-native-simple-radio-button` (react-native-ui-lib already ships RadioButton/RadioGroup)
+  - `react-native-simple-radio-button` (last published in 2018, and untyped — it accounts for
+    5 of the errors `npm run check-types` reports); `@expo/ui` ships a native `Picker` in
+    segmented/radio style, see the SDK 56 follow-ups below
 - migrate ESLint 8 + airbnb config (both EOL) to ESLint 9 flat config or
   [eslint-config-expo](https://docs.expo.dev/guides/using-eslint/)
 - follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
@@ -100,6 +102,35 @@ history, code and binary blobs related to React Native functionality filtered ou
   - consider [remote build caching](https://docs.expo.dev/guides/cache-builds-remotely/)
     (now stable) so `npm run android`/`ios` can download a cached build instead of
     compiling locally when the native fingerprint is unchanged
+- follow-ups from the [Expo SDK 56 upgrade](https://expo.dev/changelog/sdk-56):
+  - replace the deprecated `@expo/vector-icons` with the scoped
+    [`@react-native-vector-icons`](https://github.com/oblador/react-native-vector-icons) packages
+    (`npx @react-native-vector-icons/codemod`) — only `SimpleLineIcons` in
+    `src/modules/events/EventList.tsx` uses it, yet it ships ~3.5 MB of fonts into every export
+  - try [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/), production-ready as of SDK 56:
+    real SwiftUI / Jetpack Compose components that could back the homegrown ones in
+    `src/components/` and finally retire `react-native-simple-radio-button`
+  - simplify `fetchWithTimeout` in `src/utils.ts`: `expo/fetch` is now `globalThis.fetch`, so the
+    wrapper collapses to `fetch(url, { signal: AbortSignal.timeout(ms) })`. Opt back out with
+    `EXPO_PUBLIC_USE_RN_FETCH=1` if it misbehaves
+  - swap `@react-native-async-storage/async-storage` (used by `redux-persist` in
+    `src/reduxStore.ts`) for
+    [`expo-sqlite/localStorage`](https://docs.expo.dev/versions/latest/sdk/sqlite/#localstorage),
+    ideally folded into the redux replacement above
+  - verify on iOS: the minimum target jumped to iOS 16.4 (from 15.1), dropping the iPhone 7, 6s
+    and SE (1st gen). Building now requires Xcode 26.4 on macOS 13.4+
+  - drop the `@expo/config-plugins` devDependency once `@sentry/react-native` fixes its config
+    plugin: `withSentryAndroidGradlePlugin.js` imports `@expo/config-plugins` directly instead of
+    `expo/config-plugins`, and SDK 56 no longer hoists it, so `expo config` crashes without the
+    explicit dependency. Still broken in 8.20.0. Dropping Sentry outright would also remove it
+  - Hermes V1 is now the default engine; turn it off with `useHermesV1: false` in
+    `expo-build-properties` if it causes trouble
+  - now on TypeScript 6: `baseUrl` is deprecated (gone in TS 7) and was removed from
+    `tsconfig.json`, and TS 6 stopped auto-including `@types/*`, hence the explicit `types` field
+- make `npm run lint` usable again: ESLint only ignores `coverage/`, so it also walks the
+  gitignored `android/` and `ios/` directories and reports ~126 errors from stale build output.
+  Add them to `ignorePatterns`, alongside the ESLint 9 migration above
+- fix the 20 pre-existing `npm run check-types` errors (unchanged by the SDK upgrade)
 - add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership
   payments: either natively in the payment sheet (register the merchant ID
   `merchant.no.neuf.chateau` + Apple Pay certificate, set `merchantIdentifier` in the
