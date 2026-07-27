@@ -1,10 +1,10 @@
 import React from 'react';
 import { ActivityIndicator, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native';
 
-import Button from 'src/components/Button';
-import FormErrors from 'src/components/FormErrors';
-import { useAppSelector } from 'src/hooks';
-import theme from 'src/theme';
+import Button from '@/components/Button';
+import FormErrors from '@/components/FormErrors';
+import { useAppSelector } from '@/hooks';
+import theme from '@/theme';
 
 import useUserDelete from './useUserDelete';
 

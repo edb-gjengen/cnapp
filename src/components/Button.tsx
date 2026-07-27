@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
-import theme from 'src/theme';
+import theme from '@/theme';
 
 export type ButtonProps = Omit<PressableProps, 'style'> & {
   style?: StyleProp<ViewStyle>;

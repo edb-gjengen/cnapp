@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useCallback } from 'react';
 
-import { logout } from 'src/actions';
-import { requestUserData } from 'src/api';
-import { useAppDispatch, useAppSelector, usePrevious } from 'src/hooks';
+import { logout } from '@/actions';
+import { requestUserData } from '@/api';
+import { useAppDispatch, useAppSelector, usePrevious } from '@/hooks';
 
 const useMembership = () => {
   const navigation = useNavigation();

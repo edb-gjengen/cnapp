@@ -1,10 +1,10 @@
 import React from 'react';
 import { ActivityIndicator, Linking, StyleSheet, View, Text, ScrollView } from 'react-native';
 
-import Button from 'src/components/Button';
-import FormErrors from 'src/components/FormErrors';
-import FormInput from 'src/components/FormInput';
-import theme from 'src/theme';
+import Button from '@/components/Button';
+import FormErrors from '@/components/FormErrors';
+import FormInput from '@/components/FormInput';
+import theme from '@/theme';
 
 import useLogin from './useLogin';
 

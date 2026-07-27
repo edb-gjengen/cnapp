@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
-import PrivacyButton from 'src/components/PrivacyButton';
-import theme from 'src/theme';
+import PrivacyButton from '@/components/PrivacyButton';
+import theme from '@/theme';
 
 import MembershipInfo from './MembershipInfo';
 import Proof from './Proof';

@@ -2,8 +2,8 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 import 'moment/locale/nb';
-import type { EventType } from 'src/types/data';
-import { fetchWithTimeout } from 'src/utils';
+import type { EventType } from '@/types/data';
+import { fetchWithTimeout } from '@/utils';
 
 moment.locale('nb');
 

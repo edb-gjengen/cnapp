@@ -1,7 +1,7 @@
 import React from 'react';
 
-import UserDelete from 'src/modules/membership/UserDelete';
-import { renderWithProviders, testUser } from 'src/testUtils';
+import UserDelete from '@/modules/membership/UserDelete';
+import { renderWithProviders, testUser } from '@/testUtils';
 
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({

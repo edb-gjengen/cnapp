@@ -11,16 +11,16 @@ import {
   Dimensions,
 } from 'react-native';
 
-import logo from 'assets/DNS-logo-svart.png';
-import IconClock from 'assets/icons/clock.svg';
-import IconFacebook from 'assets/icons/facebook.svg';
-import IconInstagram from 'assets/icons/instagram.svg';
-import IconMail from 'assets/icons/mail.svg';
-import IconMap from 'assets/icons/map.svg';
-import IconPhone from 'assets/icons/phone.svg';
-import IconTiktok from 'assets/icons/tiktok.svg';
-import Button from 'src/components/Button';
-import theme from 'src/theme';
+import Button from '@/components/Button';
+import theme from '@/theme';
+import logo from '@assets/DNS-logo-svart.png';
+import IconClock from '@assets/icons/clock.svg';
+import IconFacebook from '@assets/icons/facebook.svg';
+import IconInstagram from '@assets/icons/instagram.svg';
+import IconMail from '@assets/icons/mail.svg';
+import IconMap from '@assets/icons/map.svg';
+import IconPhone from '@assets/icons/phone.svg';
+import IconTiktok from '@assets/icons/tiktok.svg';
 
 const CHATEAU_NEUF_ADDRESS = 'Det Norske Studentersamfund, Slemdalsveien 15, 0369 Oslo';
 

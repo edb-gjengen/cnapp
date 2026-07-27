@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { requestRegisterUser } from 'src/api';
-import { useAppDispatch, useAppSelector, usePrevious } from 'src/hooks';
-import { ToastProps } from 'src/types/toast';
+import { requestRegisterUser } from '@/api';
+import { useAppDispatch, useAppSelector, usePrevious } from '@/hooks';
+import { ToastProps } from '@/types/toast';
 
 export interface UserRegisterFormValues {
   first_name: string;

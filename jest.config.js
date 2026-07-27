@@ -5,9 +5,9 @@ module.exports = {
   moduleNameMapper: {
     // Metro resolves SVGs to components via react-native-svg-transformer; Jest gets a stub instead
     '\\.svg$': '<rootDir>/__mocks__/svgMock.js',
-    // Absolute imports relative to the repo root (tsconfig baseUrl)
-    '^src/(.*)$': '<rootDir>/src/$1',
-    '^assets/(.*)$': '<rootDir>/assets/$1',
+    // `@` and `@assets` are aliases for `src` and `assets` (see tsconfig paths)
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@assets/(.*)$': '<rootDir>/assets/$1',
   },
   transformIgnorePatterns: [
     // jest-expo's default list, extended with untranspiled libraries this app uses

@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { requestLogin } from 'src/api';
-import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { requestLogin } from '@/api';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 
 interface LoginFormValues {
   email: string;

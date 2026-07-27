@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 
-import { requestDeleteUser } from 'src/api';
-import { useAppDispatch, useAppSelector, usePrevious } from 'src/hooks';
+import { requestDeleteUser } from '@/api';
+import { useAppDispatch, useAppSelector, usePrevious } from '@/hooks';
 
 const useUserDelete = () => {
   const dispatch = useAppDispatch();

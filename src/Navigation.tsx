@@ -3,17 +3,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import IconEvent from 'assets/icons/event.svg';
-import IconInfo from 'assets/icons/information-circle.svg';
-import IconPerson from 'assets/icons/person.svg';
-import About from 'src/modules/about/About';
-import EventList from 'src/modules/events/EventList';
-import Login from 'src/modules/login/Login';
-import Membership from 'src/modules/membership/Membership';
-import UserDelete from 'src/modules/membership/UserDelete';
-import UserRegister from 'src/modules/register/UserRegister';
-import theme from 'src/theme';
-import type { EventStackParamList, HomeTabParamList, UserStackParamList } from 'src/types/navigation';
+import About from '@/modules/about/About';
+import EventList from '@/modules/events/EventList';
+import Login from '@/modules/login/Login';
+import Membership from '@/modules/membership/Membership';
+import UserDelete from '@/modules/membership/UserDelete';
+import UserRegister from '@/modules/register/UserRegister';
+import theme from '@/theme';
+import type { EventStackParamList, HomeTabParamList, UserStackParamList } from '@/types/navigation';
+import IconEvent from '@assets/icons/event.svg';
+import IconInfo from '@assets/icons/information-circle.svg';
+import IconPerson from '@assets/icons/person.svg';
 
 // This looks ugly, even though it's a recommended style from the branding profile.
 // TODO: Change this

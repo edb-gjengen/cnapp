@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 
-import Button from 'src/components/Button';
-import theme from 'src/theme';
+import Button from '@/components/Button';
+import theme from '@/theme';
 
 interface MembershipInfoProps {
   onRegister: () => void;

@@ -2,12 +2,12 @@ import * as EmailValidator from 'email-validator';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, ScrollView } from 'react-native';
 
-import Button from 'src/components/Button';
-import FormErrors from 'src/components/FormErrors';
-import FormInput from 'src/components/FormInput';
-import PrivacyButton from 'src/components/PrivacyButton';
-import Toast from 'src/components/Toast';
-import theme from 'src/theme';
+import Button from '@/components/Button';
+import FormErrors from '@/components/FormErrors';
+import FormInput from '@/components/FormInput';
+import PrivacyButton from '@/components/PrivacyButton';
+import Toast from '@/components/Toast';
+import theme from '@/theme';
 
 import useUserRegister from './useUserRegister';
 

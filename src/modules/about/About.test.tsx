@@ -1,7 +1,7 @@
 import React from 'react';
 
-import About from 'src/modules/about/About';
-import { renderWithProviders } from 'src/testUtils';
+import About from '@/modules/about/About';
+import { renderWithProviders } from '@/testUtils';
 
 it('renders the about screen', () => {
   const { getByText } = renderWithProviders(<About />);

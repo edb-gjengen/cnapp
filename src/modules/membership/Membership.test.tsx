@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 import React from 'react';
 
-import Membership from 'src/modules/membership/Membership';
-import { renderWithProviders, testUser } from 'src/testUtils';
+import Membership from '@/modules/membership/Membership';
+import { renderWithProviders, testUser } from '@/testUtils';
 
 // Must match PROOF_QUERY in useProof.tsx
 const PROOF_QUERY = gql`

@@ -3,10 +3,10 @@ import { useStripe } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
 import { useEffect, useState } from 'react';
 
-import { requestStripePaymentSheet } from 'src/api';
-import { useAppSelector } from 'src/hooks';
-import { useNotifications } from 'src/hooks/useNotifications';
-import { ToastProps } from 'src/types/toast';
+import { requestStripePaymentSheet } from '@/api';
+import { useAppSelector } from '@/hooks';
+import { useNotifications } from '@/hooks/useNotifications';
+import { ToastProps } from '@/types/toast';
 
 const PROOF_QUERY = gql`
   {

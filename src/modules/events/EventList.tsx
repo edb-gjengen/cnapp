@@ -4,9 +4,9 @@ import React from 'react';
 import { StyleSheet, View, Platform, FlatList, TouchableOpacity, Text, Linking } from 'react-native';
 import 'moment/locale/nb';
 
-import Button from 'src/components/Button';
-import theme from 'src/theme';
-import { EventType } from 'src/types/data';
+import Button from '@/components/Button';
+import theme from '@/theme';
+import { EventType } from '@/types/data';
 
 import useEventList from './useEventList';
 

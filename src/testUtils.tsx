@@ -9,8 +9,8 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, legacy_createStore as createStore } from 'redux';
 import { thunk } from 'redux-thunk';
 
-import rootReducer from 'src/reducers';
-import type { UserType } from 'src/types/data';
+import rootReducer from '@/reducers';
+import type { UserType } from '@/types/data';
 
 type AppState = ReturnType<typeof rootReducer>;
 

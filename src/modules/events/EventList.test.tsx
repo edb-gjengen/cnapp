@@ -1,11 +1,11 @@
 import React from 'react';
 
-import EventList from 'src/modules/events/EventList';
-import { renderWithProviders } from 'src/testUtils';
-import { fetchWithTimeout } from 'src/utils';
+import EventList from '@/modules/events/EventList';
+import { renderWithProviders } from '@/testUtils';
+import { fetchWithTimeout } from '@/utils';
 
-jest.mock('src/utils', () => ({
-  ...jest.requireActual('src/utils'),
+jest.mock('@/utils', () => ({
+  ...jest.requireActual('@/utils'),
   fetchWithTimeout: jest.fn(),
 }));
 

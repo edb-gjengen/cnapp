@@ -1,7 +1,7 @@
 import React from 'react';
 
-import UserRegister from 'src/modules/register/UserRegister';
-import { renderWithProviders } from 'src/testUtils';
+import UserRegister from '@/modules/register/UserRegister';
+import { renderWithProviders } from '@/testUtils';
 
 it('renders the registration form', () => {
   const { getByText } = renderWithProviders(<UserRegister />);

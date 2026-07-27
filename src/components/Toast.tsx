@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
 
-import theme from 'src/theme';
+import theme from '@/theme';
 
 export type ToastProps = {
   message?: string;

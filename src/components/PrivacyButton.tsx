@@ -1,7 +1,7 @@
 import React from 'react';
 import { Linking, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import theme from 'src/theme';
+import theme from '@/theme';
 
 const PrivacyButton = () => (
   <TouchableOpacity

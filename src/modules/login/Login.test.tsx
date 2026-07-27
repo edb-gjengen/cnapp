@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Login from 'src/modules/login/Login';
-import { renderWithProviders } from 'src/testUtils';
+import Login from '@/modules/login/Login';
+import { renderWithProviders } from '@/testUtils';
 
 it('renders the login form', () => {
   const { getByText } = renderWithProviders(<Login />);
