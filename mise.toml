@@ -1,2 +1,4 @@
 [tools]
+android-sdk = "latest"
+java = "temurin-17"
 node = "24"

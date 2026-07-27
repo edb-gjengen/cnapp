@@ -6,7 +6,8 @@ The mobile app for Chateau Neuf using React and [Expo](https://expo.dev/).
 
 ## Install
 
-Use [mise](https://mise.jdx.dev/) to install Node.
+Use [mise](https://mise.jdx.dev/) to install Node, Java and the Android SDK
+command-line tools.
 
     mise trust
     mise install
@@ -26,9 +27,15 @@ server and open the app on your device or simulator:
 
 ### Android
 
-Install the [Android SDK](https://docs.expo.dev/get-started/set-up-your-environment/?platform=android&device=physical&mode=development-build&buildEnv=local),
-then either enable [USB debugging](https://developer.android.com/studio/debug/dev-options)
-on a connected device or start an [emulator](https://docs.expo.dev/workflow/android-studio-emulator/):
+`mise install` provides the Android SDK command-line tools (the `android` CLI
+for managing the SDK, emulators and devices, and `platform-tools` for `adb`),
+plus an accepted SDK license. The first build downloads the remaining SDK
+packages automatically.
+
+Enable [USB debugging](https://developer.android.com/studio/debug/dev-options)
+or [wireless debugging](https://developer.android.com/tools/adb#connect-to-a-device-over-wi-fi) on a
+connected device, or start an [emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+(`android emulator start`), then:
 
     npm run android
 
