@@ -37,16 +37,29 @@ jest.mock('expo-notifications', () => ({
   scheduleNotificationAsync: jest.fn(async () => 'notification-id'),
 }));
 
-// Visual only, and old enough that it fights with the test renderer.
-jest.mock('react-native-confetti', () => {
+// Visual only, and Skia's native canvas isn't available in Jest.
+jest.mock('react-native-fast-confetti', () => {
   const React = require('react');
-  return class Confetti extends React.Component {
-    startConfetti() {}
-
-    stopConfetti() {}
-
-    render() {
-      return null;
-    }
+  const Confetti = React.forwardRef(function Confetti(props, ref) {
+    React.useImperativeHandle(ref, () => ({
+      restart() {},
+      pause() {},
+      resume() {},
+      reset() {},
+    }));
+    return null;
+  });
+  const PIConfetti = React.forwardRef(function PIConfetti(props, ref) {
+    React.useImperativeHandle(ref, () => ({
+      restart() {},
+      pause() {},
+      resume() {},
+      reset() {},
+    }));
+    return null;
+  });
+  PIConfetti.Origin = function Origin() {
+    return null;
   };
+  return { Confetti, PIConfetti };
 });

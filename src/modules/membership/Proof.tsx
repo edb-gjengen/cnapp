@@ -1,5 +1,5 @@
 import * as Notifications from 'expo-notifications';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -13,7 +13,9 @@ import {
   GestureResponderEvent,
   Switch,
 } from 'react-native';
-import Confetti from 'react-native-confetti';
+import { Confetti, PIConfetti } from 'react-native-fast-confetti';
+import type { ConfettiMethods, PIConfettiMethods } from 'react-native-fast-confetti';
+import { Easing } from 'react-native-reanimated';
 
 import Button from '@/components/Button';
 import RadioButton from '@/components/RadioButton';
@@ -130,14 +132,42 @@ const PurchaseButton = ({
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const UserConfetti = ({ user, confettiRef }: { user: UserType; confettiRef: any }) => {
+const UserConfetti = ({
+  user,
+  confettiRef,
+  burstRef,
+  containerRef,
+  onRainStart,
+  onRainEnd,
+}: {
+  user: UserType;
+  confettiRef: React.RefObject<ConfettiMethods | null>;
+  burstRef: React.RefObject<PIConfettiMethods | null>;
+  containerRef: React.RefObject<React.ComponentRef<typeof View> | null>;
+  onRainStart: () => void;
+  onRainEnd: () => void;
+}) => {
   if (!user.is_member) {
     return null;
   }
 
   // Confetti!!!!
-  return <Confetti ref={confettiRef} confettiCount={Number.MAX_SAFE_INTEGER} />;
+  return (
+    <View ref={containerRef} pointerEvents="none" style={styles.confetti}>
+      <Confetti
+        ref={confettiRef}
+        autoplay={false}
+        count={400}
+        gravity={0.24}
+        easing={Easing.linear}
+        onAnimationStart={onRainStart}
+        onAnimationEnd={onRainEnd}
+      />
+      <PIConfetti ref={burstRef} autoplay={false} fadeOutOnEnd>
+        <PIConfetti.Origin blastPosition="center" count={80} initialSpeed={2} />
+      </PIConfetti>
+    </View>
+  );
 };
 const Logo = ({ user }: { user: UserType }) => {
   if (!user.is_member) {
@@ -216,8 +246,10 @@ interface ProofProps {
   onDeletePress: () => void;
 }
 const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: ProofProps) => {
-  const CONFETTI_TIMEOUT = 15000;
-  const confettiRef = useRef<Confetti>(null);
+  const confettiRef = useRef<ConfettiMethods>(null);
+  const burstRef = useRef<PIConfettiMethods>(null);
+  const confettiContainerRef = useRef<React.ComponentRef<typeof View>>(null);
+  const isRaining = useRef(false);
   const {
     paymentLoading,
     isLoadingMembershipType,
@@ -231,22 +263,25 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
     fetchUser,
   });
 
-  useEffect(() => {
-    const currentRef = confettiRef.current;
-    return () => {
-      if (currentRef) {
-        currentRef.stopConfetti();
-      }
-    };
-  });
+  const onRainStart = useCallback(() => {
+    isRaining.current = true;
+  }, []);
+  const onRainEnd = useCallback(() => {
+    isRaining.current = false;
+  }, []);
 
-  const onMembershipPress = () => {
-    confettiRef.current?.startConfetti();
-    setTimeout(() => {
-      if (confettiRef && confettiRef.current) {
-        confettiRef.current.stopConfetti();
-      }
-    }, CONFETTI_TIMEOUT);
+  const onMembershipPress = (event: GestureResponderEvent) => {
+    const { pageX, pageY } = event.nativeEvent;
+    // measure() reports pageX/pageY in the same coordinate space as the touch,
+    // which measureInWindow does not on Android.
+    confettiContainerRef.current?.measure((x, y, width, height, originX, originY) => {
+      burstRef.current?.restart({
+        origins: [{ blastPosition: { x: pageX - originX, y: pageY - originY } }],
+      });
+    });
+    if (!isRaining.current) {
+      confettiRef.current?.restart();
+    }
   };
 
   if (!user) {
@@ -259,7 +294,14 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
 
   return (
     <>
-      <UserConfetti user={user} confettiRef={confettiRef} />
+      <UserConfetti
+        user={user}
+        confettiRef={confettiRef}
+        burstRef={burstRef}
+        containerRef={confettiContainerRef}
+        onRainStart={onRainStart}
+        onRainEnd={onRainEnd}
+      />
       <View style={styles.container}>
         <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
           <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
@@ -302,6 +344,14 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
 export default Proof;
 
 const styles = StyleSheet.create({
+  confetti: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1,
+  },
   membershipStatus: {
     marginVertical: 16,
   },
