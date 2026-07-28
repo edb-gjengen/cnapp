@@ -27,10 +27,12 @@ server and open the app on your device or simulator:
 
 ### Android
 
-`mise install` provides the Android SDK command-line tools (the `android` CLI
-for managing the SDK, emulators and devices, and `platform-tools` for `adb`),
-plus an accepted SDK license. The first build downloads the remaining SDK
-packages automatically.
+`mise install` provides the Android SDK (the `android` CLI
+for managing the SDK, emulators and devices).
+
+Next, install `platform-tools` (required for `adb`):
+
+    android sdk install platform-tools
 
 Enable [USB debugging](https://developer.android.com/studio/debug/dev-options)
 or [wireless debugging](https://developer.android.com/tools/adb#connect-to-a-device-over-wi-fi) on a
