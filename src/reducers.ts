@@ -44,7 +44,7 @@ const initialState: RootState = {
 };
 
 // FIXME: refactor using redux slices
-// eslint-disable-next-line @typescript-eslint/default-param-last, @typescript-eslint/no-explicit-any
+
 export default function appReducers(state = initialState, action: any) {
   switch (action.type) {
     /* Login */
@@ -78,9 +78,8 @@ export default function appReducers(state = initialState, action: any) {
       return { ...state, isRegisteringUser: false, registerError: action.registerError };
 
     case REGISTER_USER_SUCCESS:
-      // eslint-disable-next-line no-case-declarations
       const userData = action.data;
-      // eslint-disable-next-line no-case-declarations
+
       const token = action.data.auth_token;
       delete userData.auth_token;
 

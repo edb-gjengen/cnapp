@@ -21,8 +21,9 @@ export type HomeTabParamList = {
 };
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace ReactNavigation {
+    // https://reactnavigation.org/docs/typescript/#specifying-default-types-for-usenavigation-link-ref-etc
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends HomeTabParamList {}
   }
 }

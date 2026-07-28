@@ -29,8 +29,13 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   const { scheduleMembershipExpiryNotification, hasPermission } = useNotifications();
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [membershipTypeSlug, setMembershipTypeSlug] = useState('standard');
-  const [membershipPrice, setMembershipPrice] = useState(25000); // WARNING: Hardcoded due to state not being loaded initially. Should probably be fixed.
   const [toast, setToast] = useState<ToastProps | null>(null);
+
+  // WARNING: Hardcoded fallback price for when the query hasn't loaded yet. Should probably be fixed.
+  const membershipPrice =
+    data?.membershipTypes?.find(
+      (membershipTypeOption: { slug: string; price: number }) => membershipTypeOption.slug === membershipTypeSlug,
+    )?.price ?? 25000;
 
   const openPaymentSheet = async () => {
     try {
@@ -84,15 +89,6 @@ const useProof = ({ fetchUser }: UseProofProps) => {
       }
     }
   }, [membershipType, membershipEndDate, fetchUser, hasPermission, scheduleMembershipExpiryNotification]);
-
-  useEffect(() => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const membershipTypeOption of data?.membershipTypes ?? []) {
-      if (membershipTypeOption.slug === membershipTypeSlug) {
-        setMembershipPrice(membershipTypeOption.price);
-      }
-    }
-  }, [membershipTypeSlug, data?.membershipTypes]);
 
   return {
     isLoadingMembershipType: loading,

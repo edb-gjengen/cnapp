@@ -32,7 +32,7 @@ export const testUser: UserType = {
 
 interface RenderWithProvidersOptions {
   preloadedState?: Partial<AppState>;
-  apolloMocks?: ReadonlyArray<MockedResponse>;
+  apolloMocks?: readonly MockedResponse[];
 }
 
 /**

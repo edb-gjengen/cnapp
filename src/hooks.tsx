@@ -1,5 +1,5 @@
 import { useStripe } from '@stripe/stripe-react-native';
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector, useStore } from 'react-redux';
@@ -8,15 +8,17 @@ import { logout } from './actions';
 import type { AppDispatch, AppStore, RootState } from './reduxStore';
 
 export function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T>();
+  const [previous, setPrevious] = useState<T | undefined>(undefined);
+  const [current, setCurrent] = useState(value);
 
-  // Store current value in ref
-  useEffect(() => {
-    ref.current = value;
-  }, [value]); // Only re-run if value changes
+  // Adjust state during render instead of tracking the previous render's value in a ref,
+  // see https://react.dev/reference/react/useState#storing-information-from-previous-renders
+  if (value !== current) {
+    setPrevious(current);
+    setCurrent(value);
+  }
 
-  // Return previous value (happens before update in useEffect above)
-  return ref.current;
+  return previous;
 }
 
 /** Handles deep links. Currently only used by stripe */

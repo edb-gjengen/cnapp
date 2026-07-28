@@ -99,12 +99,13 @@ const PurchaseButton = ({
   ];
 
   const defaultValue = options[1];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => onSelect(defaultValue.value), []);
 
   const onSelect = (value: string) => {
     setMembershipTypeSlug(value);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => onSelect(defaultValue.value), []);
 
   if (user.is_member) {
     return null;

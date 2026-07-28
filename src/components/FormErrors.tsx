@@ -4,7 +4,6 @@ import { Text, StyleSheet, View } from 'react-native';
 import theme from '@/theme';
 import IconExclamationTriangle from '@assets/icons/exclamation-triangle.svg';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormErrors = ({ errors }: { errors: Record<string, any> }) => {
   if (!errors) {
     return [];

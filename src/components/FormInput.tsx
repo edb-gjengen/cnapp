@@ -6,9 +6,8 @@ import TextField, { TextFieldProps } from '@/components/TextField';
 import theme from '@/theme';
 
 type FormInputProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   control: any;
   name: string;
   label: string;

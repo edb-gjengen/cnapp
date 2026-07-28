@@ -86,8 +86,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   - `react-native-simple-radio-button` (last published in 2018, and untyped — it accounts for
     5 of the errors `npm run check-types` reports); `@expo/ui` ships a native `Picker` in
     segmented/radio style, see the SDK 56 follow-ups below
-- migrate ESLint 8 + airbnb config (both EOL) to ESLint 9 flat config or
-  [eslint-config-expo](https://docs.expo.dev/guides/using-eslint/)
 - follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
   - decide on Sentry: `@sentry/react-native` is installed but never initialized (see the
     commented-out init in `index.ts`), and its config plugin (now applied via `app.json`)
@@ -129,10 +127,7 @@ history, code and binary blobs related to React Native functionality filtered ou
     `expo-build-properties` if it causes trouble
   - now on TypeScript 6: `baseUrl` is deprecated (gone in TS 7) and was removed from
     `tsconfig.json`, and TS 6 stopped auto-including `@types/*`, hence the explicit `types` field
-- make `npm run lint` usable again: ESLint only ignores `coverage/`, so it also walks the
-  gitignored `android/` and `ios/` directories and reports ~126 errors from stale build output.
-  Add them to `ignorePatterns`, alongside the ESLint 9 migration above
-- fix the 20 pre-existing `npm run check-types` errors (unchanged by the SDK upgrade)
+- fix the 19 pre-existing `npm run check-types` errors (unchanged by the SDK upgrade)
 - add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership
   payments: either natively in the payment sheet (register the merchant ID
   `merchant.no.neuf.chateau` + Apple Pay certificate, set `merchantIdentifier` in the

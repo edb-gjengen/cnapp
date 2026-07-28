@@ -13,15 +13,23 @@ export type ToastProps = {
 
 const Toast = ({ message, visible, position = 'bottom', autoDismiss, onDismiss }: ToastProps) => {
   const [mounted, setMounted] = useState(!!visible);
-  const opacity = useRef(new Animated.Value(0)).current;
+  const [opacity] = useState(() => new Animated.Value(0));
+
+  if (visible && !mounted) {
+    setMounted(true);
+  }
+
+  const onDismissRef = useRef(onDismiss);
+  useEffect(() => {
+    onDismissRef.current = onDismiss;
+  }, [onDismiss]);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     if (visible) {
-      setMounted(true);
       Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
-      if (autoDismiss && onDismiss) {
-        timer = setTimeout(onDismiss, autoDismiss);
+      if (autoDismiss) {
+        timer = setTimeout(() => onDismissRef.current?.(), autoDismiss);
       }
     } else {
       Animated.timing(opacity, { toValue: 0, duration: 200, useNativeDriver: true }).start(({ finished }) => {
@@ -35,8 +43,7 @@ const Toast = ({ message, visible, position = 'bottom', autoDismiss, onDismiss }
         clearTimeout(timer);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, autoDismiss]);
+  }, [visible, autoDismiss, opacity]);
 
   if (!mounted) {
     return null;
