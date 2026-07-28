@@ -82,10 +82,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   `src/reducers.ts`, the fetch thunks in `src/api.ts` and the `isFetching*`/error flags
 - replace [moment](https://momentjs.com/docs/#/-project-status/) (maintenance mode) with
   `date-fns`
-- replace unmaintained UI packages:
-  - `react-native-simple-radio-button` (last published in 2018, and untyped — it accounts for
-    5 of the errors `npm run check-types` reports); `@expo/ui` ships a native `Picker` in
-    segmented/radio style, see the SDK 56 follow-ups below
 - follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
   - decide on Sentry: `@sentry/react-native` is installed but never initialized (see the
     commented-out init in `index.ts`), and its config plugin (now applied via `app.json`)
@@ -127,7 +123,9 @@ history, code and binary blobs related to React Native functionality filtered ou
     `expo-build-properties` if it causes trouble
   - now on TypeScript 6: `baseUrl` is deprecated (gone in TS 7) and was removed from
     `tsconfig.json`, and TS 6 stopped auto-including `@types/*`, hence the explicit `types` field
-- fix the 19 pre-existing `npm run check-types` errors (unchanged by the SDK upgrade)
+- fix the 13 remaining `npm run check-types` errors: the `*.svg` module declaration in
+  `src/types/svg.ts` isn't picked up (12 errors), plus one expo-notifications
+  `NotificationBehavior` mismatch in `src/App.tsx`
 - add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership
   payments: either natively in the payment sheet (register the merchant ID
   `merchant.no.neuf.chateau` + Apple Pay certificate, set `merchantIdentifier` in the

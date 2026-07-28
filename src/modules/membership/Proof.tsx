@@ -115,7 +115,7 @@ const PurchaseButton = ({
     <View>
       <Text style={[theme.text, styles.selectText]}>Velg medlemskapstype</Text>
       <View style={styles.radioForm}>
-        <RadioButton data={options} onSelect={onSelect} defaultValue={defaultValue} style={styles.radioForm} />
+        <RadioButton data={options} onSelect={onSelect} defaultValue={defaultValue} />
       </View>
       {paymentLoading && <ActivityIndicator color={theme.colors.neufOrange} />}
       <Button

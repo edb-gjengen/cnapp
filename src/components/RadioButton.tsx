@@ -3,10 +3,21 @@ import { Text, Pressable, StyleSheet } from 'react-native';
 
 import theme from '@/theme';
 
-export default function RadioButton({ data, onSelect, defaultValue }) {
+interface RadioOption {
+  label: string;
+  value: string;
+}
+
+interface RadioButtonProps {
+  data: RadioOption[];
+  onSelect: (value: string) => void;
+  defaultValue: RadioOption;
+}
+
+export default function RadioButton({ data, onSelect, defaultValue }: RadioButtonProps) {
   const [userOption, setUserOption] = useState(defaultValue.value);
 
-  const selectHandler = (value) => {
+  const selectHandler = (value: string) => {
     onSelect(value);
     setUserOption(value);
   };
