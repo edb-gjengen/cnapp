@@ -80,8 +80,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   token, so drop redux for [TanStack Query](https://tanstack.com/query/latest) for
   fetching/caching, with the token in React context + AsyncStorage — replaces
   `src/reducers.ts`, the fetch thunks in `src/api.ts` and the `isFetching*`/error flags
-- replace [moment](https://momentjs.com/docs/#/-project-status/) (maintenance mode) with
-  `date-fns`
 - follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
   - decide on Sentry: `@sentry/react-native` is installed but never initialized (see the
     commented-out init in `index.ts`), and its config plugin (now applied via `app.json`)

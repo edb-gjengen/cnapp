@@ -1,11 +1,7 @@
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 
-import 'moment/locale/nb';
 import type { EventType } from '@/types/data';
 import { fetchWithTimeout } from '@/utils';
-
-moment.locale('nb');
 
 /* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
 const useEventList = () => {

@@ -1,5 +1,9 @@
 /* eslint-disable no-undef */
 
+// Deliberately not Europe/Oslo: event times must render as Oslo wall-clock no
+// matter the device timezone, so tests assert Oslo strings under a foreign TZ.
+process.env.TZ = 'America/New_York';
+
 process.env.EXPO_PUBLIC_EVENT_API_URL = 'https://events.example.test/api/v1/events';
 process.env.EXPO_PUBLIC_DUSKEN_API_URL = 'https://dusken.example.test';
 process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL = 'https://dusken.example.test/auth/password_reset/';
