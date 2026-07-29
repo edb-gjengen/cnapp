@@ -9,5 +9,5 @@
     "types": ["jest", "node"]
   },
   "extends": "expo/tsconfig.base",
-  "include": ["src", "src/types/svg.ts", "App.ts", "index.ts"]
+  "include": ["src", "src/types/svg.d.ts", "App.ts", "index.ts"]
 }
