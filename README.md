@@ -113,17 +113,6 @@ history, code and binary blobs related to React Native functionality filtered ou
     ideally folded into the redux replacement above
   - verify on iOS: the minimum target jumped to iOS 16.4 (from 15.1), dropping the iPhone 7, 6s
     and SE (1st gen). Building now requires Xcode 26.4 on macOS 13.4+
-  - drop the `@expo/config-plugins` devDependency once `@sentry/react-native` fixes its config
-    plugin: `withSentryAndroidGradlePlugin.js` imports `@expo/config-plugins` directly instead of
-    `expo/config-plugins`, and SDK 56 no longer hoists it, so `expo config` crashes without the
-    explicit dependency. Still broken in 8.20.0. Dropping Sentry outright would also remove it
-  - Hermes V1 is now the default engine; turn it off with `useHermesV1: false` in
-    `expo-build-properties` if it causes trouble
-  - now on TypeScript 6: `baseUrl` is deprecated (gone in TS 7) and was removed from
-    `tsconfig.json`, and TS 6 stopped auto-including `@types/*`, hence the explicit `types` field
-- fix the 13 remaining `npm run check-types` errors: the `*.svg` module declaration in
-  `src/types/svg.ts` isn't picked up (12 errors), plus one expo-notifications
-  `NotificationBehavior` mismatch in `src/App.tsx`
 - add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership
   payments: either natively in the payment sheet (register the merchant ID
   `merchant.no.neuf.chateau` + Apple Pay certificate, set `merchantIdentifier` in the
