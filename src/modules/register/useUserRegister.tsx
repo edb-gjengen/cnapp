@@ -64,8 +64,8 @@ const useUserRegister = () => {
   }, [isAuthenticatedPrev, isAuthenticated, navigation]);
 
   useEffect(() => {
-    clearErrors();
     if (!isSubmitted || !registerError) return;
+    clearErrors();
     Object.keys(registerError).forEach((key) => {
       const errorMessages = registerError[key];
       if (!errorMessages || !Array.isArray(errorMessages)) {

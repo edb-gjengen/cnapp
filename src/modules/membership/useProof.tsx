@@ -38,11 +38,14 @@ const useProof = ({ fetchUser }: UseProofProps) => {
     )?.price ?? 25000;
 
   const openPaymentSheet = async () => {
+    setPaymentLoading(true);
     try {
       await initializePaymentSheet();
     } catch (err) {
       console.error('🔥', err);
       setToast({ message: 'Oops! Could not initialise payment', visible: true, preset: 'failure' });
+      setPaymentLoading(false);
+      return;
     }
     const { error } = await presentPaymentSheet();
     const message = error ? `Error code: ${error.code} ${error.message}` : 'Your order is confirmed!';
@@ -51,7 +54,6 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   };
 
   const initializePaymentSheet = async () => {
-    setPaymentLoading(true);
     const { paymentIntent, ephemeralKey, customer } = await requestStripePaymentSheet(
       userToken as string,
       membershipTypeSlug,
@@ -71,8 +73,8 @@ const useProof = ({ fetchUser }: UseProofProps) => {
       },
       returnURL: `${Constants.expoConfig?.scheme}://stripe-redirect`,
     });
-    if (!error) {
-      setPaymentLoading(true);
+    if (error) {
+      throw error;
     }
   };
 

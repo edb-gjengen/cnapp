@@ -36,6 +36,7 @@ const FormInput = ({
           <TextField
             ref={ref}
             label={<Text style={theme.text}>{label}</Text>}
+            accessibilityLabel={label}
             returnKeyType={returnKeyType}
             onChangeText={onChange}
             onBlur={onBlur}

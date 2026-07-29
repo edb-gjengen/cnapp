@@ -9,6 +9,10 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   blacklist: ['isLoggingIn', 'isFetchingUserData', 'isRegisteringUser', 'loginError'],
+  // redux-persist never clears its 5s rehydration-watchdog timer, which keeps
+  // Jest workers alive after tests finish; 0 disables it. The mocked
+  // AsyncStorage rehydrates instantly, so the watchdog protects nothing there.
+  timeout: process.env.NODE_ENV === 'test' ? 0 : undefined,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

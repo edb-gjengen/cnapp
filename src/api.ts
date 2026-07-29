@@ -212,7 +212,7 @@ export async function requestStripePaymentSheet(authToken: string, membershipTyp
         return data;
       },
       (data) => {
-        return data.detail || 'Kunne ikke belaste bankkortet, prøv igjen';
+        throw new Error(data?.detail || 'Kunne ikke belaste bankkortet, prøv igjen');
       },
     );
 }
