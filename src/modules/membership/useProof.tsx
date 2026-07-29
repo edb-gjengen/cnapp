@@ -24,18 +24,20 @@ interface UseProofProps {
 const useProof = ({ fetchUser }: UseProofProps) => {
   const user = useAppSelector((state) => state.user);
   const userToken = useAppSelector((state) => state.userToken);
-  const { data, loading } = useQuery(PROOF_QUERY);
+  const { data, loading, error, refetch } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { scheduleMembershipExpiryNotification, hasPermission } = useNotifications();
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [membershipTypeSlug, setMembershipTypeSlug] = useState('standard');
+  // Matches the preselected option in PurchaseButton's radio list
+  const [membershipTypeSlug, setMembershipTypeSlug] = useState('regular');
   const [toast, setToast] = useState<ToastProps | null>(null);
 
-  // WARNING: Hardcoded fallback price for when the query hasn't loaded yet. Should probably be fixed.
+  // null until the query has delivered a price for the selected type; the
+  // purchase button stays disabled rather than showing a guessed amount
   const membershipPrice =
     data?.membershipTypes?.find(
       (membershipTypeOption: { slug: string; price: number }) => membershipTypeOption.slug === membershipTypeSlug,
-    )?.price ?? 25000;
+    )?.price ?? null;
 
   const openPaymentSheet = async () => {
     setPaymentLoading(true);
@@ -94,7 +96,9 @@ const useProof = ({ fetchUser }: UseProofProps) => {
 
   return {
     isLoadingMembershipType: loading,
-    membershipPrice: membershipPrice ? membershipPrice / 100 : 0,
+    membershipPrice: membershipPrice != null ? membershipPrice / 100 : null,
+    membershipTypesError: !!error,
+    refetchMembershipTypes: refetch,
     onPurchasePress: openPaymentSheet,
     paymentLoading,
     toast,

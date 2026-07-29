@@ -1,5 +1,5 @@
 import * as Notifications from 'expo-notifications';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -79,8 +79,10 @@ interface PurchaseButtonProps {
   user: UserType;
   paymentLoading: boolean;
   isLoadingMembershipType: boolean;
-  membershipPrice: number;
+  membershipPrice: number | null;
+  membershipTypesError: boolean;
   onPurchasePress: () => void;
+  onRetryPress: () => void;
   setMembershipTypeSlug: (value: string) => void;
 }
 
@@ -90,6 +92,8 @@ const PurchaseButton = ({
   isLoadingMembershipType,
   onPurchasePress,
   membershipPrice,
+  membershipTypesError,
+  onRetryPress,
   setMembershipTypeSlug,
 }: PurchaseButtonProps) => {
   const options = [
@@ -103,9 +107,6 @@ const PurchaseButton = ({
   const onSelect = (value: string) => {
     setMembershipTypeSlug(value);
   };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => onSelect(defaultValue.value), []);
 
   if (user.is_member) {
     return null;
@@ -121,11 +122,21 @@ const PurchaseButton = ({
       <Button
         onPress={onPurchasePress}
         fullWidth
-        disabled={paymentLoading || isLoadingMembershipType}
+        disabled={paymentLoading || isLoadingMembershipType || membershipPrice == null}
         style={[theme.button, styles.purchaseButton]}
       >
-        <Text style={theme.buttonText}>{`Kjøp medlemskap (${membershipPrice} NOK)`}</Text>
+        <Text style={theme.buttonText}>
+          {membershipPrice != null ? `Kjøp medlemskap (${membershipPrice} NOK)` : 'Kjøp medlemskap'}
+        </Text>
       </Button>
+      {membershipTypesError && (
+        <>
+          <Text style={[theme.text, styles.errorMessage]}>Kunne ikke hente priser</Text>
+          <Button small onPress={onRetryPress} style={[theme.button, styles.retryButton]}>
+            <Text style={theme.buttonText}>Prøv igjen</Text>
+          </Button>
+        </>
+      )}
       <View style={styles.purchaseText}>
         <Text style={[theme.text, styles.purchaseTextInner]}>Medlemskapet er gyldig i ett år</Text>
       </View>
@@ -256,6 +267,8 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
     isLoadingMembershipType,
     onPurchasePress,
     membershipPrice,
+    membershipTypesError,
+    refetchMembershipTypes,
     toast,
     setToast,
     user,
@@ -314,7 +327,13 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
               paymentLoading={paymentLoading}
               isLoadingMembershipType={isLoadingMembershipType}
               membershipPrice={membershipPrice}
+              membershipTypesError={membershipTypesError}
               onPurchasePress={onPurchasePress}
+              onRetryPress={() => {
+                refetchMembershipTypes().catch(() => {
+                  // the failure is surfaced through useQuery's error state
+                });
+              }}
               setMembershipTypeSlug={setMembershipTypeSlug}
             />
             <MembershipValidTo user={user} />
@@ -402,6 +421,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   purchaseButton: {
+    marginTop: 8,
+  },
+  retryButton: {
+    alignSelf: 'center',
     marginTop: 8,
   },
   logoutButton: {

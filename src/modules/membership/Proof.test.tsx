@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import type { MockedResponse } from '@apollo/client/testing';
 import { fireEvent, waitFor } from '@testing-library/react-native';
 import * as Notifications from 'expo-notifications';
 import React from 'react';
@@ -56,18 +57,46 @@ const expiredMember: UserType = {
   last_membership: { membership_type: 'standard', end_date: '2020-01-01' },
 };
 
-const renderProof = ({ user = nonMember, fetchUser = jest.fn() }: { user?: UserType; fetchUser?: () => void } = {}) =>
+const renderProof = ({
+  user = nonMember,
+  fetchUser = jest.fn(),
+  mocks = apolloMocks,
+}: { user?: UserType; fetchUser?: () => void; mocks?: readonly MockedResponse[] } = {}) =>
   renderWithProviders(
     <Proof onLogoutPress={jest.fn()} fetchUser={fetchUser} isFetchingUserData={false} onDeletePress={jest.fn()} />,
     {
       preloadedState: { isAuthenticated: true, userToken: 'test-token', user },
-      apolloMocks,
+      apolloMocks: mocks,
     },
   );
 
 beforeEach(() => {
   jest.clearAllMocks();
   (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValue({ status: 'undetermined' });
+});
+
+it('disables the purchase button without showing a price while membership types load', async () => {
+  const { getByRole, findByText } = renderProof();
+
+  // The label carries no amount until the query resolves
+  expect(getByRole('button', { name: 'Kjøp medlemskap' })).toBeDisabled();
+
+  // Once the query resolves the real price takes over
+  expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
+});
+
+it('shows an error with retry instead of a price when membership types fail to load', async () => {
+  const { findByText, getByText, getByRole } = renderProof({
+    mocks: [{ request: { query: PROOF_QUERY }, error: new Error('network down') }, ...apolloMocks],
+  });
+
+  expect(await findByText('Kunne ikke hente priser')).toBeTruthy();
+  expect(getByRole('button', { name: 'Kjøp medlemskap' })).toBeDisabled();
+
+  // Retrying consumes the queued successful mock and recovers the real price
+  fireEvent.press(getByText('Prøv igjen'));
+  expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
+  expect(getByRole('button', { name: 'Kjøp medlemskap (300 NOK)' })).toBeEnabled();
 });
 
 it('purchases the preselected membership through the stripe payment sheet', async () => {
