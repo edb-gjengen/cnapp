@@ -7,7 +7,8 @@
         "EXPO_PUBLIC_DUSKEN_API_URL": "https://galtinn.neuf.no",
         "EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL": "https://galtinn.neuf.no/auth/password_reset/",
         "EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL": "https://galtinn.neuf.no/nb/personvern/",
-        "EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_test_4SNAIZZczSJKZ0y2wrZI4Ngb"
+        "EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_live_4SNAG73lw9kqFGb5u1s0yHhA",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://af0b4ac4258049d9a21a615b9696190b@bugsink.neuf.no/2"
       }
     },
     "production": {

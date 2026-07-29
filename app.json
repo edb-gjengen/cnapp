@@ -42,7 +42,14 @@
           "color": "#E5E2D7"
         }
       ],
-      "@sentry/react-native",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://bugsink.neuf.no/",
+          "organization": "bugsinkhasnoorgs",
+          "project": "cnapp"
+        }
+      ],
       [
         "@stripe/stripe-react-native",
         {}

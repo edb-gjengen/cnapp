@@ -72,6 +72,12 @@ history, code and binary blobs related to React Native functionality filtered ou
   - privacy policy
   - delete my account
   - ???
+- upload source maps to Bugsink so release-build stack traces are symbolicated (until then
+  they're minified): create an auth token in Bugsink and set `SENTRY_AUTH_TOKEN` as an
+  [EAS secret](https://docs.expo.dev/eas/environment-variables/) — the Sentry plugin config
+  in `app.json` (url/organization/project) is already set up for the upload. Needs
+  [Bugsink ≥ 2.0.14](https://www.bugsink.com/docs/sourcemaps/); verify the project slug in
+  Bugsink matches `cnapp`
 - test in ios emulator? (`npm run ios`, requires macOS)
 - use [Expo Application Services](https://expo.dev/eas) to build and submit app to stores
 - replace redux (`redux` v5 + `redux-thunk`, hand-written actions and the deprecated
@@ -80,10 +86,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   fetching/caching, with the token in React context + AsyncStorage — replaces
   `src/reducers.ts`, the fetch thunks in `src/api.ts` and the `isFetching*`/error flags
 - follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
-  - decide on Sentry: `@sentry/react-native` is installed but never initialized (see the
-    commented-out init in `index.ts`), and its config plugin (now applied via `app.json`)
-    warns about missing `organization`/`project` at every build — either finish the setup
-    or drop the dependency
   - try the [React Compiler](https://docs.expo.dev/guides/react-compiler/) (enabled by
     default in new SDK 54 projects, opt-in for existing ones via
     `"experiments": { "reactCompiler": true }` in `app.json`)
