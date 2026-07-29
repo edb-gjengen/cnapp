@@ -105,9 +105,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   - try [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/), production-ready as of SDK 56:
     real SwiftUI / Jetpack Compose components that could back the homegrown ones in
     `src/components/` and finally retire `react-native-simple-radio-button`
-  - simplify `fetchWithTimeout` in `src/utils.ts`: `expo/fetch` is now `globalThis.fetch`, so the
-    wrapper collapses to `fetch(url, { signal: AbortSignal.timeout(ms) })`. Opt back out with
-    `EXPO_PUBLIC_USE_RN_FETCH=1` if it misbehaves
   - swap `@react-native-async-storage/async-storage` (used by `redux-persist` in
     `src/reduxStore.ts`) for
     [`expo-sqlite/localStorage`](https://docs.expo.dev/versions/latest/sdk/sqlite/#localstorage),
