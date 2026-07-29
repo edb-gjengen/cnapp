@@ -72,7 +72,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   - privacy policy
   - delete my account
   - ???
-- test in android emulator? (`npm run android`)
 - test in ios emulator? (`npm run ios`, requires macOS)
 - use [Expo Application Services](https://expo.dev/eas) to build and submit app to stores
 - replace redux (`redux` v5 + `redux-thunk`, hand-written actions and the deprecated
@@ -85,8 +84,6 @@ history, code and binary blobs related to React Native functionality filtered ou
     commented-out init in `index.ts`), and its config plugin (now applied via `app.json`)
     warns about missing `organization`/`project` at every build — either finish the setup
     or drop the dependency
-  - verify Android UI on a device/emulator: edge-to-edge is now always enabled and can no
-    longer be disabled
   - try the [React Compiler](https://docs.expo.dev/guides/react-compiler/) (enabled by
     default in new SDK 54 projects, opt-in for existing ones via
     `"experiments": { "reactCompiler": true }` in `app.json`)
@@ -97,10 +94,6 @@ history, code and binary blobs related to React Native functionality filtered ou
     (now stable) so `npm run android`/`ios` can download a cached build instead of
     compiling locally when the native fingerprint is unchanged
 - follow-ups from the [Expo SDK 56 upgrade](https://expo.dev/changelog/sdk-56):
-  - replace the deprecated `@expo/vector-icons` with the scoped
-    [`@react-native-vector-icons`](https://github.com/oblador/react-native-vector-icons) packages
-    (`npx @react-native-vector-icons/codemod`) — only `SimpleLineIcons` in
-    `src/modules/events/EventList.tsx` uses it, yet it ships ~3.5 MB of fonts into every export
   - try [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/), production-ready as of SDK 56:
     real SwiftUI / Jetpack Compose components that could back the homegrown ones in
     `src/components/` and finally retire `react-native-simple-radio-button`

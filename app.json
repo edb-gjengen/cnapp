@@ -55,7 +55,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#E5E2D7"
         }
-      ]
+      ],
+      "@react-native-vector-icons/feather"
     ],
     "extra": {
       "eas": {

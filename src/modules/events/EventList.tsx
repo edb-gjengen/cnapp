@@ -1,5 +1,5 @@
 import { TZDate } from '@date-fns/tz';
-import { SimpleLineIcons as Icon } from '@expo/vector-icons';
+import Icon from '@react-native-vector-icons/feather/static';
 import { format, parseISO } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import React from 'react';
@@ -50,7 +50,7 @@ const EventList = () => {
           )}
         </View>
         <View style={styles.arrow}>
-          <Icon name="arrow-right" style={{ color: theme.colors.neufBlack, marginTop: 3 }} />
+          <Icon name="arrow-right" size={20} style={{ color: theme.colors.neufBlack }} />
         </View>
       </View>
     </TouchableOpacity>
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   arrow: {
     flex: 1,
     alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   row: { flex: 1, flexDirection: 'row' },
 });
