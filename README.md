@@ -48,6 +48,12 @@ then run on the Simulator or a connected device:
 
     npm run ios
 
+### Upgrading dependencies
+
+Many packages (`expo-*`, `react-native`, and more) are versioned in lockstep with the
+Expo SDK. Check them with `npx expo install --check` and upgrade with
+`npx expo install --fix` instead of `npm update`.
+
 ## Scripts
 
 - `npm run start` - Start Expo development server on port 19001
