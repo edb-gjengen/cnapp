@@ -13,6 +13,7 @@ import {
 
 import Button from '@/components/Button';
 import theme from '@/theme';
+import { withAppSource } from '@/utils';
 import logo from '@assets/DNS-logo-svart.png';
 import IconClock from '@assets/icons/clock.svg';
 import IconFacebook from '@assets/icons/facebook.svg';
@@ -95,7 +96,7 @@ const About = () => (
   <ScrollView style={theme.background}>
     <View style={theme.card}>
       <Text style={[theme.text, styles.header, { marginTop: 8 }]}>Det Norske Studentersamfund</Text>
-      <TouchableOpacity onPress={() => Linking.openURL('https://www.studentersamfundet.no/')}>
+      <TouchableOpacity onPress={() => Linking.openURL(withAppSource('https://neuf.no/'))}>
         <Image style={styles.logo} source={logo} />
       </TouchableOpacity>
       <Text style={[theme.text, styles.header]}>Følg oss på</Text>
@@ -126,7 +127,10 @@ const About = () => (
       </View>
       <Text style={[theme.text, styles.header]}>Åpningstider</Text>
       <View style={styles.section}>
-        <Button onPress={() => Linking.openURL('https://studentersamfundet.no/aapningstider/')} style={theme.button}>
+        <Button
+          onPress={() => Linking.openURL(withAppSource('https://neuf.no/praktisk#apningstider'))}
+          style={theme.button}
+        >
           <IconClock width={20} height={20} style={styles.icon} />
           <Text style={theme.buttonText}>Vis åpningstider</Text>
         </Button>

@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import FormErrors from '@/components/FormErrors';
 import FormInput from '@/components/FormInput';
 import theme from '@/theme';
+import { withAppSource } from '@/utils';
 
 import useLogin from './useLogin';
 
@@ -47,7 +48,7 @@ const Login = () => {
         <Button
           small
           onPress={() => {
-            Linking.openURL(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL || '');
+            Linking.openURL(withAppSource(process.env.EXPO_PUBLIC_DUSKEN_FORGOT_PASSWORD_URL || ''));
           }}
           style={[theme.button, styles.forgotPasswordButton]}
         >

@@ -8,6 +8,7 @@ import { StyleSheet, View, Platform, FlatList, TouchableOpacity, Text, Linking }
 import Button from '@/components/Button';
 import theme from '@/theme';
 import { EventType } from '@/types/data';
+import { withAppSource } from '@/utils';
 
 import useEventList from './useEventList';
 
@@ -25,7 +26,7 @@ const EventList = () => {
   const renderItem = ({ item, index }: { item: EventType; index: number }) => (
     <TouchableOpacity
       onPress={() => {
-        return Linking.openURL(item.url);
+        return Linking.openURL(withAppSource(item.url));
       }}
       style={[styles.listItem, ...(index === events.length - 1 ? [styles.lastListItem] : [])]}
     >
