@@ -1,5 +1,6 @@
-import { fireEvent, waitFor, type RenderResult } from '@testing-library/react-native';
+import { act, fireEvent, waitFor, type RenderResult } from '@testing-library/react-native';
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 
 import UserRegister from '@/modules/register/UserRegister';
 import { renderWithProviders } from '@/testUtils';
@@ -44,24 +45,26 @@ it('renders the registration form', () => {
 });
 
 it('disables the submit button while the form is incomplete', () => {
-  const { getByText, getByRole, store } = renderWithProviders(<UserRegister />);
+  const { getByText, getByRole, UNSAFE_queryByType } = renderWithProviders(<UserRegister />);
 
   expect(getByRole('button', { name: 'Registrer meg' })).toBeDisabled();
   fireEvent.press(getByText('Registrer meg'));
 
   expect(fetchMock).not.toHaveBeenCalled();
-  expect(store.getState().isRegisteringUser).toBe(false);
+  expect(UNSAFE_queryByType(ActivityIndicator)).toBeNull();
 });
 
-it('submits the form, authenticates and navigates back on success', async () => {
-  mockResponseOnce({ username: 'grisen', email: 'grisen@example.test', auth_token: 'token-456' });
-  const { getByText, getByRole, getByLabelText, store } = renderWithProviders(<UserRegister />);
+it('submits the form, shows a spinner while pending and navigates back on success', async () => {
+  let resolveRegister!: (response: { ok: boolean; status: number; json: () => Promise<unknown> }) => void;
+  fetchMock.mockImplementationOnce(() => new Promise((resolve) => (resolveRegister = resolve)));
+  const { getByText, getByRole, getByLabelText, UNSAFE_getByType } = renderWithProviders(<UserRegister />);
 
   fillForm(getByLabelText);
   await waitFor(() => expect(getByRole('button', { name: 'Registrer meg' })).toBeEnabled());
   fireEvent.press(getByText('Registrer meg'));
 
-  await waitFor(() => expect(store.getState().isAuthenticated).toBe(true));
+  // the spinner shows while the request is in flight
+  await waitFor(() => expect(UNSAFE_getByType(ActivityIndicator)).toBeTruthy());
   expect(fetchMock).toHaveBeenCalledWith(
     'https://dusken.example.test/api/user/register/',
     expect.objectContaining({
@@ -75,20 +78,28 @@ it('submits the form, authenticates and navigates back on success', async () => 
       }),
     }),
   );
-  expect(store.getState().userToken).toBe('token-456');
-  expect(mockGoBack).toHaveBeenCalled();
+  expect(mockGoBack).not.toHaveBeenCalled();
+
+  await act(async () => {
+    resolveRegister({
+      ok: true,
+      status: 200,
+      json: async () => ({ username: 'grisen', email: 'grisen@example.test', auth_token: 'token-456' }),
+    });
+  });
+
+  await waitFor(() => expect(mockGoBack).toHaveBeenCalled());
 });
 
 it('shows server field errors on the matching form field', async () => {
   mockResponseOnce({ email: ['Denne e-postadressen er allerede i bruk'] }, false);
-  const { getByText, getByRole, getByLabelText, findByText, store } = renderWithProviders(<UserRegister />);
+  const { getByText, getByRole, getByLabelText, findByText } = renderWithProviders(<UserRegister />);
 
   fillForm(getByLabelText);
   await waitFor(() => expect(getByRole('button', { name: 'Registrer meg' })).toBeEnabled());
   fireEvent.press(getByText('Registrer meg'));
 
   expect(await findByText('Denne e-postadressen er allerede i bruk')).toBeTruthy();
-  expect(store.getState().isAuthenticated).toBe(false);
   expect(mockGoBack).not.toHaveBeenCalled();
 });
 

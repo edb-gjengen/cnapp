@@ -65,7 +65,8 @@ const renderProof = ({
   renderWithProviders(
     <Proof onLogoutPress={jest.fn()} fetchUser={fetchUser} isFetchingUserData={false} onDeletePress={jest.fn()} />,
     {
-      preloadedState: { isAuthenticated: true, userToken: 'test-token', user },
+      initialToken: 'test-token',
+      initialUser: user,
       apolloMocks: mocks,
     },
   );

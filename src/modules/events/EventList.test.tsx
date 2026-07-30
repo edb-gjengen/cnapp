@@ -1,6 +1,8 @@
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
 import EventList from '@/modules/events/EventList';
+import useEventList from '@/modules/events/useEventList';
 import { renderWithProviders } from '@/testUtils';
 import { fetchWithTimeout } from '@/utils';
 
@@ -84,4 +86,17 @@ it('renders an error state when the API is unreachable', async () => {
   const { findByText } = renderWithProviders(<EventList />);
 
   expect(await findByText('Kunne ikke hente programmet...')).toBeTruthy();
+});
+
+// stuck spinner bug, fix later
+it.failing('stops the refresh spinner and shows the error when refresh fails', async () => {
+  mockFetch.mockResolvedValueOnce({ json: async () => ({ events: [event] }) });
+  const { result } = renderHook(() => useEventList());
+  await waitFor(() => expect(result.current.events).toHaveLength(1));
+
+  mockFetch.mockRejectedValue(new Error('network down'));
+  act(() => result.current.handleRefresh());
+
+  await waitFor(() => expect(result.current.error).toBeTruthy());
+  expect(result.current.refreshing).toBe(false);
 });

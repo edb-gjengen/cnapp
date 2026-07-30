@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import type { EventType } from '@/types/data';
 import { fetchWithTimeout } from '@/utils';
 
-/* Ref: https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6 */
 const useEventList = () => {
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<EventType[]>([]);

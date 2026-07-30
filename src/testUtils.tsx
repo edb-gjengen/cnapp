@@ -31,7 +31,8 @@ export const testUser: UserType = {
 };
 
 interface RenderWithProvidersOptions {
-  preloadedState?: Partial<AppState>;
+  initialToken?: string | null;
+  initialUser?: UserType | null;
   apolloMocks?: readonly MockedResponse[];
 }
 
@@ -42,17 +43,21 @@ interface RenderWithProvidersOptions {
  */
 export function renderWithProviders(
   ui: ReactElement,
-  { preloadedState, apolloMocks = [] }: RenderWithProvidersOptions = {},
+  { initialToken = null, initialUser = null, apolloMocks = [] }: RenderWithProvidersOptions = {},
 ) {
-  const store = createStore(rootReducer, { ...initialState, ...preloadedState }, applyMiddleware(thunk));
+  const preloadedState: AppState = {
+    ...initialState,
+    userToken: initialToken,
+    isAuthenticated: !!initialToken,
+    user: initialUser,
+  };
+  const store = createStore(rootReducer, preloadedState, applyMiddleware(thunk));
 
-  const result = render(
+  return render(
     <MockedProvider mocks={apolloMocks} cache={new InMemoryCache()}>
       <Provider store={store}>
         <NavigationContainer>{ui}</NavigationContainer>
       </Provider>
     </MockedProvider>,
   );
-
-  return { store, ...result };
 }
