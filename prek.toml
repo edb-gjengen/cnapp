@@ -1,0 +1,42 @@
+#:schema https://www.schemastore.org/prek.json
+
+[[repos]]
+repo = "builtin"
+hooks = [
+    { id = "check-added-large-files" },
+    { id = "check-case-conflict" },
+    { id = "check-json", exclude = '^tsconfig\.json$' }, # tsconfig is JSONC, comments allowed
+    { id = "check-merge-conflict" },
+    { id = "check-yaml" },
+    { id = "detect-private-key" },
+    { id = "end-of-file-fixer" },
+    { id = "mixed-line-ending", args = ["--fix=lf"] },
+    { id = "trailing-whitespace", args = ["--markdown-linebreak-ext=md"] },
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "eslint"
+name = "eslint"
+entry = "npx --no-install eslint --fix --no-warn-ignored"
+language = "system"
+types_or = ["javascript", "jsx", "ts", "tsx"]
+
+[[repos.hooks]]
+id = "check-types"
+name = "tsc"
+entry = "npx --no-install tsc"
+language = "system"
+files = '\.tsx?$|^tsconfig\.json$'
+pass_filenames = false
+
+[[repos.hooks]]
+id = "jest"
+name = "jest (tests related to staged files)"
+entry = "npx --no-install jest --bail --findRelatedTests --passWithNoTests"
+language = "system"
+types_or = ["javascript", "jsx", "ts", "tsx"]
+# One jest invocation for all files — parallel invocations contend and time out
+require_serial = true

@@ -12,7 +12,20 @@ command-line tools.
     mise trust
     mise install
     npm install
+    prek install
     cp env-example .env.local
+
+## Scripts
+
+- `npm run start` - Start Expo development server on port 19001
+- `npm run android` - Run app in Android emulator
+- `npm run ios` - Run app in iOS simulator (requires macOS)
+- `npm run web` - Run app in web browser
+- `npm run lint` - Check code with ESLint
+- `npm run format` - Fix code formatting with ESLint
+- `npm run check-types` - Run TypeScript type checking
+- `npm test` - Run the test suite
+- `npm run test:watch` - Run the test suite in watch mode
 
 ## Development
 
@@ -54,17 +67,17 @@ Many packages (`expo-*`, `react-native`, and more) are versioned in lockstep wit
 Expo SDK. Check them with `npx expo install --check` and upgrade with
 `npx expo install --fix` instead of `npm update`.
 
-## Scripts
+## Pre-commit hooks
 
-- `npm run start` - Start Expo development server on port 19001
-- `npm run android` - Run app in Android emulator
-- `npm run ios` - Run app in iOS simulator (requires macOS)
-- `npm run web` - Run app in web browser
-- `npm run lint` - Check code with ESLint
-- `npm run format` - Fix code formatting with ESLint
-- `npm run check-types` - Run TypeScript type checking
-- `npm test` - Run the test suite
-- `npm run test:watch` - Run the test suite in watch mode
+Git hooks are managed with [prek](https://prek.j178.dev/) (installed by `mise install`)
+and configured in `prek.toml`. Enable them with:
+
+    prek install
+
+Commits then only succeed if linting, type checking and the related tests pass. Run all
+hooks against the whole repo with:
+
+    prek run --all-files
 
 ## History
 
