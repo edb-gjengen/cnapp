@@ -60,6 +60,7 @@
         {
           "image": "./assets/splash.png",
           "resizeMode": "contain",
+          "imageWidth": 120,
           "backgroundColor": "#E5E2D7"
         }
       ],
