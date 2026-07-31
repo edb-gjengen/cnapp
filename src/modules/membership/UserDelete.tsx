@@ -1,17 +1,28 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native';
 
+import { useAuth } from '@/auth/AuthContext';
 import Button from '@/components/Button';
 import FormErrors from '@/components/FormErrors';
-import { useAppSelector } from '@/hooks';
+import { useUser } from '@/queries/useUser';
 import theme from '@/theme';
 
 import useUserDelete from './useUserDelete';
 
 const UserDelete = () => {
   const [value, onChangeText] = React.useState('');
-  const user = useAppSelector((state) => state.user);
+  const navigation = useNavigation();
+  const { isAuthenticated } = useAuth();
+  const { user } = useUser();
   const { onPress, isDeletingUser, deleteUserError } = useUserDelete();
+
+  // Not a screen for logged-out users; this also leaves after a successful deletion
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigation.navigate('UserStack', { screen: 'Membership' });
+    }
+  }, [isAuthenticated, navigation]);
 
   if (!user) {
     return null;

@@ -1,21 +1,7 @@
-import {
-  loginFailure,
-  loginRequest,
-  loginSuccess,
-  registerUserFailure,
-  registerUserRequest,
-  registerUserSuccess,
-  userDataFailure,
-  userDataRequest,
-  userDataSuccess,
-  deleteUserFailure,
-  deleteUserSuccess,
-  deleteUserRequest,
-} from './actions';
-import type { UserRegisterFormValues } from './modules/register/useUserRegister';
-import { AppDispatch } from './reduxStore';
-import type { UserType } from './types/data';
-import { fetchWithTimeout } from './utils';
+import { ApiError } from '@/errors';
+import type { EventType, UserType } from '@/types/data';
+import type { UserRegisterFormValues } from '@/types/forms';
+import { fetchWithTimeout } from '@/utils';
 
 // Dev builds only (stripped from release builds via __DEV__): log in with one of
 // these usernames and any password to get a fake user, for previewing membership
@@ -46,173 +32,99 @@ const DEV_FAKE_USERS: Record<string, UserType> = {
   },
 };
 
-export function requestLogin(username: string, password: string) {
-  return (dispatch: AppDispatch) => {
-    if (__DEV__ && username in DEV_FAKE_USERS) {
-      dispatch(loginSuccess(username, DEV_FAKE_TOKEN_PREFIX + username));
-      return Promise.resolve();
+const JSON_HEADERS = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+};
+
+// Throws ApiError with the DRF body on non-ok responses; network/timeout
+// failures reject with the raw Error
+async function requestJson(url: string, options: RequestInit, fallback: string) {
+  const response = await fetchWithTimeout(url, options);
+  const json = await response.json();
+  if (!response.ok) {
+    throw new ApiError(json ?? { non_field_errors: [fallback] }, response.status);
+  }
+  return json;
+}
+
+export async function login(username: string, password: string): Promise<{ token: string }> {
+  if (__DEV__ && username in DEV_FAKE_USERS) {
+    return { token: DEV_FAKE_TOKEN_PREFIX + username };
+  }
+  return requestJson(
+    `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/auth/obtain-token/`,
+    { method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ username, password }) },
+    'Kunne ikke logge inn, prøv igjen',
+  );
+}
+
+export async function fetchUserData(authToken: string): Promise<UserType> {
+  if (__DEV__ && authToken.startsWith(DEV_FAKE_TOKEN_PREFIX)) {
+    const fakeUser = DEV_FAKE_USERS[authToken.slice(DEV_FAKE_TOKEN_PREFIX.length)];
+    if (fakeUser) {
+      return fakeUser;
     }
+  }
+  return requestJson(
+    `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/me/`,
+    { method: 'GET', headers: { ...JSON_HEADERS, Authorization: `Token ${authToken}` } },
+    'Kunne ikke hente brukerdata',
+  );
+}
 
-    // We are now logging in
-    dispatch(loginRequest());
-
-    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/auth/obtain-token/`, {
+// snake_case so field errors from the API map straight onto form fields
+export async function registerUser({
+  first_name,
+  last_name,
+  email,
+  phone_number,
+  password,
+}: UserRegisterFormValues): Promise<{ user: UserType; token: string }> {
+  const json = await requestJson(
+    `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/user/register/`,
+    {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-      .then((response) => response.json().then((json) => ({ json, response })))
-      .then(({ json, response }) => {
-        if (response.ok === false) {
-          return Promise.reject(json);
-        }
-        return json;
-      })
-      .then(
-        (data) => {
-          dispatch(loginSuccess(username, data.token));
-        },
-        (data) => {
-          console.log(data);
-          dispatch(loginFailure(data || { non_field_errors: ['Kunne ikke logge inn, prøv igjen'] }));
-        },
-      );
-  };
+      headers: JSON_HEADERS,
+      body: JSON.stringify({ first_name, last_name, email, phone_number, password }),
+    },
+    'Kunne ikke registrere bruker, prøv igjen',
+  );
+  // The response is the user with its auth_token riding along; keep them apart
+  const { auth_token: token, ...user } = json;
+  return { user, token };
 }
 
-export function requestUserData(authToken: string) {
-  return (dispatch: AppDispatch) => {
-    if (__DEV__ && authToken.startsWith(DEV_FAKE_TOKEN_PREFIX)) {
-      const fakeUser = DEV_FAKE_USERS[authToken.slice(DEV_FAKE_TOKEN_PREFIX.length)];
-      if (fakeUser) {
-        dispatch(userDataSuccess(fakeUser));
-        return Promise.resolve();
-      }
-    }
-
-    // We are now fetching user data
-    dispatch(userDataRequest());
-
-    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/me/`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Token ${authToken}`,
-      },
-    })
-      .then((response) => response.json().then((json) => ({ json, response })))
-      .then(({ json, response }) => {
-        if (response.ok === false) {
-          return Promise.reject(json);
-        }
-        return json;
-      })
-      .then(
-        (data) => {
-          dispatch(userDataSuccess(data));
-        },
-        (data) => {
-          dispatch(userDataFailure(data || { non_field_errors: ['Kunne ikke hente brukerdata'] }));
-        },
-      );
-  };
-}
-
-// We use snake_case in order to fetch and display field errors from the API without any additional formatting
-export function requestRegisterUser({ first_name, last_name, email, phone_number, password }: UserRegisterFormValues) {
-  return (dispatch: AppDispatch) => {
-    dispatch(registerUserRequest());
-
-    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/user/register/`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        first_name,
-        last_name,
-        email,
-        phone_number,
-        password,
-      }),
-    })
-      .then((response) => response.json().then((json) => ({ json, response })))
-      .then(({ json, response }) => {
-        if (response.ok === false) {
-          return Promise.reject(json);
-        }
-        return json;
-      })
-      .then(
-        (data) => {
-          dispatch(registerUserSuccess(data));
-        },
-        (data) => {
-          dispatch(registerUserFailure(data || { non_field_errors: ['Kunne ikke registrere bruker, prøv igjen'] }));
-        },
-      );
-  };
-}
-
-export function requestDeleteUser(authToken: string) {
-  return (dispatch: AppDispatch) => {
-    dispatch(deleteUserRequest());
-
-    return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/me/delete/`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Token ${authToken}`,
-      },
-    }).then((response) => {
-      if (!response.ok) {
-        return response.json().then((json) => {
-          dispatch(deleteUserFailure(json || { non_field_errors: ['Kunne ikke slette bruker, prøv igjen'] }));
-        });
-      }
-      dispatch(deleteUserSuccess());
-      return {};
-    });
-  };
-}
-
-/** Create a stripe payment sheet. Note that this is not using redux */
-export async function requestStripePaymentSheet(authToken: string, membershipType: string) {
-  const body = JSON.stringify({
-    membership_type: membershipType,
+export async function deleteUser(authToken: string): Promise<void> {
+  const response = await fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/me/delete/`, {
+    method: 'DELETE',
+    headers: { ...JSON_HEADERS, Authorization: `Token ${authToken}` },
   });
-  const headers = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    Authorization: `Token ${authToken}`,
-  };
-  return fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/stripe/payment-sheet/`, {
+  if (!response.ok) {
+    const json = await response.json();
+    throw new ApiError(json ?? { non_field_errors: ['Kunne ikke slette bruker, prøv igjen'] }, response.status);
+  }
+}
+
+export async function fetchEvents(): Promise<EventType[]> {
+  const response = await fetchWithTimeout(`${process.env.EXPO_PUBLIC_EVENT_API_URL}?view=compact-app`);
+  const { events, error } = await response.json();
+  if (error || !events) {
+    throw new Error('Kunne ikke hente programmet');
+  }
+  return events;
+}
+
+/** Create a stripe payment sheet; rejects with a message for the failure toast. */
+export async function requestStripePaymentSheet(authToken: string, membershipType: string) {
+  const response = await fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/stripe/payment-sheet/`, {
     method: 'POST',
-    headers,
-    body,
-  })
-    .then((response) => response.json().then((json) => ({ json, response })))
-    .then(({ json, response }) => {
-      if (response.ok === false) {
-        return Promise.reject(json);
-      }
-      return json;
-    })
-    .then(
-      (data) => {
-        return data;
-      },
-      (data) => {
-        throw new Error(data?.detail || 'Kunne ikke belaste bankkortet, prøv igjen');
-      },
-    );
+    headers: { ...JSON_HEADERS, Authorization: `Token ${authToken}` },
+    body: JSON.stringify({ membership_type: membershipType }),
+  });
+  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(json?.detail || 'Kunne ikke belaste bankkortet, prøv igjen');
+  }
+  return json;
 }

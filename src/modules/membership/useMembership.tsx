@@ -1,44 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useCallback } from 'react';
 
-import { logout } from '@/actions';
-import { requestUserData } from '@/api';
-import { useAppDispatch, useAppSelector, usePrevious } from '@/hooks';
+import { useAuth } from '@/auth/AuthContext';
+import { useUser } from '@/queries/useUser';
 
 const useMembership = () => {
   const navigation = useNavigation();
-  const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
-  const isFetchingUserData = useAppSelector((store) => store.isFetchingUserData);
-  const userToken = useAppSelector((store) => store.userToken);
-  const prevUserToken = usePrevious(userToken);
+  const { isAuthenticated, signOut } = useAuth();
+  const { isPending, isRefetching, refetch } = useUser();
 
   const onLogoutPress = () => {
-    dispatch(logout());
+    signOut();
     navigation.navigate('UserStack', { screen: 'Membership' });
   };
   const onRegisterPress = () => navigation.navigate('UserStack', { screen: 'UserRegister' });
   const onLoginPress = () => navigation.navigate('UserStack', { screen: 'Login' });
   const onDeletePress = () => navigation.navigate('UserStack', { screen: 'UserDelete' });
-  const fetchUser = useCallback(() => {
-    dispatch(requestUserData(userToken || ''));
-  }, [dispatch, userToken]);
-
-  useEffect(() => {
-    if (userToken !== prevUserToken && userToken) {
-      fetchUser();
-    }
-  }, [userToken, prevUserToken, fetchUser]);
 
   return {
     isAuthenticated,
-    isFetchingUserData,
-    userToken,
+    isPending,
+    isRefetching,
     onLogoutPress,
     onRegisterPress,
     onDeletePress,
     onLoginPress,
-    fetchUser,
+    fetchUser: refetch,
   };
 };
 export default useMembership;

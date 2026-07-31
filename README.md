@@ -98,12 +98,8 @@ history, code and binary blobs related to React Native functionality filtered ou
   [Bugsink ≥ 2.0.14](https://www.bugsink.com/docs/sourcemaps/); verify the project slug in
   Bugsink matches `cnapp`
 - test in ios emulator? (`npm run ios`, requires macOS)
+- characters in the password input field are invisible
 - use [Expo Application Services](https://expo.dev/eas) to build and submit app to stores
-- replace redux (`redux` v5 + `redux-thunk`, hand-written actions and the deprecated
-  `createStore`): nearly everything in the store is server state (user data) plus one auth
-  token, so drop redux for [TanStack Query](https://tanstack.com/query/latest) for
-  fetching/caching, with the token in React context + AsyncStorage — replaces
-  `src/reducers.ts`, the fetch thunks in `src/api.ts` and the `isFetching*`/error flags
 - follow-ups from the [Expo SDK 54 upgrade](https://expo.dev/changelog/sdk-54):
   - try the [React Compiler](https://docs.expo.dev/guides/react-compiler/) (enabled by
     default in new SDK 54 projects, opt-in for existing ones via
@@ -118,10 +114,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   - try [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/), production-ready as of SDK 56:
     real SwiftUI / Jetpack Compose components that could back the homegrown ones in
     `src/components/` and finally retire `react-native-simple-radio-button`
-  - swap `@react-native-async-storage/async-storage` (used by `redux-persist` in
-    `src/reduxStore.ts`) for
-    [`expo-sqlite/localStorage`](https://docs.expo.dev/versions/latest/sdk/sqlite/#localstorage),
-    ideally folded into the redux replacement above
   - verify on iOS: the minimum target jumped to iOS 16.4 (from 15.1), dropping the iPhone 7, 6s
     and SE (1st gen). Building now requires Xcode 26.4 on macOS 13.4+
 - add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership

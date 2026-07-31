@@ -1,10 +1,10 @@
 import React from 'react';
 
 import Navigation from './Navigation';
-import { useLogoutUsersWithNoToken } from './hooks';
+import { useAppStateFocusManager } from './hooks';
 
 const AppInner = () => {
-  useLogoutUsersWithNoToken();
+  useAppStateFocusManager();
 
   return <Navigation />;
 };

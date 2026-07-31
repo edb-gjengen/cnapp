@@ -2,19 +2,14 @@ import { InMemoryCache } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import type { ReactElement } from 'react';
-import { Provider } from 'react-redux';
-import { applyMiddleware, legacy_createStore as createStore } from 'redux';
-import { thunk } from 'redux-thunk';
 
-import rootReducer from '@/reducers';
+import { AuthProvider } from '@/auth/AuthContext';
+import { queryKeys } from '@/queries/queryKeys';
 import type { UserType } from '@/types/data';
-
-type AppState = ReturnType<typeof rootReducer>;
-
-const initialState: AppState = rootReducer(undefined, { type: '@@TEST_INIT' });
 
 /** A member with an active membership, for screens that require a logged in user. */
 export const testUser: UserType = {
@@ -31,33 +26,43 @@ export const testUser: UserType = {
 };
 
 interface RenderWithProvidersOptions {
+  /** Auth token the app has stored; being set means the user is logged in. */
   initialToken?: string | null;
+  /** Already-fetched user data, as after a completed /api/me/ request. */
   initialUser?: UserType | null;
   apolloMocks?: readonly MockedResponse[];
 }
 
 /**
- * Renders a screen inside the providers it expects in the real app:
- * a fresh (non-persisted) Redux store, Apollo's MockedProvider and a
+ * Renders a screen inside the providers it expects in the real app: a fresh
+ * query client (no persister), AuthProvider, Apollo's MockedProvider and a
  * NavigationContainer.
  */
 export function renderWithProviders(
   ui: ReactElement,
   { initialToken = null, initialUser = null, apolloMocks = [] }: RenderWithProvidersOptions = {},
 ) {
-  const preloadedState: AppState = {
-    ...initialState,
-    userToken: initialToken,
-    isAuthenticated: !!initialToken,
-    user: initialUser,
-  };
-  const store = createStore(rootReducer, preloadedState, applyMiddleware(thunk));
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      // No retries, no GC timers holding Jest open, and no mount refetches
+      // (those would clobber a seeded initialUser with global fetch mock data)
+      queries: { retry: false, gcTime: Infinity, refetchOnMount: false },
+      mutations: { retry: false, gcTime: Infinity },
+    },
+  });
+  if (initialUser) {
+    queryClient.setQueryData(queryKeys.user, initialUser);
+  }
 
-  return render(
+  const result = render(
     <MockedProvider mocks={apolloMocks} cache={new InMemoryCache()}>
-      <Provider store={store}>
-        <NavigationContainer>{ui}</NavigationContainer>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider initialToken={initialToken}>
+          <NavigationContainer>{ui}</NavigationContainer>
+        </AuthProvider>
+      </QueryClientProvider>
     </MockedProvider>,
   );
+
+  return { queryClient, ...result };
 }

@@ -1,24 +1,16 @@
 import { useStripe } from '@stripe/stripe-react-native';
-import { useCallback, useEffect, useState } from 'react';
-import { Linking } from 'react-native';
-import type { TypedUseSelectorHook } from 'react-redux';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { focusManager } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { AppState, Linking } from 'react-native';
 
-import { logout } from './actions';
-import type { AppDispatch, AppStore, RootState } from './reduxStore';
-
-export function usePrevious<T>(value: T): T | undefined {
-  const [previous, setPrevious] = useState<T | undefined>(undefined);
-  const [current, setCurrent] = useState(value);
-
-  // Adjust state during render instead of tracking the previous render's value in a ref,
-  // see https://react.dev/reference/react/useState#storing-information-from-previous-renders
-  if (value !== current) {
-    setPrevious(current);
-    setCurrent(value);
-  }
-
-  return previous;
+/** Drives TanStack Query's refetch-on-focus from the app's foreground state. */
+export function useAppStateFocusManager() {
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (status) => {
+      focusManager.setFocused(status === 'active');
+    });
+    return () => subscription.remove();
+  }, []);
 }
 
 /** Handles deep links. Currently only used by stripe */
@@ -53,21 +45,3 @@ export const useDeepLinking = () => {
     return () => deepLinkListener.remove();
   }, [handleDeepLink]);
 };
-
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-export const useAppStore: () => AppStore = useStore;
-
-/** Logout authenticated users without token */
-export function useLogoutUsersWithNoToken() {
-  const user = useAppSelector((store) => store.user);
-  const userToken = useAppSelector((store) => store.userToken);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (user && !userToken) {
-      dispatch(logout());
-    }
-  });
-}

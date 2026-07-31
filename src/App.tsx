@@ -1,17 +1,18 @@
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import 'expo-dev-client';
 
+import { AuthProvider } from '@/auth/AuthContext';
+import { useDeepLinking } from '@/hooks';
+import { appQueryClient, persistOptions } from '@/queries/queryClient';
+
 import AppInner from './AppInner';
-import { useDeepLinking } from './hooks';
-import { store, persistor } from './reduxStore';
 
 // Configure notifications
 Notifications.setNotificationHandler({
@@ -33,8 +34,8 @@ export default function App() {
   return (
     <GestureHandlerRootView>
       <StatusBar style="light" />
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+      <PersistQueryClientProvider client={appQueryClient} persistOptions={persistOptions}>
+        <AuthProvider>
           <ApolloProvider client={apolloClient}>
             {/* FIXME: Read urlScheme and merchantIdentifier from .Config */}
             <StripeProvider
@@ -45,9 +46,8 @@ export default function App() {
               <AppInner />
             </StripeProvider>
           </ApolloProvider>
-        </PersistGate>
-      </Provider>
+        </AuthProvider>
+      </PersistQueryClientProvider>
     </GestureHandlerRootView>
   );
 }
-/** YOLO */

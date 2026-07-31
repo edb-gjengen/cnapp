@@ -254,10 +254,10 @@ const NotificationToggle = ({ user }: { user: UserType }) => {
 interface ProofProps {
   onLogoutPress: () => void;
   fetchUser: () => void;
-  isFetchingUserData: boolean;
+  isRefetching: boolean;
   onDeletePress: () => void;
 }
-const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: ProofProps) => {
+const Proof = ({ onLogoutPress, fetchUser, isRefetching, onDeletePress }: ProofProps) => {
   const confettiRef = useRef<ConfettiMethods>(null);
   const burstRef = useRef<PIConfettiMethods>(null);
   const confettiContainerRef = useRef<React.ComponentRef<typeof View>>(null);
@@ -317,7 +317,7 @@ const Proof = ({ onLogoutPress, fetchUser, isFetchingUserData, onDeletePress }: 
         onRainEnd={onRainEnd}
       />
       <View style={styles.container}>
-        <ScrollView refreshControl={<RefreshControl refreshing={isFetchingUserData} onRefresh={fetchUser} />}>
+        <ScrollView refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={fetchUser} />}>
           <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
             <MembershipName user={user} />
             <Logo user={user} />

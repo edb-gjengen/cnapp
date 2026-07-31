@@ -18,6 +18,11 @@ global.fetch = jest.fn(async () => ({
   json: async () => ({ events: [] }),
 }));
 
+// TanStack Query batches subscriber notifications on a setTimeout; deliver
+// them synchronously so query updates stay inside the act() that caused them
+const { notifyManager } = require('@tanstack/react-query');
+notifyManager.setScheduler((callback) => callback());
+
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );

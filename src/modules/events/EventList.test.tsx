@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
@@ -12,6 +13,17 @@ jest.mock('@/utils', () => ({
 }));
 
 const mockFetch = fetchWithTimeout as jest.Mock;
+
+// FlatList spreads cell rendering over 50 ms batch timers; with real timers
+// they fire outside act() at random, with fake timers waitFor advances them
+// act-wrapped and deterministically
+beforeEach(() => {
+  jest.useFakeTimers();
+});
+
+afterEach(() => {
+  jest.useRealTimers();
+});
 
 const event = {
   id: '1',
@@ -88,10 +100,13 @@ it('renders an error state when the API is unreachable', async () => {
   expect(await findByText('Kunne ikke hente programmet...')).toBeTruthy();
 });
 
-// stuck spinner bug, fix later
-it.failing('stops the refresh spinner and shows the error when refresh fails', async () => {
+it('stops the refresh spinner and shows the error when refresh fails', async () => {
   mockFetch.mockResolvedValueOnce({ json: async () => ({ events: [event] }) });
-  const { result } = renderHook(() => useEventList());
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: Infinity } } });
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+  const { result } = renderHook(() => useEventList(), { wrapper });
   await waitFor(() => expect(result.current.events).toHaveLength(1));
 
   mockFetch.mockRejectedValue(new Error('network down'));

@@ -1,49 +1,28 @@
-import { applyMiddleware, legacy_createStore as createStore } from 'redux';
-import { thunk } from 'redux-thunk';
-
-import {
-  requestDeleteUser,
-  requestLogin,
-  requestRegisterUser,
-  requestStripePaymentSheet,
-  requestUserData,
-} from '@/api';
-import rootReducer from '@/reducers';
-
-const createTestStore = () => createStore(rootReducer, undefined, applyMiddleware(thunk));
+import { deleteUser, fetchEvents, fetchUserData, login, registerUser, requestStripePaymentSheet } from '@/api';
+import { ApiError } from '@/errors';
 
 const fetchMock = global.fetch as jest.Mock;
 
-const mockResponseOnce = (json: unknown, ok = true) =>
-  fetchMock.mockResolvedValueOnce({ ok, status: ok ? 200 : 400, json: async () => json });
+const mockResponseOnce = (json: unknown, ok = true, status = ok ? 200 : 400) =>
+  fetchMock.mockResolvedValueOnce({ ok, status, json: async () => json });
 
 beforeEach(() => {
   fetchMock.mockClear();
 });
 
-describe('dev fake users (__DEV__ only)', () => {
-  it.each([
-    ['nonmember', false],
-    ['member', true],
-  ])('logs in "%s" with a fake user without hitting the network', async (username, isMember) => {
-    const store = createTestStore();
+const registerFormValues = {
+  first_name: 'Grisen',
+  last_name: 'Testersen',
+  email: 'grisen@example.test',
+  phone_number: '+4712345678',
+  password: 'hunter2',
+};
 
-    await store.dispatch(requestLogin(username as string, 'any-password'));
-    expect(store.getState().isAuthenticated).toBe(true);
-
-    await store.dispatch(requestUserData(store.getState().userToken ?? ''));
-    expect(store.getState().user?.is_member).toBe(isMember);
-
-    expect(global.fetch).not.toHaveBeenCalled();
-  });
-});
-
-describe('requestLogin', () => {
-  it('posts credentials and stores the token on success', async () => {
-    const store = createTestStore();
+describe('login', () => {
+  it('posts credentials and resolves with the token', async () => {
     mockResponseOnce({ token: 'token-123' });
 
-    await store.dispatch(requestLogin('grisen', 'hunter2'));
+    await expect(login('grisen', 'hunter2')).resolves.toEqual({ token: 'token-123' });
 
     expect(fetchMock).toHaveBeenCalledWith(
       'https://dusken.example.test/auth/obtain-token/',
@@ -52,48 +31,49 @@ describe('requestLogin', () => {
         body: JSON.stringify({ username: 'grisen', password: 'hunter2' }),
       }),
     );
-    expect(store.getState()).toMatchObject({
-      isAuthenticated: true,
-      isLoggingIn: false,
-      userToken: 'token-123',
-      loginError: null,
-    });
   });
 
-  it('stores the API error body on a rejected login', async () => {
-    jest.spyOn(console, 'log').mockImplementation(() => {});
-    const store = createTestStore();
+  it('throws an ApiError carrying the DRF body on a rejected login', async () => {
     const apiError = { non_field_errors: ['Kan ikke logge inn med disse opplysningene'] };
     mockResponseOnce(apiError, false);
 
-    await store.dispatch(requestLogin('grisen', 'wrong-password'));
+    const error = await login('grisen', 'wrong-password').catch((e) => e);
 
-    expect(store.getState()).toMatchObject({
-      isAuthenticated: false,
-      isLoggingIn: false,
-      userToken: null,
-      loginError: apiError,
-    });
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error).toMatchObject({ fields: apiError, status: 400 });
   });
 
-  it('falls back to a generic error message when the API returns an empty body', async () => {
-    jest.spyOn(console, 'log').mockImplementation(() => {});
-    const store = createTestStore();
+  it('falls back to the generic Norwegian body when the API returns an empty body', async () => {
     mockResponseOnce(null, false);
 
-    await store.dispatch(requestLogin('grisen', 'hunter2'));
+    const error = await login('grisen', 'hunter2').catch((e) => e);
 
-    expect(store.getState().loginError).toEqual({ non_field_errors: ['Kunne ikke logge inn, prøv igjen'] });
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error.fields).toEqual({ non_field_errors: ['Kunne ikke logge inn, prøv igjen'] });
+  });
+
+  it('short-circuits dev fake users without hitting the network', async () => {
+    await expect(login('member', 'any-password')).resolves.toEqual({ token: 'dev-fake-token:member' });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects with the raw error, not an ApiError, on network failure', async () => {
+    fetchMock.mockRejectedValueOnce(new Error('network down'));
+
+    const error = await login('grisen', 'hunter2').catch((e) => e);
+
+    expect(error).toBeInstanceOf(Error);
+    expect(error).not.toBeInstanceOf(ApiError);
   });
 });
 
-describe('requestUserData', () => {
-  it('fetches /api/me/ with the auth token and stores the user', async () => {
-    const store = createTestStore();
+describe('fetchUserData', () => {
+  it('fetches /api/me/ with the auth token', async () => {
     const user = { username: 'grisen', email: 'grisen@example.test', is_member: true };
     mockResponseOnce(user);
 
-    await store.dispatch(requestUserData('token-123'));
+    await expect(fetchUserData('token-123')).resolves.toEqual(user);
 
     expect(fetchMock).toHaveBeenCalledWith(
       'https://dusken.example.test/api/me/',
@@ -102,72 +82,56 @@ describe('requestUserData', () => {
         headers: expect.objectContaining({ Authorization: 'Token token-123' }),
       }),
     );
-    expect(store.getState()).toMatchObject({ isFetchingUserData: false, user });
   });
 
-  it('stores the API error body when fetching user data fails', async () => {
-    const store = createTestStore();
-    const apiError = { detail: 'Ugyldig token.' };
-    mockResponseOnce(apiError, false);
+  it('resolves dev fake tokens without hitting the network', async () => {
+    const user = await fetchUserData('dev-fake-token:nonmember');
 
-    await store.dispatch(requestUserData('expired-token'));
+    expect(user.is_member).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 
-    expect(store.getState()).toMatchObject({ isFetchingUserData: false, user: null, userError: apiError });
+  it('throws an ApiError with the status, so a 401 is recognizable', async () => {
+    mockResponseOnce({ detail: 'Ugyldig token.' }, false, 401);
+
+    const error = await fetchUserData('revoked-token').catch((e) => e);
+
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error).toMatchObject({ status: 401, fields: { detail: 'Ugyldig token.' } });
   });
 });
 
-describe('requestRegisterUser', () => {
-  const formValues = {
-    first_name: 'Grisen',
-    last_name: 'Testersen',
-    email: 'grisen@example.test',
-    phone_number: '+4712345678',
-    password: 'hunter2',
-  };
-
-  it('authenticates with the returned auth_token and stores the user without it', async () => {
-    const store = createTestStore();
+describe('registerUser', () => {
+  it('splits the auth_token from the returned user', async () => {
     mockResponseOnce({ username: 'grisen', email: 'grisen@example.test', auth_token: 'token-456' });
 
-    await store.dispatch(requestRegisterUser(formValues));
+    await expect(registerUser(registerFormValues)).resolves.toEqual({
+      user: { username: 'grisen', email: 'grisen@example.test' },
+      token: 'token-456',
+    });
 
     expect(fetchMock).toHaveBeenCalledWith(
       'https://dusken.example.test/api/user/register/',
-      expect.objectContaining({ method: 'POST', body: JSON.stringify(formValues) }),
+      expect.objectContaining({ method: 'POST', body: JSON.stringify(registerFormValues) }),
     );
-    expect(store.getState()).toMatchObject({
-      isRegisteringUser: false,
-      isAuthenticated: true,
-      userToken: 'token-456',
-      user: { username: 'grisen', email: 'grisen@example.test' },
-    });
-    expect(store.getState().user).not.toHaveProperty('auth_token');
   });
 
-  it('stores field errors from the API when registration fails', async () => {
-    const store = createTestStore();
+  it('throws an ApiError carrying field errors', async () => {
     const apiError = { email: ['Denne e-postadressen er allerede i bruk'] };
     mockResponseOnce(apiError, false);
 
-    await store.dispatch(requestRegisterUser(formValues));
+    const error = await registerUser(registerFormValues).catch((e) => e);
 
-    expect(store.getState()).toMatchObject({
-      isRegisteringUser: false,
-      isAuthenticated: false,
-      registerError: apiError,
-    });
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error.fields).toEqual(apiError);
   });
 });
 
-describe('requestDeleteUser', () => {
-  it('resets the store to its initial state on success', async () => {
-    const store = createTestStore();
-    // Authenticate first (via the fake-user shortcut) so the reset is observable
-    await store.dispatch(requestLogin('member', 'any-password'));
-    expect(store.getState().isAuthenticated).toBe(true);
+describe('deleteUser', () => {
+  it('sends DELETE with the auth token and resolves on success', async () => {
+    fetchMock.mockResolvedValueOnce({ ok: true, status: 204 });
 
-    mockResponseOnce({});
-    await store.dispatch(requestDeleteUser('token-123'));
+    await expect(deleteUser('token-123')).resolves.toBeUndefined();
 
     expect(fetchMock).toHaveBeenCalledWith(
       'https://dusken.example.test/api/me/delete/',
@@ -176,17 +140,35 @@ describe('requestDeleteUser', () => {
         headers: expect.objectContaining({ Authorization: 'Token token-123' }),
       }),
     );
-    expect(store.getState()).toMatchObject({ isAuthenticated: false, userToken: null, user: null });
   });
 
-  it('stores the API error body when deletion fails', async () => {
-    const store = createTestStore();
-    const apiError = { detail: 'Kan ikke slette bruker med aktivt medlemskap' };
-    mockResponseOnce(apiError, false);
+  it('throws an ApiError carrying the detail body on failure', async () => {
+    mockResponseOnce({ detail: 'Kan ikke slette bruker med aktivt medlemskap' }, false);
 
-    await store.dispatch(requestDeleteUser('token-123'));
+    const error = await deleteUser('token-123').catch((e) => e);
 
-    expect(store.getState()).toMatchObject({ isDeletingUser: false, deleteUserError: apiError });
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error.fields).toEqual({ detail: 'Kan ikke slette bruker med aktivt medlemskap' });
+  });
+});
+
+describe('fetchEvents', () => {
+  it('resolves the events list', async () => {
+    const events = [{ id: '1', title: 'Lørdagsquiz' }];
+    mockResponseOnce({ events });
+
+    await expect(fetchEvents()).resolves.toEqual(events);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://events.example.test/api/v1/events?view=compact-app',
+      expect.anything(),
+    );
+  });
+
+  it('throws when the API reports an error', async () => {
+    mockResponseOnce({ error: 'oops' });
+
+    await expect(fetchEvents()).rejects.toThrow('Kunne ikke hente programmet');
   });
 });
 

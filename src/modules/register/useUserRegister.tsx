@@ -1,28 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { requestRegisterUser } from '@/api';
-import { useAppDispatch, useAppSelector, usePrevious } from '@/hooks';
+import { ApiError } from '@/errors';
+import { useRegisterUserMutation } from '@/queries/useRegisterUserMutation';
+import type { UserRegisterFormValues } from '@/types/forms';
 import { ToastProps } from '@/types/toast';
 
-export interface UserRegisterFormValues {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
-  password: string;
-}
+export type { UserRegisterFormValues };
 
 const useUserRegister = () => {
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
-  const isRegisteringUser = useAppSelector((store) => store.isRegisteringUser);
-  const registerError = useAppSelector((store) => store.registerError);
+  const { mutate: register, isPending, error } = useRegisterUserMutation();
   const [toast, setToast] = useState<ToastProps | null>(null);
-
-  const isAuthenticatedPrev = usePrevious(isAuthenticated);
 
   const {
     control,
@@ -32,6 +22,7 @@ const useUserRegister = () => {
     setError,
     clearErrors,
   } = useForm<UserRegisterFormValues>();
+
   const onSubmit = handleSubmit((values) => {
     clearErrors();
     if (!isValid) {
@@ -44,43 +35,28 @@ const useUserRegister = () => {
     }
     setToast(null);
 
-    dispatch(requestRegisterUser(values));
-
-    // Display error messages from API on form fields
-    if (!registerError) return;
-    Object.keys(registerError).forEach((key) => {
-      const errorMessages = registerError[key];
-      if (!errorMessages || !Array.isArray(errorMessages)) {
-        return;
-      }
-      setError(key as keyof UserRegisterFormValues, { type: 'server', message: errorMessages.join('\n') });
+    register(values, {
+      onSuccess: () => navigation.goBack(),
+      onError: (registerError) => {
+        // Map DRF field errors onto the matching form fields
+        if (!(registerError instanceof ApiError)) {
+          return;
+        }
+        Object.entries(registerError.fields).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            setError(field as keyof UserRegisterFormValues, { type: 'server', message: messages.join('\n') });
+          }
+        });
+      },
     });
   });
 
-  useEffect(() => {
-    if (isAuthenticatedPrev !== isAuthenticated && isAuthenticated) {
-      navigation.goBack();
-    }
-  }, [isAuthenticatedPrev, isAuthenticated, navigation]);
-
-  useEffect(() => {
-    if (!isSubmitted || !registerError) return;
-    clearErrors();
-    Object.keys(registerError).forEach((key) => {
-      const errorMessages = registerError[key];
-      if (!errorMessages || !Array.isArray(errorMessages)) {
-        return;
-      }
-      setError(key as keyof UserRegisterFormValues, { type: 'server', message: errorMessages.join('\n') });
-    });
-  }, [registerError, isSubmitted, clearErrors, setError]);
-
   return {
-    isRegisteringUser,
+    isRegisteringUser: isPending,
     onSubmit,
     isValid,
     isSubmitted,
-    registerError,
+    registerError: error,
     control,
     errors,
     setFocus,

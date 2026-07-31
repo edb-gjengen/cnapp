@@ -3,9 +3,9 @@ import { useStripe } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
 import { useEffect, useState } from 'react';
 
-import { requestStripePaymentSheet } from '@/api';
-import { useAppSelector } from '@/hooks';
 import { useNotifications } from '@/hooks/useNotifications';
+import { usePaymentSheetMutation } from '@/queries/usePaymentSheetMutation';
+import { useUser } from '@/queries/useUser';
 import { ToastProps } from '@/types/toast';
 
 const PROOF_QUERY = gql`
@@ -22,10 +22,10 @@ interface UseProofProps {
 }
 
 const useProof = ({ fetchUser }: UseProofProps) => {
-  const user = useAppSelector((state) => state.user);
-  const userToken = useAppSelector((state) => state.userToken);
+  const { user } = useUser();
   const { data, loading, error, refetch } = useQuery(PROOF_QUERY);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const { mutateAsync: createPaymentSheet } = usePaymentSheetMutation();
   const { scheduleMembershipExpiryNotification, hasPermission } = useNotifications();
   const [paymentLoading, setPaymentLoading] = useState(false);
   // Matches the preselected option in PurchaseButton's radio list
@@ -56,10 +56,7 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   };
 
   const initializePaymentSheet = async () => {
-    const { paymentIntent, ephemeralKey, customer } = await requestStripePaymentSheet(
-      userToken as string,
-      membershipTypeSlug,
-    );
+    const { paymentIntent, ephemeralKey, customer } = await createPaymentSheet(membershipTypeSlug);
 
     const { error } = await initPaymentSheet({
       merchantDisplayName: 'Det Norske Studentersamfund',

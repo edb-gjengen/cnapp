@@ -10,7 +10,8 @@ import useMembership from './useMembership';
 
 const Membership = () => {
   const {
-    isFetchingUserData,
+    isPending,
+    isRefetching,
     onRegisterPress,
     onLoginPress,
     onLogoutPress,
@@ -19,21 +20,22 @@ const Membership = () => {
     fetchUser,
   } = useMembership();
 
-  if (isFetchingUserData) {
-    return (
-      <View style={theme.card}>
-        <ActivityIndicator color={theme.colors.neufOrange} />
-      </View>
-    );
-  }
-
   if (isAuthenticated) {
+    // Only the very first fetch blocks, refreshes keep the proof mounted
+    if (isPending) {
+      return (
+        <View style={theme.card}>
+          <ActivityIndicator color={theme.colors.neufOrange} />
+        </View>
+      );
+    }
+
     return (
       <>
         <Proof
           onLogoutPress={onLogoutPress}
           fetchUser={fetchUser}
-          isFetchingUserData={isFetchingUserData}
+          isRefetching={isRefetching}
           onDeletePress={onDeletePress}
         />
         <PrivacyButton />

@@ -63,7 +63,7 @@ const renderProof = ({
   mocks = apolloMocks,
 }: { user?: UserType; fetchUser?: () => void; mocks?: readonly MockedResponse[] } = {}) =>
   renderWithProviders(
-    <Proof onLogoutPress={jest.fn()} fetchUser={fetchUser} isFetchingUserData={false} onDeletePress={jest.fn()} />,
+    <Proof onLogoutPress={jest.fn()} fetchUser={fetchUser} isRefetching={false} onDeletePress={jest.fn()} />,
     {
       initialToken: 'test-token',
       initialUser: user,
@@ -133,10 +133,10 @@ it('purchases the preselected membership through the stripe payment sheet', asyn
 
 it('purchases the selected membership type, not the default', async () => {
   mockPaymentSheetResponse();
-  const { findByText, getByText } = renderProof();
+  const { findByText } = renderProof();
 
   fireEvent.press(await findByText('Student'));
-  fireEvent.press(getByText('Kjøp medlemskap (150 NOK)'));
+  fireEvent.press(await findByText('Kjøp medlemskap (150 NOK)'));
 
   expect(await findByText('Your order is confirmed!')).toBeTruthy();
   expect(fetchMock).toHaveBeenCalledWith(

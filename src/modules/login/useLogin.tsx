@@ -1,9 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { requestLogin } from '@/api';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useLoginMutation } from '@/queries/useLoginMutation';
 
 interface LoginFormValues {
   email: string;
@@ -12,12 +10,7 @@ interface LoginFormValues {
 
 const useLogin = () => {
   const navigation = useNavigation();
-
-  const dispatch = useAppDispatch();
-
-  const isAuthenticated = useAppSelector((store) => store.isAuthenticated);
-  const isLoggingIn = useAppSelector((store) => store.isLoggingIn);
-  const loginError = useAppSelector((store) => store.loginError);
+  const { mutate: login, isPending, error } = useLoginMutation();
 
   const {
     control,
@@ -27,17 +20,11 @@ const useLogin = () => {
   } = useForm<LoginFormValues>();
 
   const onSubmit = handleSubmit(({ email, password }) => {
-    dispatch(requestLogin(email, password));
+    // goBack works since Login is always pushed from Membership
+    login({ username: email, password }, { onSuccess: () => navigation.goBack() });
   });
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      // navigation.goBack onLogin works since LoginScreen is allways navigated to from MembershipScreen
-      navigation.goBack();
-    }
-  }, [isAuthenticated, navigation]);
-
-  return { onSubmit, isLoggingIn, isSubmitted, setFocus, control, errors: { ...errors }, loginError };
+  return { onSubmit, isLoggingIn: isPending, isSubmitted, setFocus, control, errors: { ...errors }, loginError: error };
 };
 
 export default useLogin;

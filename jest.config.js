@@ -11,7 +11,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     // jest-expo's default list, extended with untranspiled libraries this app uses
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|react-native-ui-lib|uilib-native|react-redux))',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|react-native-ui-lib|uilib-native))',
     '/node_modules/react-native-reanimated/plugin/',
   ],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/types/**', '!src/testUtils.tsx'],
