@@ -1,6 +1,8 @@
 import { fireEvent, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
+import * as api from '@/api';
+import { ApiError } from '@/errors';
 import UserDelete from '@/modules/membership/UserDelete';
 import { renderWithProviders, testUser } from '@/testUtils';
 
@@ -9,8 +11,6 @@ jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useNavigation: () => ({ navigate: mockNavigate, goBack: jest.fn() }),
 }));
-
-const fetchMock = global.fetch as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -34,7 +34,7 @@ it('renders nothing and navigates back to Membership when not logged in', () => 
 });
 
 it('deletes the account and returns to Membership once the username is typed to confirm', async () => {
-  fetchMock.mockResolvedValueOnce({ ok: true, status: 204, json: async () => ({}) });
+  const deleteUser = jest.spyOn(api, 'deleteUser').mockResolvedValueOnce(undefined);
   const { getByText, getByDisplayValue } = renderWithProviders(<UserDelete />, {
     initialToken: 'test-token',
     initialUser: testUser,
@@ -44,21 +44,13 @@ it('deletes the account and returns to Membership once the username is typed to 
   fireEvent.press(getByText('Jeg forstår, slett kontoen min'));
 
   await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('UserStack', { screen: 'Membership' }));
-  expect(fetchMock).toHaveBeenCalledWith(
-    'https://dusken.example.test/api/me/delete/',
-    expect.objectContaining({
-      method: 'DELETE',
-      headers: expect.objectContaining({ Authorization: 'Token test-token' }),
-    }),
-  );
+  expect(deleteUser).toHaveBeenCalledWith('test-token');
 });
 
 it('shows the server error when deletion fails', async () => {
-  fetchMock.mockResolvedValueOnce({
-    ok: false,
-    status: 400,
-    json: async () => ({ detail: 'Kunne ikke slette kontoen akkurat nå' }),
-  });
+  jest
+    .spyOn(api, 'deleteUser')
+    .mockRejectedValueOnce(new ApiError({ detail: 'Kunne ikke slette kontoen akkurat nå' }, 400));
   const { getByText, getByDisplayValue, findByText } = renderWithProviders(<UserDelete />, {
     initialToken: 'test-token',
     initialUser: testUser,

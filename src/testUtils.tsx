@@ -22,27 +22,21 @@ export const testUser: UserType = {
   },
 };
 
-/** The purchase options offered in the app, as served by /api/graphql/. */
+/** The purchase options offered in the app. */
 export const testMembershipTypes: MembershipTypeOption[] = [
   { slug: 'student', price: 15000 },
   { slug: 'regular', price: 30000 },
   { slug: 'support', price: 50000 },
 ];
 
-/** Queue a successful /api/graphql/ membership types response on the fetch mock. */
-export function mockMembershipTypesOnce(membershipTypes: MembershipTypeOption[] = testMembershipTypes) {
-  (global.fetch as jest.Mock).mockResolvedValueOnce({
-    ok: true,
-    status: 200,
-    json: async () => ({ data: { membershipTypes } }),
-  });
-}
-
 interface RenderWithProvidersOptions {
   /** Auth token the app has stored; being set means the user is logged in. */
   initialToken?: string | null;
   /** Already-fetched user data, as after a completed /api/me/ request. */
   initialUser?: UserType | null;
+  /** Membership purchase options already in the cache; null leaves the query
+   * empty for tests that exercise its loading and error states. */
+  initialMembershipTypes?: MembershipTypeOption[] | null;
 }
 
 /**
@@ -51,7 +45,11 @@ interface RenderWithProvidersOptions {
  */
 export function renderWithProviders(
   ui: ReactElement,
-  { initialToken = null, initialUser = null }: RenderWithProvidersOptions = {},
+  {
+    initialToken = null,
+    initialUser = null,
+    initialMembershipTypes = testMembershipTypes,
+  }: RenderWithProvidersOptions = {},
 ) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -63,6 +61,9 @@ export function renderWithProviders(
   });
   if (initialUser) {
     queryClient.setQueryData(queryKeys.user, initialUser);
+  }
+  if (initialMembershipTypes) {
+    queryClient.setQueryData(queryKeys.membershipTypes, initialMembershipTypes);
   }
 
   const result = render(
