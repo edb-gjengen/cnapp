@@ -15,4 +15,6 @@ module.exports = {
     '/node_modules/react-native-reanimated/plugin/',
   ],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.test.{ts,tsx}', '!src/types/**', '!src/testUtils.tsx'],
+  // A suite's first test must do Babel transforms if not cached (~9s with --coverage)
+  testTimeout: 20000,
 };
