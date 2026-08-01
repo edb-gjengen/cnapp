@@ -1,5 +1,5 @@
 import { ApiError } from '@/errors';
-import type { EventType, UserType } from '@/types/data';
+import type { EventType, MembershipTypeOption, UserType } from '@/types/data';
 import type { UserRegisterFormValues } from '@/types/forms';
 import { fetchWithTimeout } from '@/utils';
 
@@ -113,6 +113,20 @@ export async function fetchEvents(): Promise<EventType[]> {
     throw new Error('Kunne ikke hente programmet');
   }
   return events;
+}
+
+export async function fetchMembershipTypes(): Promise<MembershipTypeOption[]> {
+  const response = await fetchWithTimeout(`${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ query: '{ membershipTypes { slug price } }' }),
+  });
+  const json = await response.json();
+  const membershipTypes = response.ok ? json?.data?.membershipTypes : null;
+  if (!membershipTypes) {
+    throw new Error('Kunne ikke hente priser');
+  }
+  return membershipTypes;
 }
 
 /** Create a stripe payment sheet; rejects with a message for the failure toast. */

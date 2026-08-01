@@ -1,11 +1,9 @@
-import { gql } from '@apollo/client';
-import type { MockedResponse } from '@apollo/client/testing';
 import { fireEvent, waitFor } from '@testing-library/react-native';
 import * as Notifications from 'expo-notifications';
 import React from 'react';
 
 import Proof from '@/modules/membership/Proof';
-import { renderWithProviders, testUser } from '@/testUtils';
+import { mockMembershipTypesOnce, renderWithProviders, testUser } from '@/testUtils';
 import type { UserType } from '@/types/data';
 
 // The setup-wide stripe mock resolves initPaymentSheet/presentPaymentSheet
@@ -24,31 +22,6 @@ const mockPaymentSheetResponse = () =>
     json: async () => ({ paymentIntent: 'pi_secret', ephemeralKey: 'ek_secret', customer: 'cus_123' }),
   });
 
-// Must match PROOF_QUERY in useProof.tsx
-const PROOF_QUERY = gql`
-  {
-    membershipTypes {
-      slug
-      price
-    }
-  }
-`;
-
-const apolloMocks = [
-  {
-    request: { query: PROOF_QUERY },
-    result: {
-      data: {
-        membershipTypes: [
-          { __typename: 'MembershipType', slug: 'student', price: 15000 },
-          { __typename: 'MembershipType', slug: 'regular', price: 30000 },
-          { __typename: 'MembershipType', slug: 'support', price: 50000 },
-        ],
-      },
-    },
-  },
-];
-
 const nonMember: UserType = { ...testUser, is_member: false, last_membership: null };
 
 const expiredMember: UserType = {
@@ -57,19 +30,18 @@ const expiredMember: UserType = {
   last_membership: { membership_type: 'standard', end_date: '2020-01-01' },
 };
 
-const renderProof = ({
-  user = nonMember,
-  fetchUser = jest.fn(),
-  mocks = apolloMocks,
-}: { user?: UserType; fetchUser?: () => void; mocks?: readonly MockedResponse[] } = {}) =>
-  renderWithProviders(
+// The membership type query fires on mount, so its response must be queued
+// before render; later mockResolvedValueOnce calls queue up behind it.
+const renderProof = ({ user = nonMember, fetchUser = jest.fn() }: { user?: UserType; fetchUser?: () => void } = {}) => {
+  mockMembershipTypesOnce();
+  return renderWithProviders(
     <Proof onLogoutPress={jest.fn()} fetchUser={fetchUser} isRefetching={false} onDeletePress={jest.fn()} />,
     {
       initialToken: 'test-token',
       initialUser: user,
-      apolloMocks: mocks,
     },
   );
+};
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -87,9 +59,8 @@ it('disables the purchase button without showing a price while membership types 
 });
 
 it('shows an error with retry instead of a price when membership types fail to load', async () => {
-  const { findByText, getByText, getByRole } = renderProof({
-    mocks: [{ request: { query: PROOF_QUERY }, error: new Error('network down') }, ...apolloMocks],
-  });
+  fetchMock.mockRejectedValueOnce(new Error('network down'));
+  const { findByText, getByText, getByRole } = renderProof();
 
   expect(await findByText('Kunne ikke hente priser')).toBeTruthy();
   expect(getByRole('button', { name: 'Kjøp medlemskap' })).toBeDisabled();
@@ -101,8 +72,8 @@ it('shows an error with retry instead of a price when membership types fail to l
 });
 
 it('purchases the preselected membership through the stripe payment sheet', async () => {
-  mockPaymentSheetResponse();
   const { findByText } = renderProof();
+  mockPaymentSheetResponse();
 
   // 'Ordinær' (slug: regular) is preselected; the button enables once the
   // membership type query has resolved and its price is shown
@@ -132,8 +103,8 @@ it('purchases the preselected membership through the stripe payment sheet', asyn
 });
 
 it('purchases the selected membership type, not the default', async () => {
-  mockPaymentSheetResponse();
   const { findByText } = renderProof();
+  mockPaymentSheetResponse();
 
   fireEvent.press(await findByText('Student'));
   fireEvent.press(await findByText('Kjøp medlemskap (150 NOK)'));
@@ -146,11 +117,11 @@ it('purchases the selected membership type, not the default', async () => {
 });
 
 it('shows the stripe error when the payment sheet is not completed', async () => {
-  mockPaymentSheetResponse();
   presentPaymentSheet.mockResolvedValueOnce({
     error: { code: 'Canceled', message: 'The payment flow has been canceled' },
   });
   const { findByText, queryByText } = renderProof();
+  mockPaymentSheetResponse();
 
   fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 
@@ -160,12 +131,12 @@ it('shows the stripe error when the payment sheet is not completed', async () =>
 
 it('shows an error and does not present the sheet when the backend rejects the purchase', async () => {
   jest.spyOn(console, 'error').mockImplementation(() => {});
+  const { findByText, getByRole } = renderProof();
   fetchMock.mockResolvedValueOnce({
     ok: false,
     status: 400,
     json: async () => ({ detail: 'Ugyldig medlemskapstype' }),
   });
-  const { findByText, getByRole } = renderProof();
 
   fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 
@@ -178,9 +149,9 @@ it('shows an error and does not present the sheet when the backend rejects the p
 
 it('shows an error and does not present the sheet when stripe fails to initialise it', async () => {
   jest.spyOn(console, 'error').mockImplementation(() => {});
-  mockPaymentSheetResponse();
   initPaymentSheet.mockResolvedValueOnce({ error: { code: 'Failed', message: 'Invalid client secret' } });
   const { findByText } = renderProof();
+  mockPaymentSheetResponse();
 
   fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 

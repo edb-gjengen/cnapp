@@ -1,4 +1,3 @@
-import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import Constants from 'expo-constants';
@@ -24,11 +23,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const apolloClient = new ApolloClient({
-  link: new HttpLink({ uri: `${process.env.EXPO_PUBLIC_DUSKEN_API_URL}/api/graphql/` }),
-  cache: new InMemoryCache(),
-});
-
 export default function App() {
   useDeepLinking();
   return (
@@ -36,16 +30,14 @@ export default function App() {
       <StatusBar style="light" />
       <PersistQueryClientProvider client={appQueryClient} persistOptions={persistOptions}>
         <AuthProvider>
-          <ApolloProvider client={apolloClient}>
-            {/* FIXME: Read urlScheme and merchantIdentifier from .Config */}
-            <StripeProvider
-              publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''}
-              urlScheme={Constants.expoConfig?.scheme as string}
-              merchantIdentifier="merchant.no.neuf.chateau" // https://developer.apple.com/account/resources/identifiers/list/merchant
-            >
-              <AppInner />
-            </StripeProvider>
-          </ApolloProvider>
+          {/* FIXME: Read urlScheme and merchantIdentifier from .Config */}
+          <StripeProvider
+            publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''}
+            urlScheme={Constants.expoConfig?.scheme as string}
+            merchantIdentifier="merchant.no.neuf.chateau" // https://developer.apple.com/account/resources/identifiers/list/merchant
+          >
+            <AppInner />
+          </StripeProvider>
         </AuthProvider>
       </PersistQueryClientProvider>
     </GestureHandlerRootView>

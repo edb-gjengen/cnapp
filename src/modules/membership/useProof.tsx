@@ -1,21 +1,12 @@
-import { gql, useQuery } from '@apollo/client';
 import { useStripe } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
 import { useEffect, useState } from 'react';
 
 import { useNotifications } from '@/hooks/useNotifications';
+import { useMembershipTypes } from '@/queries/useMembershipTypes';
 import { usePaymentSheetMutation } from '@/queries/usePaymentSheetMutation';
 import { useUser } from '@/queries/useUser';
 import { ToastProps } from '@/types/toast';
-
-const PROOF_QUERY = gql`
-  {
-    membershipTypes {
-      slug
-      price
-    }
-  }
-`;
 
 interface UseProofProps {
   fetchUser: () => void;
@@ -23,7 +14,7 @@ interface UseProofProps {
 
 const useProof = ({ fetchUser }: UseProofProps) => {
   const { user } = useUser();
-  const { data, loading, error, refetch } = useQuery(PROOF_QUERY);
+  const { data: membershipTypes, isPending, isError, refetch } = useMembershipTypes();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { mutateAsync: createPaymentSheet } = usePaymentSheetMutation();
   const { scheduleMembershipExpiryNotification, hasPermission } = useNotifications();
@@ -35,9 +26,7 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   // null until the query has delivered a price for the selected type; the
   // purchase button stays disabled rather than showing a guessed amount
   const membershipPrice =
-    data?.membershipTypes?.find(
-      (membershipTypeOption: { slug: string; price: number }) => membershipTypeOption.slug === membershipTypeSlug,
-    )?.price ?? null;
+    membershipTypes?.find((membershipTypeOption) => membershipTypeOption.slug === membershipTypeSlug)?.price ?? null;
 
   const openPaymentSheet = async () => {
     setPaymentLoading(true);
@@ -92,9 +81,9 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   }, [membershipType, membershipEndDate, fetchUser, hasPermission, scheduleMembershipExpiryNotification]);
 
   return {
-    isLoadingMembershipType: loading,
+    isLoadingMembershipType: isPending,
     membershipPrice: membershipPrice != null ? membershipPrice / 100 : null,
-    membershipTypesError: !!error,
+    membershipTypesError: isError,
     refetchMembershipTypes: refetch,
     onPurchasePress: openPaymentSheet,
     paymentLoading,

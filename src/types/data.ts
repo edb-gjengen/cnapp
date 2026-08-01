@@ -27,6 +27,12 @@ export interface MembershipType {
   end_date: string;
 }
 
+/** A purchasable membership type; price is in øre. */
+export interface MembershipTypeOption {
+  slug: string;
+  price: number;
+}
+
 export interface UserType {
   first_name: string;
   last_name: string;

@@ -1,10 +1,9 @@
-import { gql } from '@apollo/client';
 import { fireEvent } from '@testing-library/react-native';
 import React from 'react';
 import { RefreshControl } from 'react-native';
 
 import Membership from '@/modules/membership/Membership';
-import { renderWithProviders, testUser } from '@/testUtils';
+import { mockMembershipTypesOnce, renderWithProviders, testUser } from '@/testUtils';
 import type { UserType } from '@/types/data';
 
 const mockNavigate = jest.fn();
@@ -12,25 +11,6 @@ jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useNavigation: () => ({ navigate: mockNavigate }),
 }));
-
-// Must match PROOF_QUERY in useProof.tsx
-const PROOF_QUERY = gql`
-  {
-    membershipTypes {
-      slug
-      price
-    }
-  }
-`;
-
-const apolloMocks = [
-  {
-    request: { query: PROOF_QUERY },
-    result: {
-      data: { membershipTypes: [{ __typename: 'MembershipType', slug: 'standard', price: 25000 }] },
-    },
-  },
-];
 
 it('shows the membership pitch when logged out', async () => {
   const { findByText } = renderWithProviders(<Membership />);
@@ -42,23 +22,10 @@ it('shows the membership pitch when logged out', async () => {
 it('lets a logged in non-member pick a membership type and shows its price', async () => {
   const nonMember: UserType = { ...testUser, is_member: false, last_membership: null };
 
+  mockMembershipTypesOnce();
   const { findByText, getByText } = renderWithProviders(<Membership />, {
     initialToken: 'test-token',
     initialUser: nonMember,
-    apolloMocks: [
-      {
-        request: { query: PROOF_QUERY },
-        result: {
-          data: {
-            membershipTypes: [
-              { __typename: 'MembershipType', slug: 'student', price: 15000 },
-              { __typename: 'MembershipType', slug: 'regular', price: 30000 },
-              { __typename: 'MembershipType', slug: 'support', price: 50000 },
-            ],
-          },
-        },
-      },
-    ],
   });
 
   // All three membership types are offered
@@ -79,10 +46,10 @@ it('lets a logged in non-member pick a membership type and shows its price', asy
 });
 
 it('shows the membership proof when logged in', async () => {
+  mockMembershipTypesOnce();
   const { findByText } = renderWithProviders(<Membership />, {
     initialToken: 'test-token',
     initialUser: testUser,
-    apolloMocks,
   });
 
   expect(await findByText('MEDLEM')).toBeTruthy();
@@ -90,15 +57,16 @@ it('shows the membership proof when logged in', async () => {
 });
 
 it('fetches the user with the stored token when only the token survives a cold start', async () => {
-  (global.fetch as jest.Mock).mockResolvedValue({
+  // The user fetch resolves first; Proof then mounts and fetches membership types
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
     ok: true,
     status: 200,
     json: async () => testUser,
   });
+  mockMembershipTypesOnce();
 
   const { findByText } = renderWithProviders(<Membership />, {
     initialToken: 'test-token',
-    apolloMocks,
   });
 
   expect(await findByText('MEDLEM')).toBeTruthy();
@@ -116,10 +84,10 @@ it('refetches and renders updated user data on pull-to-refresh', async () => {
   const fetchMock = global.fetch as jest.Mock;
   const nonMember: UserType = { ...testUser, is_member: false, last_membership: null };
 
+  mockMembershipTypesOnce();
   const { findByText, UNSAFE_getByType } = renderWithProviders(<Membership />, {
     initialToken: 'test-token',
     initialUser: nonMember,
-    apolloMocks,
   });
   expect(await findByText('Velg medlemskapstype')).toBeTruthy();
 
@@ -146,17 +114,16 @@ it('signs out when the stored token has been revoked', async () => {
 
   const { findByText } = renderWithProviders(<Membership />, {
     initialToken: 'revoked-token',
-    apolloMocks,
   });
 
   expect(await findByText('Bli medlem')).toBeTruthy();
 });
 
 it('logs out and shows the logged-out membership screen again', async () => {
+  mockMembershipTypesOnce();
   const { findByText } = renderWithProviders(<Membership />, {
     initialToken: 'test-token',
     initialUser: testUser,
-    apolloMocks,
   });
 
   fireEvent.press(await findByText('Logg ut'));

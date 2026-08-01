@@ -1,6 +1,3 @@
-import { InMemoryCache } from '@apollo/client';
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
@@ -9,7 +6,7 @@ import type { ReactElement } from 'react';
 
 import { AuthProvider } from '@/auth/AuthContext';
 import { queryKeys } from '@/queries/queryKeys';
-import type { UserType } from '@/types/data';
+import type { MembershipTypeOption, UserType } from '@/types/data';
 
 /** A member with an active membership, for screens that require a logged in user. */
 export const testUser: UserType = {
@@ -25,22 +22,36 @@ export const testUser: UserType = {
   },
 };
 
+/** The purchase options offered in the app, as served by /api/graphql/. */
+export const testMembershipTypes: MembershipTypeOption[] = [
+  { slug: 'student', price: 15000 },
+  { slug: 'regular', price: 30000 },
+  { slug: 'support', price: 50000 },
+];
+
+/** Queue a successful /api/graphql/ membership types response on the fetch mock. */
+export function mockMembershipTypesOnce(membershipTypes: MembershipTypeOption[] = testMembershipTypes) {
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
+    ok: true,
+    status: 200,
+    json: async () => ({ data: { membershipTypes } }),
+  });
+}
+
 interface RenderWithProvidersOptions {
   /** Auth token the app has stored; being set means the user is logged in. */
   initialToken?: string | null;
   /** Already-fetched user data, as after a completed /api/me/ request. */
   initialUser?: UserType | null;
-  apolloMocks?: readonly MockedResponse[];
 }
 
 /**
  * Renders a screen inside the providers it expects in the real app: a fresh
- * query client (no persister), AuthProvider, Apollo's MockedProvider and a
- * NavigationContainer.
+ * query client (no persister), AuthProvider and a NavigationContainer.
  */
 export function renderWithProviders(
   ui: ReactElement,
-  { initialToken = null, initialUser = null, apolloMocks = [] }: RenderWithProvidersOptions = {},
+  { initialToken = null, initialUser = null }: RenderWithProvidersOptions = {},
 ) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -55,13 +66,11 @@ export function renderWithProviders(
   }
 
   const result = render(
-    <MockedProvider mocks={apolloMocks} cache={new InMemoryCache()}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider initialToken={initialToken}>
-          <NavigationContainer>{ui}</NavigationContainer>
-        </AuthProvider>
-      </QueryClientProvider>
-    </MockedProvider>,
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider initialToken={initialToken}>
+        <NavigationContainer>{ui}</NavigationContainer>
+      </AuthProvider>
+    </QueryClientProvider>,
   );
 
   return { queryClient, ...result };

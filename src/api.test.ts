@@ -1,4 +1,12 @@
-import { deleteUser, fetchEvents, fetchUserData, login, registerUser, requestStripePaymentSheet } from '@/api';
+import {
+  deleteUser,
+  fetchEvents,
+  fetchMembershipTypes,
+  fetchUserData,
+  login,
+  registerUser,
+  requestStripePaymentSheet,
+} from '@/api';
 import { ApiError } from '@/errors';
 
 const fetchMock = global.fetch as jest.Mock;
@@ -169,6 +177,35 @@ describe('fetchEvents', () => {
     mockResponseOnce({ error: 'oops' });
 
     await expect(fetchEvents()).rejects.toThrow('Kunne ikke hente programmet');
+  });
+});
+
+describe('fetchMembershipTypes', () => {
+  it('posts the GraphQL query and resolves the membership types', async () => {
+    const membershipTypes = [{ slug: 'regular', price: 30000 }];
+    mockResponseOnce({ data: { membershipTypes } });
+
+    await expect(fetchMembershipTypes()).resolves.toEqual(membershipTypes);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://dusken.example.test/api/graphql/',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ query: '{ membershipTypes { slug price } }' }),
+      }),
+    );
+  });
+
+  it('throws when the API reports a GraphQL error', async () => {
+    mockResponseOnce({ data: null, errors: [{ message: 'Cannot query field "membershipTypes"' }] });
+
+    await expect(fetchMembershipTypes()).rejects.toThrow('Kunne ikke hente priser');
+  });
+
+  it('throws on a non-ok response', async () => {
+    mockResponseOnce({ data: { membershipTypes: [] } }, false, 500);
+
+    await expect(fetchMembershipTypes()).rejects.toThrow('Kunne ikke hente priser');
   });
 });
 
