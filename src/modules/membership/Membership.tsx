@@ -25,7 +25,7 @@ const Membership = () => {
     if (isPending) {
       return (
         <View style={theme.card}>
-          <ActivityIndicator color={theme.colors.neufOrange} />
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
         </View>
       );
     }

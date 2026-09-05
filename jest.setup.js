@@ -29,6 +29,12 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 jest.mock('@stripe/stripe-react-native', () => require('@stripe/stripe-react-native/jest/mock.js'));
 
+// The preset's RefreshControl mock drops its props, so onRefresh and testID never reach the host tree
+jest.mock('react-native/Libraries/Components/RefreshControl/RefreshControl', () => {
+  const React = require('react');
+  return { __esModule: true, default: (props) => React.createElement('RCTRefreshControl', props) };
+});
+
 // Reanimated (even its mock) initializes the native side of worklets at import
 // time; substitute the mock that ships with react-native-worklets.
 jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));

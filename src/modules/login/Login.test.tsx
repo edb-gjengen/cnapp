@@ -15,20 +15,20 @@ jest.mock('@react-navigation/native', () => {
   return { ...actual, useNavigation: () => ({ goBack: mockGoBack }) };
 });
 
-const fillForm = (
+const fillForm = async (
   getByLabelText: RenderResult['getByLabelText'],
   { username = 'grisen@example.test', password = 'hunter2' } = {},
 ) => {
-  fireEvent.changeText(getByLabelText('E-post / Brukernavn'), username);
-  fireEvent.changeText(getByLabelText('Passord'), password);
+  await fireEvent.changeText(getByLabelText('E-post / Brukernavn'), username);
+  await fireEvent.changeText(getByLabelText('Passord'), password);
 };
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-it('renders the login form', () => {
-  const { getByText } = renderWithProviders(<Login />);
+it('renders the login form', async () => {
+  const { getByText } = await renderWithProviders(<Login />);
 
   expect(getByText('E-post / Brukernavn')).toBeTruthy();
   expect(getByText('Passord')).toBeTruthy();
@@ -37,18 +37,18 @@ it('renders the login form', () => {
 });
 
 it('moves focus to the password field when the username is submitted from the keyboard', async () => {
-  const { getByLabelText } = renderWithProviders(<Login />);
+  const { getByLabelText } = await renderWithProviders(<Login />);
 
-  fireEvent(getByLabelText('E-post / Brukernavn'), 'submitEditing');
+  await fireEvent(getByLabelText('E-post / Brukernavn'), 'submitEditing');
 
   // react-hook-form's setFocus defers the focus call to the next tick
   await waitFor(() => expect(focusedFieldLabel()).toBe('Passord'));
 });
 
-it('opens the forgot password page in the browser', () => {
-  const { getByText } = renderWithProviders(<Login />);
+it('opens the forgot password page in the browser', async () => {
+  const { getByText } = await renderWithProviders(<Login />);
 
-  fireEvent.press(getByText('Glemt passord?'));
+  await fireEvent.press(getByText('Glemt passord?'));
 
   // Not one of our own domains in the test env, so no UTM tagging (covered in utils.test.ts)
   expect(Linking.openURL).toHaveBeenCalledWith('https://dusken.example.test/auth/password_reset/');
@@ -56,10 +56,10 @@ it('opens the forgot password page in the browser', () => {
 
 it('logs in against the API and returns to the previous screen', async () => {
   const login = jest.spyOn(api, 'login').mockResolvedValue({ token: 'token-123' });
-  const { getByText, getByLabelText } = renderWithProviders(<Login />);
+  const { getByText, getByLabelText } = await renderWithProviders(<Login />);
 
-  fillForm(getByLabelText);
-  fireEvent.press(getByText('Logg inn'));
+  await fillForm(getByLabelText);
+  await fireEvent.press(getByText('Logg inn'));
 
   await waitFor(() => expect(mockGoBack).toHaveBeenCalled());
   expect(login).toHaveBeenCalledWith('grisen@example.test', 'hunter2');
@@ -72,10 +72,10 @@ it('shows the server error when the credentials are rejected', async () => {
     400,
   );
   jest.spyOn(api, 'login').mockRejectedValueOnce(invalidCredentials);
-  const { getByText, getByLabelText, findByText } = renderWithProviders(<Login />);
+  const { getByText, getByLabelText, findByText } = await renderWithProviders(<Login />);
 
-  fillForm(getByLabelText);
-  fireEvent.press(getByText('Logg inn'));
+  await fillForm(getByLabelText);
+  await fireEvent.press(getByText('Logg inn'));
 
   expect(await findByText('Kan ikke logge inn med angitt brukernavn og passord')).toBeTruthy();
   expect(mockGoBack).not.toHaveBeenCalled();
@@ -84,20 +84,20 @@ it('shows the server error when the credentials are rejected', async () => {
 it('shows a generic message when the request fails on the network', async () => {
   jest.spyOn(console, 'log').mockImplementation(() => {});
   jest.spyOn(api, 'login').mockRejectedValueOnce(new Error('network down'));
-  const { getByText, getByLabelText, findByText } = renderWithProviders(<Login />);
+  const { getByText, getByLabelText, findByText } = await renderWithProviders(<Login />);
 
-  fillForm(getByLabelText);
-  fireEvent.press(getByText('Logg inn'));
+  await fillForm(getByLabelText);
+  await fireEvent.press(getByText('Logg inn'));
 
   expect(await findByText('Kunne ikke sende inn skjemaet! Prøv igjen senere...')).toBeTruthy();
   expect(mockGoBack).not.toHaveBeenCalled();
 });
 
 it('logs in a dev-fake user without hitting the network', async () => {
-  const { getByText, getByLabelText } = renderWithProviders(<Login />);
+  const { getByText, getByLabelText } = await renderWithProviders(<Login />);
 
-  fillForm(getByLabelText, { username: 'member', password: 'whatever' });
-  fireEvent.press(getByText('Logg inn'));
+  await fillForm(getByLabelText, { username: 'member', password: 'whatever' });
+  await fireEvent.press(getByText('Logg inn'));
 
   await waitFor(() => expect(mockGoBack).toHaveBeenCalled());
   expect(global.fetch).not.toHaveBeenCalled();

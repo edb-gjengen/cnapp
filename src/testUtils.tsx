@@ -48,7 +48,7 @@ interface RenderWithProvidersOptions {
  * Renders a screen inside the providers it expects in the real app: a fresh
  * query client (no persister), AuthProvider and a NavigationContainer.
  */
-export function renderWithProviders(
+export async function renderWithProviders(
   ui: ReactElement,
   {
     initialToken = null,
@@ -71,7 +71,7 @@ export function renderWithProviders(
     queryClient.setQueryData(queryKeys.membershipTypes, initialMembershipTypes);
   }
 
-  const result = render(
+  const result = await render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider initialToken={initialToken}>
         <NavigationContainer>{ui}</NavigationContainer>

@@ -118,7 +118,9 @@ const PurchaseButton = ({
       <View style={styles.radioForm}>
         <RadioButton data={options} onSelect={onSelect} defaultValue={defaultValue} />
       </View>
-      {paymentLoading && <ActivityIndicator color={theme.colors.neufOrange} />}
+      {paymentLoading && (
+        <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+      )}
       <Button
         onPress={onPurchasePress}
         fullWidth
@@ -317,7 +319,9 @@ const Proof = ({ onLogoutPress, fetchUser, isRefetching, onDeletePress }: ProofP
         onRainEnd={onRainEnd}
       />
       <View style={styles.container}>
-        <ScrollView refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={fetchUser} />}>
+        <ScrollView
+          refreshControl={<RefreshControl testID="refresh-control" refreshing={isRefetching} onRefresh={fetchUser} />}
+        >
           <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
             <MembershipName user={user} />
             <Logo user={user} />

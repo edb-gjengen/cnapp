@@ -16,8 +16,8 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-it('renders the delete confirmation for a logged in user', () => {
-  const { getByText } = renderWithProviders(<UserDelete />, {
+it('renders the delete confirmation for a logged in user', async () => {
+  const { getByText } = await renderWithProviders(<UserDelete />, {
     initialToken: 'test-token',
     initialUser: testUser,
   });
@@ -26,8 +26,8 @@ it('renders the delete confirmation for a logged in user', () => {
   expect(mockNavigate).not.toHaveBeenCalled();
 });
 
-it('renders nothing and navigates back to Membership when not logged in', () => {
-  const { queryByText } = renderWithProviders(<UserDelete />);
+it('renders nothing and navigates back to Membership when not logged in', async () => {
+  const { queryByText } = await renderWithProviders(<UserDelete />);
 
   expect(queryByText('Slett meg')).toBeNull();
   expect(mockNavigate).toHaveBeenCalledWith('UserStack', { screen: 'Membership' });
@@ -35,13 +35,13 @@ it('renders nothing and navigates back to Membership when not logged in', () => 
 
 it('deletes the account and returns to Membership once the username is typed to confirm', async () => {
   const deleteUser = jest.spyOn(api, 'deleteUser').mockResolvedValueOnce(undefined);
-  const { getByText, getByDisplayValue } = renderWithProviders(<UserDelete />, {
+  const { getByText, getByDisplayValue } = await renderWithProviders(<UserDelete />, {
     initialToken: 'test-token',
     initialUser: testUser,
   });
 
-  fireEvent.changeText(getByDisplayValue(''), 'testbruker');
-  fireEvent.press(getByText('Jeg forstår, slett kontoen min'));
+  await fireEvent.changeText(getByDisplayValue(''), 'testbruker');
+  await fireEvent.press(getByText('Jeg forstår, slett kontoen min'));
 
   await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('UserStack', { screen: 'Membership' }));
   expect(deleteUser).toHaveBeenCalledWith('test-token');
@@ -51,13 +51,13 @@ it('shows the server error when deletion fails', async () => {
   jest
     .spyOn(api, 'deleteUser')
     .mockRejectedValueOnce(new ApiError({ detail: 'Kunne ikke slette kontoen akkurat nå' }, 400));
-  const { getByText, getByDisplayValue, findByText } = renderWithProviders(<UserDelete />, {
+  const { getByText, getByDisplayValue, findByText } = await renderWithProviders(<UserDelete />, {
     initialToken: 'test-token',
     initialUser: testUser,
   });
 
-  fireEvent.changeText(getByDisplayValue(''), 'testbruker');
-  fireEvent.press(getByText('Jeg forstår, slett kontoen min'));
+  await fireEvent.changeText(getByDisplayValue(''), 'testbruker');
+  await fireEvent.press(getByText('Jeg forstår, slett kontoen min'));
 
   expect(await findByText('Kunne ikke slette kontoen akkurat nå')).toBeTruthy();
   expect(mockNavigate).not.toHaveBeenCalled();

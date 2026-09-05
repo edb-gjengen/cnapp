@@ -44,7 +44,9 @@ const Login = () => {
           <Text style={theme.buttonText}>Logg inn</Text>
         </Button>
         {loginError && isSubmitted && <FormErrors errors={loginError} />}
-        {isLoggingIn && <ActivityIndicator color={theme.colors.neufOrange} />}
+        {isLoggingIn && (
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+        )}
         <Button
           small
           onPress={() => {

@@ -15,7 +15,7 @@ jest.mock('@stripe/stripe-react-native', () => ({
 afterEach(() => appQueryClient.clear());
 
 it('renders the whole app up to the navigation tabs', async () => {
-  const { findByText } = render(<App />);
+  const { findByText } = await render(<App />);
 
   // A tab label proves the auth bootstrap finished and Navigation mounted
   expect(await findByText('Medlemskap')).toBeTruthy();

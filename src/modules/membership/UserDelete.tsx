@@ -56,7 +56,9 @@ const UserDelete = () => {
         >
           <Text style={!isDisabled ? styles.whiteText : styles.disabledText}>Jeg forstår, slett kontoen min</Text>
         </Button>
-        {isDeletingUser && <ActivityIndicator color={theme.colors.neufOrange} />}
+        {isDeletingUser && (
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+        )}
       </View>
     </ScrollView>
   );

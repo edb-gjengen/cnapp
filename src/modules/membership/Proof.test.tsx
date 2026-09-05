@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, waitFor } from '@testing-library/react-native';
 import * as Notifications from 'expo-notifications';
 import React from 'react';
 
@@ -47,13 +47,20 @@ beforeEach(() => {
 });
 
 it('disables the purchase button without showing a price while membership types load', async () => {
-  jest.spyOn(api, 'fetchMembershipTypes').mockResolvedValue(testMembershipTypes);
-  const { getByRole, findByText } = renderProof({ membershipTypes: null });
+  // Hold the response so the loading state survives the async render
+  let resolveMembershipTypes!: (types: MembershipTypeOption[]) => void;
+  jest
+    .spyOn(api, 'fetchMembershipTypes')
+    .mockImplementationOnce(() => new Promise((resolve) => (resolveMembershipTypes = resolve)));
+  const { getByRole, findByText } = await renderProof({ membershipTypes: null });
 
   // The label carries no amount until the query resolves
   expect(getByRole('button', { name: 'Kjøp medlemskap' })).toBeDisabled();
 
   // Once the query resolves the real price takes over
+  await act(async () => {
+    resolveMembershipTypes(testMembershipTypes);
+  });
   expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
 });
 
@@ -62,24 +69,24 @@ it('shows an error with retry instead of a price when membership types fail to l
     .spyOn(api, 'fetchMembershipTypes')
     .mockRejectedValueOnce(new Error('network down'))
     .mockResolvedValue(testMembershipTypes);
-  const { findByText, getByText, getByRole } = renderProof({ membershipTypes: null });
+  const { findByText, getByText, getByRole } = await renderProof({ membershipTypes: null });
 
   expect(await findByText('Kunne ikke hente priser')).toBeTruthy();
   expect(getByRole('button', { name: 'Kjøp medlemskap' })).toBeDisabled();
 
   // Retrying hits the recovered API and gets the real price
-  fireEvent.press(getByText('Prøv igjen'));
+  await fireEvent.press(getByText('Prøv igjen'));
   expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
   expect(getByRole('button', { name: 'Kjøp medlemskap (300 NOK)' })).toBeEnabled();
 });
 
 it('purchases the preselected membership through the stripe payment sheet', async () => {
   const requestPaymentSheet = mockPaymentSheet();
-  const { findByText } = renderProof();
+  const { findByText } = await renderProof();
 
   // 'Ordinær' (slug: regular) is preselected; the button enables once the
   // membership type query has resolved and its price is shown
-  fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 
   expect(await findByText('Your order is confirmed!')).toBeTruthy();
   expect(requestPaymentSheet).toHaveBeenCalledWith('test-token', 'regular');
@@ -99,10 +106,10 @@ it('purchases the preselected membership through the stripe payment sheet', asyn
 
 it('purchases the selected membership type, not the default', async () => {
   const requestPaymentSheet = mockPaymentSheet();
-  const { findByText } = renderProof();
+  const { findByText } = await renderProof();
 
-  fireEvent.press(await findByText('Student'));
-  fireEvent.press(await findByText('Kjøp medlemskap (150 NOK)'));
+  await fireEvent.press(await findByText('Student'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (150 NOK)'));
 
   expect(await findByText('Your order is confirmed!')).toBeTruthy();
   expect(requestPaymentSheet).toHaveBeenCalledWith('test-token', 'student');
@@ -113,9 +120,9 @@ it('shows the stripe error when the payment sheet is not completed', async () =>
   presentPaymentSheet.mockResolvedValueOnce({
     error: { code: 'Canceled', message: 'The payment flow has been canceled' },
   });
-  const { findByText, queryByText } = renderProof();
+  const { findByText, queryByText } = await renderProof();
 
-  fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 
   expect(await findByText('Error code: Canceled The payment flow has been canceled')).toBeTruthy();
   expect(queryByText('Your order is confirmed!')).toBeNull();
@@ -124,9 +131,9 @@ it('shows the stripe error when the payment sheet is not completed', async () =>
 it('shows an error and does not present the sheet when the backend rejects the purchase', async () => {
   jest.spyOn(console, 'error').mockImplementation(() => {});
   jest.spyOn(api, 'requestStripePaymentSheet').mockRejectedValueOnce(new Error('Ugyldig medlemskapstype'));
-  const { findByText, getByRole } = renderProof();
+  const { findByText, getByRole } = await renderProof();
 
-  fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 
   expect(await findByText('Oops! Could not initialise payment')).toBeTruthy();
   expect(initPaymentSheet).not.toHaveBeenCalled();
@@ -139,9 +146,9 @@ it('shows an error and does not present the sheet when stripe fails to initialis
   jest.spyOn(console, 'error').mockImplementation(() => {});
   mockPaymentSheet();
   initPaymentSheet.mockResolvedValueOnce({ error: { code: 'Failed', message: 'Invalid client secret' } });
-  const { findByText } = renderProof();
+  const { findByText } = await renderProof();
 
-  fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
 
   expect(await findByText('Oops! Could not initialise payment')).toBeTruthy();
   expect(presentPaymentSheet).not.toHaveBeenCalled();
@@ -149,7 +156,7 @@ it('shows an error and does not present the sheet when stripe fails to initialis
 
 it('refetches user data when the stored membership has expired', async () => {
   const fetchUser = jest.fn();
-  renderProof({ user: expiredMember, fetchUser });
+  await renderProof({ user: expiredMember, fetchUser });
 
   await waitFor(() => expect(fetchUser).toHaveBeenCalled());
   // Notification permission was never granted, so nothing is scheduled
@@ -159,7 +166,7 @@ it('refetches user data when the stored membership has expired', async () => {
 it('cancels stale expiry notifications when permission is granted, without scheduling one in the past', async () => {
   (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValue({ status: 'granted' });
   const fetchUser = jest.fn();
-  renderProof({ user: expiredMember, fetchUser });
+  await renderProof({ user: expiredMember, fetchUser });
 
   // Once the granted permission resolves, the expiry effect runs the cleanup
   await waitFor(() => expect(Notifications.cancelAllScheduledNotificationsAsync).toHaveBeenCalled());

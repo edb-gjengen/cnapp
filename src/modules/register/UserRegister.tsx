@@ -6,24 +6,13 @@ import Button from '@/components/Button';
 import FormErrors from '@/components/FormErrors';
 import FormInput from '@/components/FormInput';
 import PrivacyButton from '@/components/PrivacyButton';
-import Toast from '@/components/Toast';
 import theme from '@/theme';
 
 import useUserRegister from './useUserRegister';
 
 const UserRegister = () => {
-  const {
-    isRegisteringUser,
-    onSubmit,
-    isValid,
-    isSubmitted,
-    control,
-    errors,
-    registerError,
-    setFocus,
-    toast,
-    setToast,
-  } = useUserRegister();
+  const { isRegisteringUser, onSubmit, isValid, isSubmitted, control, errors, registerError, setFocus } =
+    useUserRegister();
   const isDisabled = isRegisteringUser || !isValid;
 
   return (
@@ -78,21 +67,14 @@ const UserRegister = () => {
           onSubmitEditing={onSubmit}
         />
         {registerError && isSubmitted && <FormErrors errors={registerError} />}
-        {isRegisteringUser && <ActivityIndicator color={theme.colors.neufOrange} />}
+        {isRegisteringUser && (
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+        )}
         <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={[theme.button, styles.registerButton]}>
           <Text style={theme.buttonText}>Registrer meg</Text>
         </Button>
       </ScrollView>
       <PrivacyButton />
-      <Toast
-        message={toast?.message}
-        visible={toast?.visible}
-        position="bottom"
-        autoDismiss={5 * 1000}
-        onDismiss={() => {
-          setToast(null);
-        }}
-      />
     </>
   );
 };
