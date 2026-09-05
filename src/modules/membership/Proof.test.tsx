@@ -32,14 +32,11 @@ const renderProof = ({
   fetchUser = jest.fn(),
   membershipTypes,
 }: { user?: UserType; fetchUser?: () => void; membershipTypes?: MembershipTypeOption[] | null } = {}) =>
-  renderWithProviders(
-    <Proof onLogoutPress={jest.fn()} fetchUser={fetchUser} isRefetching={false} onDeletePress={jest.fn()} />,
-    {
-      initialToken: 'test-token',
-      initialUser: user,
-      initialMembershipTypes: membershipTypes,
-    },
-  );
+  renderWithProviders(<Proof fetchUser={fetchUser} isRefetching={false} />, {
+    initialToken: 'test-token',
+    initialUser: user,
+    initialMembershipTypes: membershipTypes,
+  });
 
 beforeEach(() => {
   jest.clearAllMocks();

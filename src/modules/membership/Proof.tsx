@@ -1,5 +1,4 @@
-import * as Notifications from 'expo-notifications';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   ScrollView,
@@ -11,7 +10,6 @@ import {
   ActivityIndicator,
   Dimensions,
   GestureResponderEvent,
-  Switch,
 } from 'react-native';
 import { Confetti, PIConfetti } from 'react-native-fast-confetti';
 import type { ConfettiMethods, PIConfettiMethods } from 'react-native-fast-confetti';
@@ -20,9 +18,9 @@ import { Easing } from 'react-native-reanimated';
 import Button from '@/components/Button';
 import RadioButton from '@/components/RadioButton';
 import Toast from '@/components/Toast';
-import { useNotifications } from '@/hooks/useNotifications';
 import theme from '@/theme';
 import type { UserType } from '@/types/data';
+import { displayName } from '@/utils';
 
 import useProof from './useProof';
 import logo from '../../../assets/DNS-logo-svart.png';
@@ -195,71 +193,17 @@ const Logo = ({ user }: { user: UserType }) => {
   );
 };
 
-const MembershipName = ({ user }: { user: UserType }) => {
-  let name = `${user.first_name} ${user.last_name}`;
-  if (name === ' ') {
-    name = user.email;
-  }
-  return (
-    <View>
-      <Text style={[theme.text, styles.nameText]}>{name}</Text>
-    </View>
-  );
-};
-
-const NotificationToggle = ({ user }: { user: UserType }) => {
-  const { hasPermission, toggleNotifications, scheduleMembershipExpiryNotification } = useNotifications();
-  const [toast, setToast] = useState<{ message: string; visible: boolean } | null>(null);
-
-  const handleToggle = async (enabled: boolean) => {
-    const { success, needsPermission } = await toggleNotifications(enabled);
-    if (needsPermission) {
-      await Notifications.requestPermissionsAsync();
-      setToast({
-        message: 'Du må godta varsler i innstillinger for å motta påminnelser',
-        visible: true,
-      });
-      setTimeout(() => setToast(null), 3000);
-      return;
-    }
-    if (success && enabled && user.last_membership?.end_date) {
-      await scheduleMembershipExpiryNotification(user.last_membership.end_date);
-    }
-  };
-
-  if (!user.is_member || !user.last_membership) {
-    return null;
-  }
-
-  return (
-    <View style={styles.notificationToggle}>
-      <Text style={[theme.text, styles.notificationText]}>Varsle meg når medlemskapet utløper</Text>
-      <Switch
-        value={hasPermission || false}
-        onValueChange={handleToggle}
-        trackColor={{ false: '#E0E0E0', true: theme.colors.neufOrange }}
-        thumbColor={hasPermission ? '#FFFFFF' : '#FFFFFF'}
-        ios_backgroundColor="#E0E0E0"
-        style={styles.switch}
-      />
-      <Toast
-        message={toast?.message}
-        visible={toast?.visible || false}
-        position="bottom"
-        autoDismiss={3000}
-        onDismiss={() => setToast(null)}
-      />
-    </View>
-  );
-};
+const MembershipName = ({ user }: { user: UserType }) => (
+  <View>
+    <Text style={[theme.text, styles.nameText]}>{displayName(user)}</Text>
+  </View>
+);
 
 interface ProofProps {
-  onLogoutPress: () => void;
   fetchUser: () => void;
   isRefetching: boolean;
-  onDeletePress: () => void;
 }
-const Proof = ({ onLogoutPress, fetchUser, isRefetching, onDeletePress }: ProofProps) => {
+const Proof = ({ fetchUser, isRefetching }: ProofProps) => {
   const confettiRef = useRef<ConfettiMethods>(null);
   const burstRef = useRef<PIConfettiMethods>(null);
   const confettiContainerRef = useRef<React.ComponentRef<typeof View>>(null);
@@ -341,17 +285,8 @@ const Proof = ({ onLogoutPress, fetchUser, isRefetching, onDeletePress }: ProofP
               setMembershipTypeSlug={setMembershipTypeSlug}
             />
             <MembershipValidTo user={user} />
-            <NotificationToggle user={user} />
           </View>
         </ScrollView>
-        <View style={styles.buttonContainer}>
-          <Button onPress={onLogoutPress} style={[theme.button, styles.logoutButton]} small>
-            <Text style={theme.buttonText}>Logg ut</Text>
-          </Button>
-          <Button onPress={onDeletePress} style={[theme.button, styles.deleteButton]} small>
-            <Text style={styles.whiteText}>Slett bruker</Text>
-          </Button>
-        </View>
       </View>
       <Toast
         message={toast?.message}
@@ -409,17 +344,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
   },
-  notMember: {
-    backgroundColor: theme.colors.neufBlue,
-    flex: 1,
-    marginHorizontal: -16,
-    padding: 16,
-  },
-  notMemberText: {
-    color: theme.colors.neufWhite,
-    textAlign: 'center',
-    fontSize: 24,
-  },
   validToValue: {
     fontWeight: 'bold',
     fontSize: 18,
@@ -430,16 +354,6 @@ const styles = StyleSheet.create({
   retryButton: {
     alignSelf: 'center',
     marginTop: 8,
-  },
-  logoutButton: {
-    marginBottom: 8,
-  },
-  deleteButton: {
-    backgroundColor: theme.colors.danger,
-  },
-  whiteText: {
-    color: theme.colors.neufWhite,
-    fontWeight: '500',
   },
   purchaseText: {
     alignItems: 'center',
@@ -473,26 +387,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 30,
   },
-  notificationToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 32,
-  },
-  notificationText: {
-    fontSize: 18,
-  },
-  switch: {
-    transform: [{ scale: 1.25 }],
-  },
   container: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-  },
-  buttonContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    backgroundColor: 'transparent',
   },
 });

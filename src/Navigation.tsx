@@ -1,14 +1,17 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import React from 'react';
 
+import { useAuth } from '@/auth/AuthContext';
 import About from '@/modules/about/About';
 import EventList from '@/modules/events/EventList';
 import Login from '@/modules/login/Login';
 import Membership from '@/modules/membership/Membership';
 import UserDelete from '@/modules/membership/UserDelete';
 import UserRegister from '@/modules/register/UserRegister';
+import Settings from '@/modules/settings/Settings';
+import SettingsHeaderButton from '@/modules/settings/SettingsHeaderButton';
 import theme from '@/theme';
 import type { EventStackParamList, HomeTabParamList, UserStackParamList } from '@/types/navigation';
 import IconEvent from '@assets/icons/event.svg';
@@ -39,27 +42,40 @@ const EventStackScreen = () => (
   </EventStack.Navigator>
 );
 
+type HeaderRightType = NativeStackNavigationOptions['headerRight'];
+const SettingsHeaderRight: HeaderRightType = ({ tintColor }) => <SettingsHeaderButton tintColor={tintColor} />;
+
 const UserStack = createNativeStackNavigator<UserStackParamList>();
-const UserStackScreen = () => (
-  <UserStack.Navigator initialRouteName="Membership" screenOptions={{ ...defaultNavigationStyle }}>
-    <UserStack.Screen name="Membership" component={Membership} options={{ title: 'Medlemskap' }} />
-    <UserStack.Screen name="Login" component={Login} options={{ title: 'Logg inn' }} />
-    <UserStack.Screen
-      name="UserRegister"
-      component={UserRegister}
-      options={{
-        title: 'Bli medlem',
-      }}
-    />
-    <UserStack.Screen
-      name="UserDelete"
-      component={UserDelete}
-      options={{
-        title: 'Slett bruker',
-      }}
-    />
-  </UserStack.Navigator>
-);
+const UserStackScreen = () => {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <UserStack.Navigator initialRouteName="Membership" screenOptions={{ ...defaultNavigationStyle }}>
+      <UserStack.Screen
+        name="Membership"
+        component={Membership}
+        // Settings only make sense with an account to manage
+        options={{ title: 'Medlemskap', headerRight: isAuthenticated ? SettingsHeaderRight : undefined }}
+      />
+      <UserStack.Screen name="Login" component={Login} options={{ title: 'Logg inn' }} />
+      <UserStack.Screen
+        name="UserRegister"
+        component={UserRegister}
+        options={{
+          title: 'Bli medlem',
+        }}
+      />
+      <UserStack.Screen
+        name="UserDelete"
+        component={UserDelete}
+        options={{
+          title: 'Slett bruker',
+        }}
+      />
+      <UserStack.Screen name="UserSettings" component={Settings} options={{ title: 'Innstillinger' }} />
+    </UserStack.Navigator>
+  );
+};
 
 type TabBarIconType = BottomTabNavigationOptions['tabBarIcon'];
 

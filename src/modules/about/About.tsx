@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import Button from '@/components/Button';
+import PrivacyButton from '@/components/PrivacyButton';
 import theme from '@/theme';
 import { withAppSource } from '@/utils';
 import logo from '@assets/DNS-logo-svart.png';
@@ -177,6 +178,7 @@ const About = () => (
         Alle studentforeninger i Oslo kan arrangere gratis på Chateau Neuf. Skal du arrangere en fest, sette en konsert,
         holde et foredrag eller gjennomføre et møte, har vi lokaler som kan brukes til dette.
       </Text>
+      <PrivacyButton />
     </View>
   </ScrollView>
 );

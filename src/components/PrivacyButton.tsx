@@ -1,14 +1,11 @@
 import React from 'react';
-import { Linking, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import theme from '@/theme';
-import { withAppSource } from '@/utils';
+import { openPrivacyPolicy } from '@/utils';
 
 const PrivacyButton = () => (
-  <TouchableOpacity
-    style={[theme.background, styles.button]}
-    onPress={() => Linking.openURL(withAppSource(process.env.EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL || ''))}
-  >
+  <TouchableOpacity style={[theme.background, styles.button]} onPress={openPrivacyPolicy}>
     <Text style={styles.linkText}>Personvern</Text>
   </TouchableOpacity>
 );

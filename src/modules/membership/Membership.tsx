@@ -9,16 +9,7 @@ import Proof from './Proof';
 import useMembership from './useMembership';
 
 const Membership = () => {
-  const {
-    isPending,
-    isRefetching,
-    onRegisterPress,
-    onLoginPress,
-    onLogoutPress,
-    onDeletePress,
-    isAuthenticated,
-    fetchUser,
-  } = useMembership();
+  const { isPending, isRefetching, onRegisterPress, onLoginPress, isAuthenticated, fetchUser } = useMembership();
 
   if (isAuthenticated) {
     // Only the very first fetch blocks, refreshes keep the proof mounted
@@ -30,17 +21,8 @@ const Membership = () => {
       );
     }
 
-    return (
-      <>
-        <Proof
-          onLogoutPress={onLogoutPress}
-          fetchUser={fetchUser}
-          isRefetching={isRefetching}
-          onDeletePress={onDeletePress}
-        />
-        <PrivacyButton />
-      </>
-    );
+    // Account actions and the privacy policy live behind the header's settings button
+    return <Proof fetchUser={fetchUser} isRefetching={isRefetching} />;
   }
 
   return (

@@ -12,6 +12,7 @@ export type UserStackParamList = {
   Login: undefined;
   UserRegister: undefined;
   UserDelete: undefined;
+  UserSettings: undefined;
 };
 
 export type HomeTabParamList = {

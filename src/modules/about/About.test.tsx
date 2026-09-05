@@ -8,4 +8,6 @@ it('renders the about screen', async () => {
 
   expect(getByText('Åpningstider')).toBeTruthy();
   expect(getByText('Ta kontakt')).toBeTruthy();
+  // Store policies want the privacy policy reachable without logging in
+  expect(getByText('Personvern')).toBeTruthy();
 });

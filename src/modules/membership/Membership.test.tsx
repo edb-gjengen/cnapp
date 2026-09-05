@@ -98,14 +98,14 @@ it('signs out when the stored token has been revoked', async () => {
   expect(await findByText('Bli medlem')).toBeTruthy();
 });
 
-it('logs out and shows the logged-out membership screen again', async () => {
-  const { findByText } = await renderWithProviders(<Membership />, {
+it('keeps account actions off the proof, behind the settings button', async () => {
+  const { findByText, queryByText } = await renderWithProviders(<Membership />, {
     initialToken: 'test-token',
     initialUser: testUser,
   });
 
-  await fireEvent.press(await findByText('Logg ut'));
-
-  expect(await findByText('Bli medlem')).toBeTruthy();
-  expect(mockNavigate).toHaveBeenCalledWith('UserStack', { screen: 'Membership' });
+  expect(await findByText('MEDLEM')).toBeTruthy();
+  expect(queryByText('Logg ut')).toBeNull();
+  expect(queryByText('Slett bruker')).toBeNull();
+  expect(queryByText('Varsle meg når medlemskapet utløper')).toBeNull();
 });

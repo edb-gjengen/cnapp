@@ -1,3 +1,7 @@
+import { Linking } from 'react-native';
+
+import type { UserType } from '@/types/data';
+
 // Sites tracked by our Umami instance. Subdomains (galtinn.neuf.no, www.*) match too.
 const APP_SOURCE_DOMAINS = ['neuf.no', 'studentersamfundet.no'];
 
@@ -18,6 +22,17 @@ export function withAppSource(url: string): string {
   parsed.searchParams.set('utm_source', 'neuf-app');
   parsed.searchParams.set('utm_medium', 'app');
   return parsed.toString();
+}
+
+export function openPrivacyPolicy() {
+  /** Opens the Dusken privacy policy in the browser */
+  return Linking.openURL(withAppSource(process.env.EXPO_PUBLIC_DUSKEN_PRIVACY_POLICY_URL || ''));
+}
+
+export function displayName(user: UserType): string {
+  /** Full name, or the email for accounts without one */
+  const name = `${user.first_name} ${user.last_name}`.trim();
+  return name || user.email;
 }
 
 export function snakeToCamelCase(val: string): string {
