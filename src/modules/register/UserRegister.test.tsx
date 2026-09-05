@@ -5,7 +5,7 @@ import { ActivityIndicator } from 'react-native';
 import * as api from '@/api';
 import { ApiError } from '@/errors';
 import UserRegister from '@/modules/register/UserRegister';
-import { renderWithProviders, testUser } from '@/testUtils';
+import { focusedFieldLabel, renderWithProviders, testUser } from '@/testUtils';
 import type { UserType } from '@/types/data';
 
 // The screen is pushed on top of Login and closes itself with goBack() once
@@ -32,6 +32,10 @@ const fillForm = (getByLabelText: RenderResult['getByLabelText'], overrides: Rec
 
 beforeEach(() => {
   jest.clearAllMocks();
+});
+
+afterEach(() => {
+  jest.useRealTimers();
 });
 
 it('renders the registration form', () => {
@@ -96,6 +100,47 @@ it('shows server field errors on the matching form field', async () => {
 
   expect(await findByText('Denne e-postadressen er allerede i bruk')).toBeTruthy();
   expect(mockGoBack).not.toHaveBeenCalled();
+});
+
+it('moves focus down the form when a field is submitted from the keyboard', async () => {
+  const { getByLabelText } = renderWithProviders(<UserRegister />);
+  const labels = ['Fornavn', 'Etternavn', 'E-post', 'Mobilnummer', 'Passord'];
+
+  for (const [i, label] of labels.slice(0, -1).entries()) {
+    fireEvent(getByLabelText(label), 'submitEditing');
+    // react-hook-form's setFocus defers the focus call to the next tick
+    await waitFor(() => expect(focusedFieldLabel()).toBe(labels[i + 1]));
+  }
+});
+
+it('shows a generic error when registration fails on the network', async () => {
+  jest.spyOn(api, 'registerUser').mockRejectedValueOnce(new Error('network down'));
+  const { getByText, getByRole, getByLabelText, findByText } = renderWithProviders(<UserRegister />);
+
+  fillForm(getByLabelText);
+  await waitFor(() => expect(getByRole('button', { name: 'Registrer meg' })).toBeEnabled());
+  fireEvent.press(getByText('Registrer meg'));
+
+  expect(await findByText('Kunne ikke sende inn skjemaet! Prøv igjen senere...')).toBeTruthy();
+  expect(mockGoBack).not.toHaveBeenCalled();
+});
+
+it('warns instead of submitting when the keyboard submits before validation has caught up', async () => {
+  jest.useFakeTimers();
+  const registerUser = jest.spyOn(api, 'registerUser');
+  const { getByLabelText, findByText, queryByText } = renderWithProviders(<UserRegister />);
+
+  // Filling in and submitting in the same tick reaches the submit handler while isValid still reflects the empty form
+  fillForm(getByLabelText);
+  fireEvent(getByLabelText('Passord'), 'submitEditing');
+
+  const message = 'Noen av feltene er ikke fylt ut riktig';
+  expect(await findByText(message)).toBeTruthy();
+  expect(registerUser).not.toHaveBeenCalled();
+
+  // The toast dismisses itself after five seconds
+  act(() => jest.advanceTimersByTime(5000));
+  expect(queryByText(message)).toBeNull();
 });
 
 it('rejects an invalid e-mail address without submitting', async () => {

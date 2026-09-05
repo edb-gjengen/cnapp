@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import type { ReactElement } from 'react';
+import { TextInput } from 'react-native';
 
 import { AuthProvider } from '@/auth/AuthContext';
 import { queryKeys } from '@/queries/queryKeys';
@@ -28,6 +29,10 @@ export const testMembershipTypes: MembershipTypeOption[] = [
   { slug: 'regular', price: 30000 },
   { slug: 'support', price: 50000 },
 ];
+
+/** Label of the field focused last; the mocked TextInput shares a single focus() mock across instances. */
+export const focusedFieldLabel = () =>
+  (TextInput.prototype.focus as jest.Mock).mock.contexts.at(-1)?.props.accessibilityLabel;
 
 interface RenderWithProvidersOptions {
   /** Auth token the app has stored; being set means the user is logged in. */

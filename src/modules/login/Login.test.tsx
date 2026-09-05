@@ -1,10 +1,11 @@
 import { fireEvent, waitFor, type RenderResult } from '@testing-library/react-native';
 import React from 'react';
+import { Linking } from 'react-native';
 
 import * as api from '@/api';
 import { ApiError } from '@/errors';
 import Login from '@/modules/login/Login';
-import { renderWithProviders } from '@/testUtils';
+import { focusedFieldLabel, renderWithProviders } from '@/testUtils';
 
 // Login is pushed on top of Membership and closes itself with goBack() once
 // authentication succeeds; stub the navigation object so we can assert on that.
@@ -33,6 +34,24 @@ it('renders the login form', () => {
   expect(getByText('Passord')).toBeTruthy();
   expect(getByText('Logg inn')).toBeTruthy();
   expect(getByText('Glemt passord?')).toBeTruthy();
+});
+
+it('moves focus to the password field when the username is submitted from the keyboard', async () => {
+  const { getByLabelText } = renderWithProviders(<Login />);
+
+  fireEvent(getByLabelText('E-post / Brukernavn'), 'submitEditing');
+
+  // react-hook-form's setFocus defers the focus call to the next tick
+  await waitFor(() => expect(focusedFieldLabel()).toBe('Passord'));
+});
+
+it('opens the forgot password page in the browser', () => {
+  const { getByText } = renderWithProviders(<Login />);
+
+  fireEvent.press(getByText('Glemt passord?'));
+
+  // Not one of our own domains in the test env, so no UTM tagging (covered in utils.test.ts)
+  expect(Linking.openURL).toHaveBeenCalledWith('https://dusken.example.test/auth/password_reset/');
 });
 
 it('logs in against the API and returns to the previous screen', async () => {
