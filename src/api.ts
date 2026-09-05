@@ -30,6 +30,18 @@ const DEV_FAKE_USERS: Record<string, UserType> = {
       end_date: '2099-08-01',
     },
   },
+  volunteer: {
+    username: 'volunteer',
+    email: 'volunteer@example.test',
+    first_name: 'Aktiv',
+    last_name: 'Frivillig',
+    is_member: true,
+    is_volunteer: true,
+    last_membership: {
+      membership_type: 'standard',
+      end_date: '2099-08-01',
+    },
+  },
 };
 
 const JSON_HEADERS = {

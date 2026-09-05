@@ -38,6 +38,21 @@ server and open the app on your device or simulator:
 
     npm run start
 
+### Demo users
+
+Dev builds accept three fake users (defined in `src/api.ts`) so you can preview the
+membership screens without a real account. They are valid with any password:
+
+| Username    | State                                                   |
+| ----------- | ------------------------------------------------------- |
+| `nonmember` | Not a member, no membership history                     |
+| `member`    | Valid standard membership, expires 2099-08-01           |
+| `volunteer` | Same membership as `member`, but flagged as a volunteer |
+
+They only work via `npm run start`/`android`/`ios`, not in EAS `preview` or
+`production` builds. Only login and fetching user data are faked, so
+buying a membership or deleting the account will fail against the real API.
+
 ### Android
 
 `mise install` provides the Android SDK (the `android` CLI

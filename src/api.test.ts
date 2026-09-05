@@ -99,6 +99,13 @@ describe('fetchUserData', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('resolves the dev fake volunteer as a member with the volunteer flag', async () => {
+    const user = await fetchUserData('dev-fake-token:volunteer');
+
+    expect(user).toMatchObject({ is_member: true, is_volunteer: true });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('throws an ApiError with the status, so a 401 is recognizable', async () => {
     mockResponseOnce({ detail: 'Ugyldig token.' }, false, 401);
 
