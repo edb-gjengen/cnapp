@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     ...theme.typography.body,
-    color: theme.colors.deepBrick,
+    color: theme.colors.chateauBlue,
     textAlign: 'center',
     textDecorationLine: 'underline',
   },

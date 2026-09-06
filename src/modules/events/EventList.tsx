@@ -51,7 +51,7 @@ const EventList = () => {
           )}
         </View>
         <View style={styles.arrow}>
-          <Icon name="arrow-right" size={20} style={{ color: theme.colors.black }} />
+          <Icon name="arrow-right" size={20} color={theme.colors.chateauBlue} />
         </View>
       </View>
     </TouchableOpacity>

@@ -18,9 +18,6 @@ import IconEvent from '@assets/icons/event.svg';
 import IconInfo from '@assets/icons/information-circle.svg';
 import IconPerson from '@assets/icons/person.svg';
 
-// This looks ugly, even though it's a recommended style from the branding profile.
-// TODO: Change this
-// also TODO: make sure battery indicator etc. is visible
 const defaultNavigationStyle = {
   headerTintColor: theme.colors.white,
   headerTitleAlign: 'center',

@@ -30,10 +30,8 @@ const FormErrors = ({ errors }: { errors: Record<string, any> | Error }) => {
 
   return (
     <View style={styles.container}>
-      <IconExclamationTriangle width={20} height={20} style={styles.icon} />
-      <View>
-        <Text style={theme.typography.body}>{errorFormatted}</Text>
-      </View>
+      <IconExclamationTriangle width={20} height={20} fill={theme.colors.white} style={styles.icon} />
+      <Text style={[theme.typography.body, styles.message]}>{errorFormatted}</Text>
     </View>
   );
 };
@@ -42,14 +40,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fecaca',
+    backgroundColor: theme.colors.danger,
     padding: 12,
     borderRadius: 4,
-    borderWidth: 1,
-    borderColor: theme.colors.danger,
   },
   icon: {
     marginRight: 8,
+  },
+  message: {
+    flex: 1,
+    color: theme.colors.white,
   },
 });
 

@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   paragraph: {
     ...theme.typography.body,
     textAlign: 'center',
-    color: theme.colors.black,
+    color: theme.colors.chateauBlue,
     paddingBottom: 10,
   },
   bold: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     ...theme.typography.h2,
     textAlign: 'center',
-    color: theme.colors.black,
+    color: theme.colors.chateauBlue,
     paddingVertical: 10,
   },
 });
