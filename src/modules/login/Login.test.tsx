@@ -28,12 +28,13 @@ beforeEach(() => {
 });
 
 it('renders the login form', async () => {
-  const { getByText } = await renderWithProviders(<Login />);
+  const { getByText, getByTestId } = await renderWithProviders(<Login />);
 
   expect(getByText('E-post / Brukernavn')).toBeTruthy();
   expect(getByText('Passord')).toBeTruthy();
   expect(getByText('Logg inn')).toBeTruthy();
   expect(getByText('Glemt passord?')).toBeTruthy();
+  expect(getByTestId('key-pig')).toBeTruthy();
 });
 
 it('moves focus to the password field when the username is submitted from the keyboard', async () => {

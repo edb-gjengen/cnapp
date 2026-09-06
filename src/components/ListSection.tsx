@@ -8,7 +8,7 @@ type ListSectionProps = {
   children: React.ReactNode;
 };
 
-/** Grouped rows on a white card with hairline separators, like a settings screen */
+/** Grouped rows on a card with separators, like a settings screen */
 const ListSection = ({ title, children }: ListSectionProps) => {
   const rows = React.Children.toArray(children);
 
@@ -33,23 +33,22 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   title: {
-    color: theme.colors.lightText,
-    fontSize: 13,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    ...theme.typography.suphead,
+    color: theme.colors.chateauBlue05,
     marginHorizontal: 32,
     marginBottom: 8,
   },
+  // Rounded like buttons: the rows are actions, not a content surface
   card: {
-    backgroundColor: theme.colors.neufWhite,
+    backgroundColor: theme.colors.betongGrayDarkened,
     borderRadius: 12,
     marginHorizontal: 16,
     overflow: 'hidden',
   },
+  // The web's subtle border
   separator: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: theme.colors.gray1,
-    marginLeft: 16,
+    height: 1,
+    backgroundColor: theme.colors.chateauBlue05,
   },
 });
 

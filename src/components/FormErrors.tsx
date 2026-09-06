@@ -32,7 +32,7 @@ const FormErrors = ({ errors }: { errors: Record<string, any> | Error }) => {
     <View style={styles.container}>
       <IconExclamationTriangle width={20} height={20} style={styles.icon} />
       <View>
-        <Text>{errorFormatted}</Text>
+        <Text style={theme.typography.body}>{errorFormatted}</Text>
       </View>
     </View>
   );

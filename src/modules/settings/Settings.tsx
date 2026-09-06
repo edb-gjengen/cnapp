@@ -35,7 +35,7 @@ const Settings = () => {
           </ListSection>
         )}
         <ListSection>
-          <ListRow label="Personvern" chevron accessibilityRole="link" onPress={onPrivacyPress} />
+          <ListRow label="Personvern" arrow accessibilityRole="link" onPress={onPrivacyPress} />
           <ListRow label="Logg ut" onPress={onLogoutPress} />
         </ListSection>
         <ListSection>
@@ -58,7 +58,6 @@ export default Settings;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    ...theme.background,
   },
   content: {
     paddingBottom: 32,
@@ -69,13 +68,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   name: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...theme.typography.h3,
     textAlign: 'center',
   },
   email: {
-    color: theme.colors.lightText,
-    fontSize: 16,
+    ...theme.typography.body,
+    color: theme.colors.chateauBlue05,
     marginTop: 4,
     textAlign: 'center',
   },

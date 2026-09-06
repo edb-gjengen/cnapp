@@ -1,5 +1,5 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import React from 'react';
 
@@ -22,10 +22,10 @@ import IconPerson from '@assets/icons/person.svg';
 // TODO: Change this
 // also TODO: make sure battery indicator etc. is visible
 const defaultNavigationStyle = {
-  headerTintColor: theme.colors.neufWhite,
+  headerTintColor: theme.colors.white,
   headerTitleAlign: 'center',
   headerStyle: {
-    backgroundColor: theme.colors.neufBlue,
+    backgroundColor: theme.colors.chateauBlue,
   },
 } as const;
 
@@ -41,6 +41,12 @@ const EventStackScreen = () => (
     />
   </EventStack.Navigator>
 );
+
+// Scene background for screens that don't paint their own
+const navigationTheme = {
+  ...DefaultTheme,
+  colors: { ...DefaultTheme.colors, background: theme.background.backgroundColor },
+};
 
 type HeaderRightType = NativeStackNavigationOptions['headerRight'];
 const SettingsHeaderRight: HeaderRightType = ({ tintColor }) => <SettingsHeaderButton tintColor={tintColor} />;
@@ -84,7 +90,7 @@ const EventIcon: TabBarIconType = ({ color, size }) => <IconEvent width={size} h
 const UserIcon: TabBarIconType = ({ color, size }) => <IconPerson width={size + 8} height={size + 8} fill={color} />;
 const AboutIcon: TabBarIconType = ({ color, size }) => <IconInfo width={size} height={size} fill={color} />;
 const Navigation = () => (
-  <NavigationContainer>
+  <NavigationContainer theme={navigationTheme}>
     <HomeTabs.Navigator initialRouteName="EventStack">
       <HomeTabs.Screen
         name="EventStack"

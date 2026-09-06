@@ -22,6 +22,10 @@ it('shows the membership pitch when logged out', async () => {
 
   expect(await findByText('Bli medlem')).toBeTruthy();
   expect(await findByText('Logg inn')).toBeTruthy();
+  expect(await findByText('Medlemsfordeler')).toBeTruthy();
+  expect(await findByText('Stemmerett i alle saker på medlemsmøter')).toBeTruthy();
+  // Store policies want the privacy policy reachable without logging in
+  expect(await findByText('Personvern')).toBeTruthy();
 });
 
 it('lets a logged in non-member pick a membership type and shows its price', async () => {
@@ -32,21 +36,24 @@ it('lets a logged in non-member pick a membership type and shows its price', asy
     initialUser: nonMember,
   });
 
-  // All three membership types are offered
+  // All three membership types are offered, each with its price
   expect(await findByText('Velg medlemskapstype')).toBeTruthy();
   expect(getByText('Student')).toBeTruthy();
+  expect(getByText('150 kr')).toBeTruthy();
   expect(getByText('Ordinær')).toBeTruthy();
+  expect(getByText('300 kr')).toBeTruthy();
   expect(getByText('Støtte')).toBeTruthy();
+  expect(getByText('500 kr')).toBeTruthy();
 
   // 'Ordinær' (slug: regular) is preselected, so the purchase button shows its price
-  expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
+  expect(await findByText('Kjøp medlemskap (300 kr)')).toBeTruthy();
 
   // Selecting another type updates the price
   await fireEvent.press(getByText('Student'));
-  expect(await findByText('Kjøp medlemskap (150 NOK)')).toBeTruthy();
+  expect(await findByText('Kjøp medlemskap (150 kr)')).toBeTruthy();
 
   await fireEvent.press(getByText('Støtte'));
-  expect(await findByText('Kjøp medlemskap (500 NOK)')).toBeTruthy();
+  expect(await findByText('Kjøp medlemskap (500 kr)')).toBeTruthy();
 });
 
 it('shows the membership proof when logged in', async () => {

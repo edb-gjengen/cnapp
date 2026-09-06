@@ -37,7 +37,7 @@ const MembershipValidTo = ({ user }: { user: UserType }) => {
 
   return (
     <View style={{ alignItems: 'center', flex: 1 }}>
-      <Text style={theme.text}>Gyldig til: </Text>
+      <Text style={[theme.text, theme.typography.body]}>Gyldig til: </Text>
       <Text style={[theme.text, styles.validToValue]}>{validTo}</Text>
     </View>
   );
@@ -78,6 +78,7 @@ interface PurchaseButtonProps {
   paymentLoading: boolean;
   isLoadingMembershipType: boolean;
   membershipPrice: number | null;
+  priceFor: (slug: string) => number | null;
   membershipTypesError: boolean;
   onPurchasePress: () => void;
   onRetryPress: () => void;
@@ -90,6 +91,7 @@ const PurchaseButton = ({
   isLoadingMembershipType,
   onPurchasePress,
   membershipPrice,
+  priceFor,
   membershipTypesError,
   onRetryPress,
   setMembershipTypeSlug,
@@ -98,7 +100,10 @@ const PurchaseButton = ({
     { label: 'Student', value: 'student' },
     { label: 'Ordinær', value: 'regular' },
     { label: 'Støtte', value: 'support' },
-  ];
+  ].map((option) => {
+    const price = priceFor(option.value);
+    return { ...option, detail: price != null ? `${price} kr` : undefined };
+  });
 
   const defaultValue = options[1];
 
@@ -117,23 +122,22 @@ const PurchaseButton = ({
         <RadioButton data={options} onSelect={onSelect} defaultValue={defaultValue} />
       </View>
       {paymentLoading && (
-        <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+        <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.goldenOrange} />
       )}
       <Button
+        variant="primary"
         onPress={onPurchasePress}
         fullWidth
         disabled={paymentLoading || isLoadingMembershipType || membershipPrice == null}
-        style={[theme.button, styles.purchaseButton]}
+        style={styles.purchaseButton}
       >
-        <Text style={theme.buttonText}>
-          {membershipPrice != null ? `Kjøp medlemskap (${membershipPrice} NOK)` : 'Kjøp medlemskap'}
-        </Text>
+        {membershipPrice != null ? `Kjøp medlemskap (${membershipPrice} kr)` : 'Kjøp medlemskap'}
       </Button>
       {membershipTypesError && (
         <>
           <Text style={[theme.text, styles.errorMessage]}>Kunne ikke hente priser</Text>
-          <Button small onPress={onRetryPress} style={[theme.button, styles.retryButton]}>
-            <Text style={theme.buttonText}>Prøv igjen</Text>
+          <Button small onPress={onRetryPress} style={styles.retryButton}>
+            Prøv igjen
           </Button>
         </>
       )}
@@ -213,6 +217,7 @@ const Proof = ({ fetchUser, isRefetching }: ProofProps) => {
     isLoadingMembershipType,
     onPurchasePress,
     membershipPrice,
+    priceFor,
     membershipTypesError,
     refetchMembershipTypes,
     toast,
@@ -266,7 +271,7 @@ const Proof = ({ fetchUser, isRefetching }: ProofProps) => {
         <ScrollView
           refreshControl={<RefreshControl testID="refresh-control" refreshing={isRefetching} onRefresh={fetchUser} />}
         >
-          <View style={[theme.card, { paddingVertical: 16, backgroundColor: 'transparent' }]}>
+          <View style={styles.content}>
             <MembershipName user={user} />
             <Logo user={user} />
             <MembershipStatus user={user} onMembershipPress={onMembershipPress} />
@@ -275,6 +280,7 @@ const Proof = ({ fetchUser, isRefetching }: ProofProps) => {
               paymentLoading={paymentLoading}
               isLoadingMembershipType={isLoadingMembershipType}
               membershipPrice={membershipPrice}
+              priceFor={priceFor}
               membershipTypesError={membershipTypesError}
               onPurchasePress={onPurchasePress}
               onRetryPress={() => {
@@ -315,10 +321,9 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   nameText: {
+    ...theme.typography.h3,
     flex: 1,
     textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   valid: {
     backgroundColor: theme.colors.success,
@@ -327,7 +332,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   validText: {
-    color: theme.colors.neufWhite,
+    color: theme.colors.white,
     textAlign: 'center',
     fontSize: 30,
     fontWeight: '800',
@@ -340,13 +345,13 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   expiredText: {
-    color: theme.colors.neufWhite,
+    color: theme.colors.white,
     textAlign: 'center',
     fontSize: 24,
   },
   validToValue: {
-    fontWeight: 'bold',
-    fontSize: 18,
+    ...theme.typography.lead,
+    fontWeight: '600',
   },
   purchaseButton: {
     marginTop: 8,
@@ -360,13 +365,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   purchaseTextInner: {
+    ...theme.typography.body,
     fontStyle: 'italic',
-    fontSize: 16,
     textAlign: 'center',
     paddingTop: 10,
     paddingBottom: 8,
   },
   errorMessage: {
+    ...theme.typography.caption,
     paddingTop: 10,
     textAlign: 'center',
     color: theme.colors.danger,
@@ -378,18 +384,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   radioForm: {
-    marginTop: 4,
+    marginTop: 16,
     marginBottom: 20,
   },
   selectText: {
+    ...theme.typography.h3,
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
     marginTop: 30,
   },
   container: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+  },
+  // On the page itself, not a card: the status banner bleeds to the edges
+  content: {
+    padding: 16,
   },
 });

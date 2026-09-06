@@ -58,7 +58,7 @@ it('disables the purchase button without showing a price while membership types 
   await act(async () => {
     resolveMembershipTypes(testMembershipTypes);
   });
-  expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
+  expect(await findByText('Kjøp medlemskap (300 kr)')).toBeTruthy();
 });
 
 it('shows an error with retry instead of a price when membership types fail to load', async () => {
@@ -73,8 +73,8 @@ it('shows an error with retry instead of a price when membership types fail to l
 
   // Retrying hits the recovered API and gets the real price
   await fireEvent.press(getByText('Prøv igjen'));
-  expect(await findByText('Kjøp medlemskap (300 NOK)')).toBeTruthy();
-  expect(getByRole('button', { name: 'Kjøp medlemskap (300 NOK)' })).toBeEnabled();
+  expect(await findByText('Kjøp medlemskap (300 kr)')).toBeTruthy();
+  expect(getByRole('button', { name: 'Kjøp medlemskap (300 kr)' })).toBeEnabled();
 });
 
 it('purchases the preselected membership through the stripe payment sheet', async () => {
@@ -83,7 +83,7 @@ it('purchases the preselected membership through the stripe payment sheet', asyn
 
   // 'Ordinær' (slug: regular) is preselected; the button enables once the
   // membership type query has resolved and its price is shown
-  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 kr)'));
 
   expect(await findByText('Your order is confirmed!')).toBeTruthy();
   expect(requestPaymentSheet).toHaveBeenCalledWith('test-token', 'regular');
@@ -106,7 +106,7 @@ it('purchases the selected membership type, not the default', async () => {
   const { findByText } = await renderProof();
 
   await fireEvent.press(await findByText('Student'));
-  await fireEvent.press(await findByText('Kjøp medlemskap (150 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (150 kr)'));
 
   expect(await findByText('Your order is confirmed!')).toBeTruthy();
   expect(requestPaymentSheet).toHaveBeenCalledWith('test-token', 'student');
@@ -119,7 +119,7 @@ it('shows the stripe error when the payment sheet is not completed', async () =>
   });
   const { findByText, queryByText } = await renderProof();
 
-  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 kr)'));
 
   expect(await findByText('Error code: Canceled The payment flow has been canceled')).toBeTruthy();
   expect(queryByText('Your order is confirmed!')).toBeNull();
@@ -130,13 +130,13 @@ it('shows an error and does not present the sheet when the backend rejects the p
   jest.spyOn(api, 'requestStripePaymentSheet').mockRejectedValueOnce(new Error('Ugyldig medlemskapstype'));
   const { findByText, getByRole } = await renderProof();
 
-  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 kr)'));
 
   expect(await findByText('Oops! Could not initialise payment')).toBeTruthy();
   expect(initPaymentSheet).not.toHaveBeenCalled();
   expect(presentPaymentSheet).not.toHaveBeenCalled();
   // The purchase button recovers so the user can retry
-  expect(getByRole('button', { name: 'Kjøp medlemskap (300 NOK)' })).toBeEnabled();
+  expect(getByRole('button', { name: 'Kjøp medlemskap (300 kr)' })).toBeEnabled();
 });
 
 it('shows an error and does not present the sheet when stripe fails to initialise it', async () => {
@@ -145,7 +145,7 @@ it('shows an error and does not present the sheet when stripe fails to initialis
   initPaymentSheet.mockResolvedValueOnce({ error: { code: 'Failed', message: 'Invalid client secret' } });
   const { findByText } = await renderProof();
 
-  await fireEvent.press(await findByText('Kjøp medlemskap (300 NOK)'));
+  await fireEvent.press(await findByText('Kjøp medlemskap (300 kr)'));
 
   expect(await findByText('Oops! Could not initialise payment')).toBeTruthy();
   expect(presentPaymentSheet).not.toHaveBeenCalled();

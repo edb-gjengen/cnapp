@@ -1,3 +1,4 @@
+import Icon from '@react-native-vector-icons/feather/static';
 import React from 'react';
 import { AccessibilityRole, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -8,20 +9,20 @@ export type ListRowProps = {
   onPress?: () => void;
   /** Right-hand element, e.g. a Switch */
   accessory?: React.ReactNode;
-  /** Disclosure glyph, for rows that lead somewhere */
-  chevron?: boolean;
+  /** The program list's arrow, for rows that lead somewhere */
+  arrow?: boolean;
   destructive?: boolean;
   accessibilityRole?: AccessibilityRole;
   testID?: string;
 };
 
 /** One row in a ListSection: a label with an optional accessory, pressable when given onPress */
-const ListRow = ({ label, onPress, accessory, chevron, destructive, accessibilityRole, testID }: ListRowProps) => {
+const ListRow = ({ label, onPress, accessory, arrow, destructive, accessibilityRole, testID }: ListRowProps) => {
   const content = (
     <>
       <Text style={[theme.text, styles.label, destructive && styles.destructive]}>{label}</Text>
       {accessory}
-      {chevron && <Text style={styles.chevron}>›</Text>}
+      {arrow && <Icon name="arrow-right" size={20} color={theme.colors.chateauBlue} />}
     </>
   );
 
@@ -53,23 +54,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 14,
     paddingHorizontal: 16,
-    backgroundColor: theme.colors.neufWhite,
   },
   pressed: {
     opacity: 0.7,
   },
   label: {
+    ...theme.typography.body,
     flex: 1,
-    fontSize: 16,
   },
   destructive: {
     color: theme.colors.danger,
-  },
-  chevron: {
-    color: theme.colors.lightText,
-    fontSize: 22,
-    lineHeight: 22,
-    marginLeft: 8,
   },
 });
 

@@ -1,6 +1,6 @@
 import * as EmailValidator from 'email-validator';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, ScrollView } from 'react-native';
+import { ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
 
 import Button from '@/components/Button';
 import FormErrors from '@/components/FormErrors';
@@ -17,7 +17,7 @@ const UserRegister = () => {
 
   return (
     <>
-      <ScrollView style={theme.card}>
+      <ScrollView contentContainerStyle={theme.card}>
         <FormInput
           name="first_name"
           label="Fornavn"
@@ -68,10 +68,10 @@ const UserRegister = () => {
         />
         {registerError && isSubmitted && <FormErrors errors={registerError} />}
         {isRegisteringUser && (
-          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.goldenOrange} />
         )}
-        <Button fullWidth disabled={isDisabled} onPress={onSubmit} style={[theme.button, styles.registerButton]}>
-          <Text style={theme.buttonText}>Registrer meg</Text>
+        <Button variant="primary" fullWidth disabled={isDisabled} onPress={onSubmit} style={styles.registerButton}>
+          Registrer meg
         </Button>
       </ScrollView>
       <PrivacyButton />
@@ -82,15 +82,6 @@ const UserRegister = () => {
 export default UserRegister;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  input: {
-    width: 320,
-    fontSize: 20,
-    height: 52,
-  },
   registerButton: {
     marginVertical: 16,
   },

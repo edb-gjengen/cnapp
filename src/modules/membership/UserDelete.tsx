@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { ActivityIndicator, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View, StyleSheet } from 'react-native';
 
 import { useAuth } from '@/auth/AuthContext';
 import Button from '@/components/Button';
 import FormErrors from '@/components/FormErrors';
+import TextField from '@/components/TextField';
 import { useUser } from '@/queries/useUser';
 import theme from '@/theme';
 
@@ -31,33 +32,29 @@ const UserDelete = () => {
   const isDisabled = !isDeletingUser && value !== user.username;
 
   return (
-    <ScrollView style={theme.background}>
+    <ScrollView>
       <View style={theme.card}>
         <Text style={styles.headerTitle}>Slett meg</Text>
         <Text style={styles.paragraph}>
           Dette sletter kontoen med brukernavn <Text style={styles.bold}>{user.username}</Text> inkludert all tilknyttet
-          persondata <Text style={styles.bold}>for alltid</Text>.
+          personinformasjon <Text style={styles.bold}>for alltid</Text>.
         </Text>
         <Text style={styles.paragraph}>Skriv inn brukernavnet ditt for å fortsette.</Text>
-        <TextInput
-          editable
-          numberOfLines={1}
+        <TextField
+          label="Brukernavn"
+          accessibilityLabel="Brukernavn"
           maxLength={32}
           autoCapitalize="none"
-          onChangeText={(text) => onChangeText(text)}
+          autoCorrect={false}
+          onChangeText={onChangeText}
           value={value}
-          style={styles.input}
         />
         {deleteUserError && <FormErrors errors={deleteUserError} />}
-        <Button
-          onPress={onPress}
-          disabled={isDisabled}
-          style={!isDisabled ? styles.deleteButton : styles.deleteButtonDisabled}
-        >
-          <Text style={!isDisabled ? styles.whiteText : styles.disabledText}>Jeg forstår, slett kontoen min</Text>
+        <Button onPress={onPress} disabled={isDisabled} style={styles.deleteButton} textStyle={styles.whiteText}>
+          Jeg forstår, slett kontoen min
         </Button>
         {isDeletingUser && (
-          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.goldenOrange} />
         )}
       </View>
     </ScrollView>
@@ -68,11 +65,10 @@ export default UserDelete;
 
 const styles = StyleSheet.create({
   paragraph: {
+    ...theme.typography.body,
     textAlign: 'center',
-    fontSize: 16,
-    color: theme.colors.neufBlack,
+    color: theme.colors.black,
     paddingBottom: 10,
-    lineHeight: 25,
   },
   bold: {
     fontWeight: 'bold',
@@ -82,33 +78,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: theme.colors.danger,
   },
-  deleteButtonDisabled: {
-    marginTop: 16,
-    marginBottom: 16,
-    backgroundColor: theme.colors.gray1,
-  },
   whiteText: {
-    color: theme.colors.neufWhite,
-    fontWeight: '900',
-  },
-  disabledText: {
-    opacity: 0.5,
+    color: theme.colors.white,
   },
   headerTitle: {
+    ...theme.typography.h2,
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: theme.colors.neufBlack,
+    color: theme.colors.black,
     paddingVertical: 10,
-    lineHeight: 25,
-  },
-  input: {
-    height: 40,
-    borderColor: theme.colors.neufPurple,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    margin: 10,
-    padding: 10,
-    textAlign: 'center',
   },
 });

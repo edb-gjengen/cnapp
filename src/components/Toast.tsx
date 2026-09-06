@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 16,
     right: 16,
-    backgroundColor: theme.colors.neufBlack,
+    backgroundColor: theme.colors.black,
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
@@ -76,9 +76,9 @@ const styles = StyleSheet.create({
     bottom: 48,
   },
   message: {
-    color: theme.colors.neufWhite,
+    ...theme.typography.body,
+    color: theme.colors.white,
     textAlign: 'center',
-    fontSize: 15,
   },
 });
 

@@ -23,10 +23,11 @@ const useProof = ({ fetchUser }: UseProofProps) => {
   const [membershipTypeSlug, setMembershipTypeSlug] = useState('regular');
   const [toast, setToast] = useState<ToastProps | null>(null);
 
-  // null until the query has delivered a price for the selected type; the
-  // purchase button stays disabled rather than showing a guessed amount
-  const membershipPrice =
-    membershipTypes?.find((membershipTypeOption) => membershipTypeOption.slug === membershipTypeSlug)?.price ?? null;
+  // Price in kr (the API sends øre), null until the query has delivered it
+  const priceFor = (slug: string) => {
+    const price = membershipTypes?.find((membershipTypeOption) => membershipTypeOption.slug === slug)?.price;
+    return price != null ? price / 100 : null;
+  };
 
   const openPaymentSheet = async () => {
     setPaymentLoading(true);
@@ -82,7 +83,8 @@ const useProof = ({ fetchUser }: UseProofProps) => {
 
   return {
     isLoadingMembershipType: isPending,
-    membershipPrice: membershipPrice != null ? membershipPrice / 100 : null,
+    membershipPrice: priceFor(membershipTypeSlug),
+    priceFor,
     membershipTypesError: isError,
     refetchMembershipTypes: refetch,
     onPurchasePress: openPaymentSheet,

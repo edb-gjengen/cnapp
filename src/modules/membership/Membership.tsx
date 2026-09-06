@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
-import PrivacyButton from '@/components/PrivacyButton';
 import theme from '@/theme';
 
 import MembershipInfo from './MembershipInfo';
@@ -16,7 +15,7 @@ const Membership = () => {
     if (isPending) {
       return (
         <View style={theme.card}>
-          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.neufOrange} />
+          <ActivityIndicator accessible accessibilityRole="progressbar" color={theme.colors.goldenOrange} />
         </View>
       );
     }
@@ -25,11 +24,6 @@ const Membership = () => {
     return <Proof fetchUser={fetchUser} isRefetching={isRefetching} />;
   }
 
-  return (
-    <>
-      <MembershipInfo onRegister={onRegisterPress} onLogin={onLoginPress} />
-      <PrivacyButton />
-    </>
-  );
+  return <MembershipInfo onRegister={onRegisterPress} onLogin={onLoginPress} />;
 };
 export default Membership;

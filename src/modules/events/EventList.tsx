@@ -3,7 +3,7 @@ import Icon from '@react-native-vector-icons/feather/static';
 import { format, parseISO } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import React from 'react';
-import { StyleSheet, View, Platform, FlatList, TouchableOpacity, Text, Linking } from 'react-native';
+import { StyleSheet, View, FlatList, TouchableOpacity, Text, Linking } from 'react-native';
 
 import Button from '@/components/Button';
 import theme from '@/theme';
@@ -15,7 +15,7 @@ import useEventList from './useEventList';
 // Venue-local (Europe/Oslo) wall-clock time regardless of device timezone,
 // e.g. "lø. 1. aug. 2026 kl. 19:00"
 const formatTime = (time: string) => {
-  return format(new TZDate(parseISO(time), 'Europe/Oslo'), "EEEEEE. d. MMM y 'kl.' HH:mm", { locale: nb });
+  return format(new TZDate(parseISO(time), 'Europe/Oslo'), "EEEE d. MMM y 'kl.' HH:mm", { locale: nb });
 };
 
 const Header = () => <View style={styles.listHeader} />;
@@ -51,7 +51,7 @@ const EventList = () => {
           )}
         </View>
         <View style={styles.arrow}>
-          <Icon name="arrow-right" size={20} style={{ color: theme.colors.neufBlack }} />
+          <Icon name="arrow-right" size={20} style={{ color: theme.colors.black }} />
         </View>
       </View>
     </TouchableOpacity>
@@ -64,9 +64,7 @@ const EventList = () => {
           <Text style={styles.loadingText}>Kunne ikke hente programmet...</Text>
         </View>
         <View>
-          <Button onPress={handleRefresh}>
-            <Text>Prøv igjen</Text>
-          </Button>
+          <Button onPress={handleRefresh}>Prøv igjen</Button>
         </View>
       </View>
     );
@@ -79,7 +77,6 @@ const EventList = () => {
       keyExtractor={(item: EventType) => item.id}
       refreshing={refreshing}
       onRefresh={handleRefresh}
-      style={[theme.card, styles.list]}
       ListHeaderComponent={Header}
     />
   );
@@ -88,7 +85,6 @@ export default EventList;
 
 const styles = StyleSheet.create({
   listItem: {
-    backgroundColor: theme.colors.betongGray,
     paddingTop: 10,
     paddingBottom: 12,
     paddingLeft: 12,
@@ -100,41 +96,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   listItemTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    ...theme.text,
+    ...theme.typography.body,
+    fontWeight: '600',
   },
   listItemSubtitle: {
-    fontSize: 16,
+    ...theme.text,
+    ...theme.typography.body,
   },
   listItemTime: {
-    fontSize: 14,
-    color: theme.colors.lightText,
-  },
-  sectionHeader: {
-    backgroundColor: theme.colors.neufWhite,
-    ...Platform.select({
-      ios: { marginBottom: -8 },
-    }),
-    paddingLeft: 8,
-    paddingTop: 12,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    ...theme.text,
+    ...theme.typography.caption,
   },
   loadingText: {
+    ...theme.text,
+    ...theme.typography.body,
     textAlign: 'center',
     paddingBottom: 8,
   },
-  list: {
-    padding: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    backgroundColor: 'transparent',
-  },
   listHeader: {
     paddingTop: 8,
-    backgroundColor: theme.colors.neufGray,
   },
   arrow: {
     flex: 1,

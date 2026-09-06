@@ -37,9 +37,9 @@ const NotificationRow = ({ expiryDate, showToast }: NotificationRowProps) => {
           accessibilityLabel={LABEL}
           value={hasPermission || false}
           onValueChange={handleToggle}
-          trackColor={{ false: '#E0E0E0', true: theme.colors.neufOrange }}
-          thumbColor="#FFFFFF"
-          ios_backgroundColor="#E0E0E0"
+          trackColor={{ false: theme.colors.betongGrayDarkened, true: theme.colors.goldenOrange }}
+          thumbColor={theme.colors.white}
+          ios_backgroundColor={theme.colors.betongGrayDarkened}
         />
       }
     />

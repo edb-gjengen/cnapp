@@ -49,7 +49,7 @@ it('formats the next occurrence as a Norwegian date with the venue', async () =>
 
   const { findByText } = await renderWithProviders(<EventList />);
 
-  expect(await findByText('lø. 1. aug. 2026 kl. 19:00 i Storsalen')).toBeTruthy();
+  expect(await findByText('lørdag 1. aug. 2026 kl. 19:00 i Storsalen')).toBeTruthy();
 });
 
 it('formats weekday and month abbreviations across the year', async () => {
@@ -61,8 +61,8 @@ it('formats weekday and month abbreviations across the year', async () => {
 
   const { findByText } = await renderWithProviders(<EventList />);
 
-  expect(await findByText('on. 30. des. 2026 kl. 18:00 i Storsalen')).toBeTruthy();
-  expect(await findByText('ma. 17. mai 2027 kl. 13:00 i Storsalen')).toBeTruthy();
+  expect(await findByText('onsdag 30. des. 2026 kl. 18:00 i Storsalen')).toBeTruthy();
+  expect(await findByText('mandag 17. mai 2027 kl. 13:00 i Storsalen')).toBeTruthy();
 });
 
 it('renders venue-local (Oslo) time whatever the API offset and device timezone', async () => {
@@ -72,7 +72,7 @@ it('renders venue-local (Oslo) time whatever the API offset and device timezone'
 
   const { findByText } = await renderWithProviders(<EventList />);
 
-  expect(await findByText('lø. 1. aug. 2026 kl. 19:00 i Storsalen')).toBeTruthy();
+  expect(await findByText('lørdag 1. aug. 2026 kl. 19:00 i Storsalen')).toBeTruthy();
 });
 
 it('prefixes the time with Neste: when the event has more occurrences', async () => {
@@ -80,7 +80,7 @@ it('prefixes the time with Neste: when the event has more occurrences', async ()
 
   const { findByText } = await renderWithProviders(<EventList />);
 
-  expect(await findByText('Neste: lø. 1. aug. 2026 kl. 19:00 i Storsalen')).toBeTruthy();
+  expect(await findByText('Neste: lørdag 1. aug. 2026 kl. 19:00 i Storsalen')).toBeTruthy();
   expect(await findByText('Se flere tider (2)')).toBeTruthy();
 });
 

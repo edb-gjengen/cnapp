@@ -1,57 +1,52 @@
-import { Platform } from 'react-native';
-
+// The brand palette, named as in neuf-www's variables.scss
 const colors = {
-  danger: '#d9534f',
-  success: '#5cb85c',
-  lightText: '#666',
-  neufPurple: '#720328',
-  neufGray: '#E5E2D7',
-  neufOrange: '#f58220',
-  neufBeige: '#F8BC90',
-  neufBlue: '#0A0F6D',
-  neufWhite: '#FFFFFF',
-  neufBlack: '#161516',
-  gray1: '#dddddd',
-  // 2024 colors
   deepBrick: '#720328',
   neufPink: '#cd96ab',
   betongGray: '#e5e2d7',
   goldenOrange: '#ff6915',
   goldenBeige: '#f8bc90',
   chateauBlue: '#0a0f6d',
+  white: '#ffffff',
+  black: '#161516',
+  // Derived colours neuf.no uses for muted text and secondary surfaces
+  chateauBlue05: 'rgba(10, 15, 109, 0.5)',
+  betongGrayDarkened: '#dcd8cc',
+  // Not from the brand palette: status banners, errors and destructive actions
+  danger: '#d9534f',
+  success: '#5cb85c',
 };
 
+// Secondary surface, as neuf.no's forms and info boxes
 const card = {
-  ...Platform.select({
-    ios: {
-      shadowColor: 'rgba(0,0,0, .2)',
-      shadowOffset: { height: 0, width: 0 },
-      shadowOpacity: 1,
-      shadowRadius: 1,
-    },
-    android: {
-      elevation: 1,
-    },
-  }),
+  backgroundColor: colors.betongGrayDarkened,
   padding: 16,
-  backgroundColor: colors.neufGray,
+  margin: 16,
 };
 
+// Painted behind every screen by the navigator (see Navigation.tsx)
 const background = {
-  backgroundColor: colors.neufGray,
+  backgroundColor: colors.betongGray,
 };
 
 const text = {
-  color: colors.neufBlue,
+  color: colors.chateauBlue,
 };
 
-const button = {
-  backgroundColor: colors.neufBeige,
+// Button colour pairs from neuf.no: primary is its default button, secondary its beige menu style
+const buttons = {
+  primary: { background: colors.goldenOrange, text: colors.black },
+  secondary: { background: colors.goldenBeige, text: colors.deepBrick },
 };
 
-const buttonText = {
-  color: colors.neufPurple,
-  fontWeight: '500',
+// neuf.no's type scale at phone widths: body 1.5 line height, headings 600 at 1.2
+const typography = {
+  h1: { fontSize: 32, fontWeight: '600', lineHeight: 38 },
+  h2: { fontSize: 26, fontWeight: '600', lineHeight: 31 },
+  h3: { fontSize: 21, fontWeight: '600', lineHeight: 25 },
+  lead: { fontSize: 19, lineHeight: 28 },
+  body: { fontSize: 16, lineHeight: 24 },
+  caption: { fontSize: 14, lineHeight: 21 },
+  suphead: { fontSize: 14, fontWeight: '700', lineHeight: 21, textTransform: 'uppercase', letterSpacing: 0.7 },
 } as const;
 
-export default { card, colors, background, text, button, buttonText };
+export default { card, colors, background, text, typography, buttons };

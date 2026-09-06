@@ -35,12 +35,12 @@ const FormInput = ({
         <>
           <TextField
             ref={ref}
-            label={<Text style={theme.text}>{label}</Text>}
+            label={label}
             accessibilityLabel={label}
             returnKeyType={returnKeyType}
             onChangeText={onChange}
             onBlur={onBlur}
-            fieldStyle={[styles.field, fieldError ? styles.fieldWithError : undefined]}
+            fieldStyle={fieldError ? styles.fieldWithError : undefined}
             value={value}
             {...rest}
           />
@@ -54,21 +54,14 @@ const FormInput = ({
 };
 
 const styles = StyleSheet.create({
-  field: {
-    borderColor: theme.colors.neufPurple,
-    borderWidth: 1,
-    borderRadius: 4,
-    backgroundColor: 'white',
-    padding: 4,
-    marginVertical: 4,
-  },
   fieldWithError: {
     borderColor: theme.colors.danger,
-    borderWidth: 2,
   },
   errorMessage: {
+    ...theme.typography.caption,
     color: theme.colors.danger,
     marginBottom: 4,
+    marginLeft: 16,
   },
 });
 
