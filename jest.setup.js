@@ -29,6 +29,9 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 jest.mock('@stripe/stripe-react-native', () => require('@stripe/stripe-react-native/jest/mock.js'));
 
+// Navigation sizes the tab bar from the bottom inset; the mock answers with zeros without a provider
+jest.mock('react-native-safe-area-context', () => require('react-native-safe-area-context/jest/mock').default);
+
 // The preset's RefreshControl mock drops its props, so onRefresh and testID never reach the host tree
 jest.mock('react-native/Libraries/Components/RefreshControl/RefreshControl', () => {
   const React = require('react');

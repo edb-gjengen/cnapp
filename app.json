@@ -56,6 +56,13 @@
       ],
       "expo-status-bar",
       [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": false,
+          "style": "dark"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/splash.png",

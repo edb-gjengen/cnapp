@@ -38,6 +38,15 @@ const buttons = {
   secondary: { background: colors.goldenBeige, text: colors.deepBrick },
 };
 
+// Bottom tab bar: the screen's own surface with no edge, the active icon in a pill of the secondary button colours
+const tabBar = {
+  height: 56,
+  background: colors.betongGray,
+  activeTint: colors.chateauBlue,
+  inactiveTint: colors.chateauBlue05,
+  pill: buttons.secondary,
+};
+
 // neuf.no's type scale at phone widths: body 1.5 line height, headings 600 at 1.2
 const typography = {
   h1: { fontSize: 32, fontWeight: '600', lineHeight: 38 },
@@ -49,4 +58,4 @@ const typography = {
   suphead: { fontSize: 14, fontWeight: '700', lineHeight: 21, textTransform: 'uppercase', letterSpacing: 0.7 },
 } as const;
 
-export default { card, colors, background, text, typography, buttons };
+export default { card, colors, background, text, typography, buttons, tabBar };

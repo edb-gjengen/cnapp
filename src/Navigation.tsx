@@ -2,8 +2,11 @@ import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-nav
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import React from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/auth/AuthContext';
+import TabButton from '@/components/TabButton';
+import TabIcon, { PILL_SIZE } from '@/components/TabIcon';
 import About from '@/modules/about/About';
 import EventList from '@/modules/events/EventList';
 import Login from '@/modules/login/Login';
@@ -14,9 +17,9 @@ import Settings from '@/modules/settings/Settings';
 import SettingsHeaderButton from '@/modules/settings/SettingsHeaderButton';
 import theme from '@/theme';
 import type { EventStackParamList, HomeTabParamList, UserStackParamList } from '@/types/navigation';
-import IconEvent from '@assets/icons/event.svg';
-import IconInfo from '@assets/icons/information-circle.svg';
-import IconPerson from '@assets/icons/person.svg';
+import IconCalendar from '@assets/icons/calendar.svg';
+import IconIdCard from '@assets/icons/id-card.svg';
+import IconInfo from '@assets/icons/info.svg';
 
 const defaultNavigationStyle = {
   headerTintColor: theme.colors.white,
@@ -83,41 +86,61 @@ const UserStackScreen = () => {
 type TabBarIconType = BottomTabNavigationOptions['tabBarIcon'];
 
 const HomeTabs = createBottomTabNavigator<HomeTabParamList>();
-const EventIcon: TabBarIconType = ({ color, size }) => <IconEvent width={size} height={size} fill={color} />;
-const UserIcon: TabBarIconType = ({ color, size }) => <IconPerson width={size + 8} height={size + 8} fill={color} />;
-const AboutIcon: TabBarIconType = ({ color, size }) => <IconInfo width={size} height={size} fill={color} />;
-const Navigation = () => (
-  <NavigationContainer theme={navigationTheme}>
-    <HomeTabs.Navigator initialRouteName="EventStack">
-      <HomeTabs.Screen
-        name="EventStack"
-        component={EventStackScreen}
-        options={{
-          headerShown: false,
-          tabBarLabel: 'Program',
-          tabBarIcon: EventIcon,
-        }}
-      />
-      <HomeTabs.Screen
-        name="UserStack"
-        component={UserStackScreen}
-        options={{
-          headerShown: false,
-          tabBarLabel: 'Medlemskap',
-          tabBarIcon: UserIcon,
-        }}
-      />
-      <HomeTabs.Screen
-        name="About"
-        component={About}
-        options={{
-          title: 'Om oss',
-          tabBarLabel: 'Om oss',
-          tabBarIcon: AboutIcon,
-          ...defaultNavigationStyle,
-        }}
-      />
-    </HomeTabs.Navigator>
-  </NavigationContainer>
-);
+const EventIcon: TabBarIconType = (props) => <TabIcon icon={IconCalendar} {...props} />;
+const UserIcon: TabBarIconType = (props) => <TabIcon icon={IconIdCard} {...props} />;
+const AboutIcon: TabBarIconType = (props) => <TabIcon icon={IconInfo} {...props} />;
+
+const tabBarOptions: BottomTabNavigationOptions = {
+  tabBarActiveTintColor: theme.tabBar.activeTint,
+  tabBarInactiveTintColor: theme.tabBar.inactiveTint,
+  tabBarLabelStyle: { fontSize: 11, fontWeight: '500' },
+  tabBarIconStyle: PILL_SIZE,
+  tabBarButton: TabButton,
+};
+
+const Navigation = () => {
+  const insets = useSafeAreaInsets();
+  // Setting a height replaces the navigator's own inset handling, so the inset is added back here
+  const tabBarStyle = {
+    height: theme.tabBar.height + insets.bottom,
+    backgroundColor: theme.tabBar.background,
+    borderTopWidth: 0,
+    elevation: 0,
+  };
+
+  return (
+    <NavigationContainer theme={navigationTheme}>
+      <HomeTabs.Navigator initialRouteName="EventStack" screenOptions={{ ...tabBarOptions, tabBarStyle }}>
+        <HomeTabs.Screen
+          name="EventStack"
+          component={EventStackScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Program',
+            tabBarIcon: EventIcon,
+          }}
+        />
+        <HomeTabs.Screen
+          name="UserStack"
+          component={UserStackScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Medlemskap',
+            tabBarIcon: UserIcon,
+          }}
+        />
+        <HomeTabs.Screen
+          name="About"
+          component={About}
+          options={{
+            title: 'Om oss',
+            tabBarLabel: 'Om oss',
+            tabBarIcon: AboutIcon,
+            ...defaultNavigationStyle,
+          }}
+        />
+      </HomeTabs.Navigator>
+    </NavigationContainer>
+  );
+};
 export default Navigation;
