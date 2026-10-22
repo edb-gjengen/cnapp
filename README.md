@@ -111,8 +111,6 @@ history, code and binary blobs related to React Native functionality filtered ou
 - test in ios emulator? (`npm run ios`, requires macOS)
 - use [Expo Application Services](https://expo.dev/eas) to build and submit app to stores
 - explore Expo features:
-  - try the [React Compiler](https://docs.expo.dev/guides/react-compiler/) via
-    `"experiments": { "reactCompiler": true }` in `app.json`
   - add an iOS 26 liquid glass icon: a `.icon` file made with Apple's Icon Composer,
     referenced from `ios.icon` (old icon remains as fallback for older iOS); optionally
     play with [`expo-glass-effect`](https://docs.expo.dev/versions/latest/sdk/glass-effect/)

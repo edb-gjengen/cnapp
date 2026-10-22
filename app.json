@@ -78,6 +78,9 @@
         "projectId": "908b7664-3796-4d49-b075-2847b0804c02"
       }
     },
-    "owner": "neuf"
+    "owner": "neuf",
+    "experiments": {
+      "reactCompiler": true
+    }
   }
 }
