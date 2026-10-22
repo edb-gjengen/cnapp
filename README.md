@@ -121,7 +121,7 @@ history, code and binary blobs related to React Native functionality filtered ou
     compiling locally when the native fingerprint is unchanged
   - try [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/), production-ready as of SDK 56:
     real SwiftUI / Jetpack Compose components that could back the homegrown ones in
-    `src/components/` and finally retire `react-native-simple-radio-button`
+    `src/components/`
 - add [Apple Pay](https://docs.stripe.com/apple-pay?platform=react-native) for membership
   payments: either natively in the payment sheet (register the merchant ID
   `merchant.no.neuf.chateau` + Apple Pay certificate, set `merchantIdentifier` in the
