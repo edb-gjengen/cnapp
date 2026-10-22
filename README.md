@@ -38,6 +38,11 @@ server and open the app on your device or simulator:
 
     npm run start
 
+Remote build caching is enabled (`buildCacheProvider` in `app.json`): when you're logged in
+to EAS (`npx eas-cli login`) and a member of the `neuf` organization, `npm run android`/`ios`
+download a cached build if the native fingerprint is unchanged, and upload new local builds
+for others to reuse. Without a login they just build locally.
+
 ### Demo users
 
 Dev builds accept three fake users (defined in `src/api.ts`) so you can preview the
@@ -114,9 +119,6 @@ history, code and binary blobs related to React Native functionality filtered ou
   - add an iOS 26 liquid glass icon: a `.icon` file made with Apple's Icon Composer,
     referenced from `ios.icon` (old icon remains as fallback for older iOS); optionally
     play with [`expo-glass-effect`](https://docs.expo.dev/versions/latest/sdk/glass-effect/)
-  - consider [remote build caching](https://docs.expo.dev/guides/cache-builds-remotely/)
-    (now stable) so `npm run android`/`ios` can download a cached build instead of
-    compiling locally when the native fingerprint is unchanged
   - try [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/), production-ready as of SDK 56:
     real SwiftUI / Jetpack Compose components that could back the homegrown ones in
     `src/components/`

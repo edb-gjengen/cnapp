@@ -79,6 +79,7 @@
       }
     },
     "owner": "neuf",
+    "buildCacheProvider": "eas",
     "experiments": {
       "reactCompiler": true
     }
